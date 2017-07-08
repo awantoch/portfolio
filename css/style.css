@@ -1,3 +1,17 @@
+html {
+  background-color: black;
+}
+
+body {
+    opacity: 1;
+    transition: 2s opacity;
+}
+
+body.fade-out {
+    opacity: 0;
+    transition: none;
+}
+
 p {
   line-height: 2rem;
 }
@@ -8,6 +22,11 @@ p {
 
 #index-banner {
   height: 100vh;
+}
+
+#daconsole {
+  background-color: black;
+  font-family: monospace;
 }
 
 #skills {

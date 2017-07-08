@@ -106,4 +106,14 @@ function callback() {
   }, 1000);
 }
 
-resolver.resolve(options, callback);
+$(function(){
+  $('.parallax').parallax();
+  setTimeout(()=>{
+    $('body').removeClass('fade-out');
+    $('html').css('background-color', 'white');
+    setTimeout(()=>{
+      resolver.resolve(options, callback)
+    }, 3000);
+  }, 1000);
+  
+});

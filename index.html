@@ -16,12 +16,13 @@
 
 </head>
 <body>
+  <script>document.body.className += ' fade-out';</script>
 
   <div id="index-banner" class="parallax-container valign-wrapper">
       <div class="container">
         <h1>Who am I?</h1>
-        <div style="background-color: black; font-family: monospace;">
-          <h3 class="header" data-target-resolver></h3>
+        <div id="daconsole">
+          <h3 class="header" data-target-resolver>hmmm...</h3>
         </div>
       </div>
     <div class="parallax"><img src="img/paradise.jpg" alt="Unsplashed background img 1"></div>
@@ -313,15 +314,6 @@
   <!-- scripts -->
 
   <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
-
-  <script type="text/javascript">
-    (function($){
-      $(function(){
-        $('.parallax').parallax();
-      });
-    })(jQuery);
-  </script>
-
   <script src="js/console.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.99.0/js/materialize.min.js"></script>
 
