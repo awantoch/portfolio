@@ -110,7 +110,6 @@ $(function(){
   setTimeout(()=>{
     $('body').removeClass('fade-out');
     $('html').css('background-color', 'white');
-    $('.parallax').parallax();
     setTimeout(()=>{
       resolver.resolve(options, callback)
     }, 3000);
