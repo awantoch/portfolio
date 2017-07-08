@@ -64,10 +64,10 @@ const resolver = {
 }
 
 const strings = [
+  'adventurer',
   'computer scientist',
   'cyber security enthusiast',
   'software engineer',
-  'adventurer',
   'leader',
   'entrepreneur',
   'collaborator',
