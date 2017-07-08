@@ -25,8 +25,10 @@ p {
 }
 
 #daconsole {
+  position: absolute;
   background-color: black;
   font-family: monospace;
+  padding: 0 25px 0 25px;
 }
 
 #skills {
@@ -88,6 +90,10 @@ img#me {
 
   #index-banner .section {
     top: 0;
+  }
+
+  #daconsole {
+    width: 100vw;
   }
 }
 
