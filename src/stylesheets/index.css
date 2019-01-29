@@ -1,0 +1,109 @@
+html {
+    background-color: black;
+  }
+  
+  body {
+      opacity: 1;
+      transition: 2s opacity;
+  }
+  
+  body.fade-out {
+      opacity: 0;
+      transition: none;
+  }
+  
+  p {
+    line-height: 2rem;
+  }
+  
+  .button-collapse {
+    color: #26a69a;
+  }
+  
+  #index-banner {
+    height: 100vh;
+  }
+  
+  #daconsole {
+    position: absolute;
+    background-color: black;
+    font-family: monospace;
+    padding: 0 25px 0 25px;
+  }
+  
+  #skills {
+    min-height: 100vh;
+  }
+  
+  #skills-icons {
+    font-size: 128px;
+  }
+  
+  #skills-icons > .col {
+    margin-bottom: 40px;
+  }
+  
+  #skills-icons > .col > i {
+    background: white;
+    -moz-border-radius: 5%;
+    -webkit-border-radius: 5%;
+    border-radius: 5%;
+    padding: 5px;
+  }
+  
+  #connect-buttons > a{
+    font-size: 48px;
+    margin: 10px;
+  }
+  
+  .parallax-container {
+    min-height: 380px;
+    line-height: 0;
+    height: auto;
+    color: rgba(255,255,255,.9);
+  }
+    .parallax-container .section {
+      width: 100%;
+    }
+  
+  img#me {
+    width: 100%;
+    -moz-border-radius: 2%;
+    -webkit-border-radius: 2%;
+    border-radius: 2%;
+  }
+  
+  @media only screen and (max-width : 992px) {
+    .parallax-container .section {
+      position: absolute;
+      top: 40%;
+    }
+    #index-banner .section {
+      top: 10%;
+    }
+  }
+  
+  @media only screen and (max-width : 600px) {
+    html {
+      overflow-x: hidden;
+    }
+  
+    #index-banner .section {
+      top: 0;
+    }
+  
+    #daconsole {
+      width: 100vw;
+    }
+  }
+  
+  .icon-block {
+    padding: 0 15px;
+  }
+  .icon-block .material-icons {
+    font-size: inherit;
+  }
+  
+  footer.page-footer {
+    margin: 0;
+  }

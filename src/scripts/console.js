@@ -66,7 +66,8 @@ const resolver = {
 const strings = [
   'adventurer',
   'computer scientist',
-  'cyber security enthusiast',
+  'cyber security engineer',
+  'blockchain engineer',
   'software engineer',
   'leader',
   'entrepreneur',
