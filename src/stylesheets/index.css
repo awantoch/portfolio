@@ -35,20 +35,24 @@ html {
     min-height: 100vh;
   }
   
-  #skills-icons {
-    font-size: 128px;
-  }
-  
   #skills-icons > .col {
     margin-bottom: 40px;
   }
-  
-  #skills-icons > .col > i {
+
+  .skill-icon {
+    font-size: 128px;
+    width: 136px;
+    height: 136px;
     background: white;
+    margin: 0 auto;
     -moz-border-radius: 5%;
     -webkit-border-radius: 5%;
     border-radius: 5%;
-    padding: 5px;
+    padding: 4px;
+  }
+  
+  .skill-icon > img {
+    max-height: 128px;
   }
   
   #connect-buttons > a{
@@ -65,13 +69,6 @@ html {
     .parallax-container .section {
       width: 100%;
     }
-  
-  img#me {
-    width: 100%;
-    -moz-border-radius: 2%;
-    -webkit-border-radius: 2%;
-    border-radius: 2%;
-  }
   
   @media only screen and (max-width : 992px) {
     .parallax-container .section {

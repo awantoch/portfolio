@@ -113,7 +113,7 @@ $(function(){
     $('html').css('background-color', 'white');
     setTimeout(()=>{
       resolver.resolve(options, callback)
-    }, 3000);
+    }, 2000);
   }, 1000);
   
 });
