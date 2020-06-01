@@ -8,8 +8,7 @@
     "watch": "parcel watch src/index.html",
     "dev": "parcel src/index.html",
     "predeploy": "npm run build",
-    "deploy": "gh-pages -d dist",
-    "prepush": "npm run deploy"
+    "deploy": "gh-pages -d dist"
   },
   "dependencies": {
     "react": "^16.7.0",
