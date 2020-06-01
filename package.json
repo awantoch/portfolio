@@ -4,6 +4,7 @@
   "homepage": "https://wantoch.net",
   "scripts": {
     "build": "parcel build src/index.html",
+    "postbuild": "cp -r public/* dist/",
     "watch": "parcel watch src/index.html",
     "dev": "parcel src/index.html",
     "predeploy": "npm run build",
