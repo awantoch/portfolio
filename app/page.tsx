@@ -5,10 +5,10 @@ import { Links } from 'app/components/links'
 export default function Page() {
   return (
     <section>
-      <h1 className="mb-8 text-2xl font-semibold tracking-tighter">
+      <h1 className="mb-8 text-2xl font-semibold tracking-tighter text-center">
         Alec M. Wantoch
       </h1>
-      <p className="mb-4">
+      <p className="mb-4 text-center">
         {`I am an entrepreneur & computer scientist that seeks to change the world for the better through the optimal use of technology.`}
       </p>
       <div className="mt-8 mb-8">

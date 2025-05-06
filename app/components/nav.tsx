@@ -3,13 +3,13 @@ import { NAV_ITEMS } from '../constants'
 
 export function Navbar() {
   return (
-    <aside className="-ml-[8px] mb-16 tracking-tight">
+    <aside className="mb-16 tracking-tight flex justify-center">
       <div className="lg:sticky lg:top-20">
         <nav
-          className="flex flex-row items-start relative px-0 pb-0 fade md:overflow-auto scroll-pr-6 md:relative"
+          className="flex flex-row items-start justify-center relative px-0 pb-0 fade md:overflow-auto scroll-pr-6 md:relative"
           id="nav"
         >
-          <div className="flex flex-row space-x-0 pr-10">
+          <div className="flex flex-row space-x-0 justify-center">
             {Object.entries(NAV_ITEMS).map(([path, { name }]) => {
               return (
                 <Link

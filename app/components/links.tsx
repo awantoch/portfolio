@@ -1,8 +1,9 @@
 function ArrowIcon() {
   return (
     <svg
-      width="12"
-      height="12"
+      className="w-4 h-4 shrink-0"
+      width="16"
+      height="16"
       viewBox="0 0 12 12"
       fill="none"
       xmlns="http://www.w3.org/2000/svg"
@@ -17,7 +18,7 @@ function ArrowIcon() {
 
 export function Links() {
   return (
-    <ul className="grid grid-cols-2 gap-4 w-full max-w-xs mx-auto text-neutral-600 dark:text-neutral-300 sm:grid-cols-3 md:grid-cols-6 md:max-w-none">
+    <ul className="grid grid-cols-3 gap-4 w-full max-w-2xl mx-auto text-neutral-600 dark:text-neutral-300">
       <li className="text-center">
         <a
           className="flex items-center justify-center transition-all hover:text-neutral-800 dark:hover:text-neutral-100"
