@@ -1,8 +1,9 @@
 import { ImageResponse } from 'next/og'
+import { OG_CONFIG } from '../constants'
 
 export function GET(request: Request) {
   let url = new URL(request.url)
-  let title = url.searchParams.get('title') || 'Next.js Portfolio Starter'
+  let title = url.searchParams.get('title') || OG_CONFIG.defaultTitle
 
   return new ImageResponse(
     (
@@ -15,8 +16,8 @@ export function GET(request: Request) {
       </div>
     ),
     {
-      width: 1200,
-      height: 630,
+      width: OG_CONFIG.imageWidth,
+      height: OG_CONFIG.imageHeight,
     }
   )
 }

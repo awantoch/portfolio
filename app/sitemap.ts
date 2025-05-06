@@ -1,6 +1,7 @@
 import { getJournalPosts } from 'app/journal/utils'
+import { SITE_CONFIG } from './constants'
 
-export const baseUrl = 'https://portfolio-journal-starter.vercel.app'
+export const baseUrl = SITE_CONFIG.baseUrl
 
 export default async function sitemap() {
   let entries = getJournalPosts().map((post) => ({

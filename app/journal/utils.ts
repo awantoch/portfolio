@@ -1,5 +1,6 @@
 import fs from 'fs'
 import path from 'path'
+import { DATE_CONFIG } from '../constants'
 
 type Metadata = {
   title: string
@@ -56,7 +57,7 @@ export function getJournalPosts() {
 export function formatDate(date: string, includeRelative = false) {
   let currentDate = new Date()
   if (!date.includes('T')) {
-    date = `${date}T00:00:00`
+    date = `${date}${DATE_CONFIG.defaultTimeString}`
   }
   let targetDate = new Date(date)
 
@@ -76,11 +77,7 @@ export function formatDate(date: string, includeRelative = false) {
     formattedDate = 'Today'
   }
 
-  let fullDate = targetDate.toLocaleString('en-us', {
-    month: 'long',
-    day: 'numeric',
-    year: 'numeric',
-  })
+  let fullDate = targetDate.toLocaleString(DATE_CONFIG.dateLocale, DATE_CONFIG.dateFormat)
 
   if (!includeRelative) {
     return fullDate

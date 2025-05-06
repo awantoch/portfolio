@@ -6,21 +6,21 @@ import { Navbar } from './components/nav'
 import { Analytics } from '@vercel/analytics/react'
 import { SpeedInsights } from '@vercel/speed-insights/next'
 import Footer from './components/footer'
-import { baseUrl } from './sitemap'
+import { SITE_CONFIG } from './constants'
 
 export const metadata: Metadata = {
-  metadataBase: new URL(baseUrl),
+  metadataBase: new URL(SITE_CONFIG.baseUrl),
   title: {
-    default: 'Next.js Portfolio Starter',
-    template: '%s | Next.js Portfolio Starter',
+    default: SITE_CONFIG.title,
+    template: `%s | ${SITE_CONFIG.title}`,
   },
-  description: 'This is my portfolio.',
+  description: SITE_CONFIG.description,
   openGraph: {
-    title: 'My Portfolio',
-    description: 'This is my portfolio.',
-    url: baseUrl,
-    siteName: 'My Portfolio',
-    locale: 'en_US',
+    title: SITE_CONFIG.title,
+    description: SITE_CONFIG.description,
+    url: SITE_CONFIG.baseUrl,
+    siteName: SITE_CONFIG.title,
+    locale: SITE_CONFIG.locale,
     type: 'website',
   },
   robots: {
@@ -45,7 +45,7 @@ export default function RootLayout({
 }) {
   return (
     <html
-      lang="en"
+      lang={SITE_CONFIG.language}
       className={cx(
         'text-black bg-white dark:text-white dark:bg-black',
         GeistSans.variable,
