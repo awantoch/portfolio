@@ -1,1 +1,3 @@
-This is Alec M. Wantoch's portfolio website
+# Alec M. Wantoch 
+
+Portfolio & journal repo
