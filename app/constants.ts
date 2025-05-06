@@ -13,6 +13,9 @@ export const NAV_ITEMS = {
   '/journal': {
     name: 'journal',
   },
+  'mailto:alec@wantoch.com': {
+    name: 'contact me',
+  },
 } as const
 
 export const OG_CONFIG = {

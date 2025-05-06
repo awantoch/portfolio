@@ -6,7 +6,9 @@ export function JournalEntries() {
 
   return (
     <div>
-      {allEntries
+      <h2 className="text-xl font-semibold mb-4">Journal</h2>
+      <div>
+        {allEntries
         .sort((a, b) => {
           if (
             new Date(a.metadata.publishedAt) > new Date(b.metadata.publishedAt)
@@ -31,6 +33,7 @@ export function JournalEntries() {
             </div>
           </Link>
         ))}
+      </div>
     </div>
   )
 }

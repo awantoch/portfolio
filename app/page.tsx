@@ -1,4 +1,5 @@
 import { JournalEntries } from 'app/components/posts'
+import { Portfolio } from 'app/components/portfolio'
 
 export default function Page() {
   return (
@@ -9,6 +10,7 @@ export default function Page() {
       <p className="mb-4">
         {`I am an entrepreneur & computer scientist that seeks to change the world for the better through the optimal use of technology.`}
       </p>
+      <Portfolio />
       <div className="my-8">
         <JournalEntries />
       </div>
