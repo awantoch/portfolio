@@ -13,13 +13,14 @@ const portfolioEntries: PortfolioEntry[] = [
     description: 'Head of Product (2024 - present). Web3-native game store and marketplace. Led product development, roadmap, and cross-functional coordination.',
     links: [
       { label: 'Website', url: 'https://hyperplay.xyz' },
+      { label: 'GitHub', url: 'https://github.com/hyperplay-gaming' },
     ],
   },
   {
     title: 'Valist, Inc. (acquired by HyperPlay)',
     description: 'CEO, Co-founder (2020 - March 2024). Web3-native software deployment tooling. Raised $1MM+, led team, and managed successful acquisition.',
     links: [
-      { label: 'Website', url: 'https://valist.io' },
+      { label: 'Website', url: 'https://docs.valist.io' },
       { label: 'GitHub', url: 'https://github.com/valist-io' },
     ],
   },
