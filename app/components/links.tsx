@@ -17,10 +17,10 @@ function ArrowIcon() {
 
 export function Links() {
   return (
-    <ul className="font-sm flex flex-col space-x-0 space-y-2 text-neutral-600 md:flex-row md:space-x-4 md:space-y-0 dark:text-neutral-300">
-      <li>
+    <ul className="grid grid-cols-2 gap-4 w-full max-w-xs mx-auto text-neutral-600 dark:text-neutral-300 sm:grid-cols-3 md:grid-cols-6 md:max-w-none">
+      <li className="text-center">
         <a
-          className="flex items-center transition-all hover:text-neutral-800 dark:hover:text-neutral-100"
+          className="flex items-center justify-center transition-all hover:text-neutral-800 dark:hover:text-neutral-100"
           rel="noopener noreferrer"
           target="_blank"
           href="https://github.com/awantoch"
@@ -29,9 +29,9 @@ export function Links() {
           <p className="ml-2 h-7">github</p>
         </a>
       </li>
-      <li>
+      <li className="text-center">
         <a
-          className="flex items-center transition-all hover:text-neutral-800 dark:hover:text-neutral-100"
+          className="flex items-center justify-center transition-all hover:text-neutral-800 dark:hover:text-neutral-100"
           rel="noopener noreferrer"
           target="_blank"
           href="https://linkedin.com/in/awantoch"
@@ -40,9 +40,9 @@ export function Links() {
           <p className="ml-2 h-7">linkedin</p>
         </a>
       </li>
-      <li>
+      <li className="text-center">
         <a
-          className="flex items-center transition-all hover:text-neutral-800 dark:hover:text-neutral-100"
+          className="flex items-center justify-center transition-all hover:text-neutral-800 dark:hover:text-neutral-100"
           rel="noopener noreferrer"
           target="_blank"
           href="https://instagram.com/awantoch"
@@ -51,9 +51,9 @@ export function Links() {
           <p className="ml-2 h-7">instagram</p>
         </a>
       </li>
-      <li>
+      <li className="text-center">
         <a
-          className="flex items-center transition-all hover:text-neutral-800 dark:hover:text-neutral-100"
+          className="flex items-center justify-center transition-all hover:text-neutral-800 dark:hover:text-neutral-100"
           rel="noopener noreferrer"
           target="_blank"
           href="https://x.com/alecw"
@@ -62,9 +62,9 @@ export function Links() {
           <p className="ml-2 h-7">x</p>
         </a>
       </li>
-      <li>
+      <li className="text-center">
         <a
-          className="flex items-center transition-all hover:text-neutral-800 dark:hover:text-neutral-100"
+          className="flex items-center justify-center transition-all hover:text-neutral-800 dark:hover:text-neutral-100"
           rel="noopener noreferrer"
           target="_blank"
           href="https://youtube.com/awantoch"
@@ -73,9 +73,9 @@ export function Links() {
           <p className="ml-2 h-7">youtube</p>
         </a>
       </li>
-      <li>
+      <li className="text-center">
         <a
-          className="flex items-center transition-all hover:text-neutral-800 dark:hover:text-neutral-100"
+          className="flex items-center justify-center transition-all hover:text-neutral-800 dark:hover:text-neutral-100"
           rel="noopener noreferrer"
           target="_blank"
           href="mailto:alec@wantoch.com"
