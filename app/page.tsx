@@ -11,12 +11,14 @@ export default function Page() {
       <p className="mb-4">
         {`I am an entrepreneur & computer scientist that seeks to change the world for the better through the optimal use of technology.`}
       </p>
-      <div className="mb-8">
+      <div className="mt-8 mb-8">
         <Links />
       </div>
-      <Portfolio />
+      <h2 className="text-xl font-semibold mb-4">Portfolio</h2>
+      <Portfolio limit={3} showMore={true} />
       <div className="my-8">
-        <JournalEntries />
+        <h2 className="text-xl font-semibold mb-4">Journal</h2>
+        <JournalEntries limit={5} showMore={true} />
       </div>
     </section>
   )

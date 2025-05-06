@@ -1,4 +1,5 @@
 import React from 'react';
+import Link from 'next/link';
 
 export type PortfolioEntry = {
   title: string;
@@ -48,12 +49,18 @@ const portfolioEntries: PortfolioEntry[] = [
   },
 ];
 
-export function Portfolio() {
+type PortfolioProps = {
+  limit?: number;
+  showMore?: boolean;
+};
+
+export function Portfolio({ limit, showMore = false }: PortfolioProps) {
+  const entries = limit ? portfolioEntries.slice(0, limit) : portfolioEntries;
+
   return (
     <section className="my-8">
-      <h2 className="text-xl font-semibold mb-4">Portfolio</h2>
       <div className="flex flex-col gap-6">
-        {portfolioEntries.map((entry, idx) => (
+        {entries.map((entry, idx) => (
           <div key={idx} className="border-b border-neutral-800 pb-4">
             <h3 className="font-medium text-lg">{entry.title}</h3>
             <p className="text-neutral-400 mb-2">{entry.description}</p>
@@ -75,6 +82,16 @@ export function Portfolio() {
           </div>
         ))}
       </div>
+      {showMore && (
+        <div className="mt-8">
+          <Link 
+            href="/portfolio" 
+            className="text-neutral-300 hover:text-white underline"
+          >
+            View full portfolio →
+          </Link>
+        </div>
+      )}
     </section>
   );
 } 

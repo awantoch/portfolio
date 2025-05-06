@@ -10,6 +10,9 @@ export const NAV_ITEMS = {
   '/': {
     name: 'home',
   },
+  '/portfolio': {
+    name: 'portfolio',
+  },
   '/journal': {
     name: 'journal',
   },

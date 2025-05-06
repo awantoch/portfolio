@@ -1,23 +1,28 @@
 import Link from 'next/link'
 import { formatDate, getJournalPosts } from 'app/journal/utils'
 
-export function JournalEntries() {
+type JournalEntriesProps = {
+  limit?: number;
+  showMore?: boolean;
+};
+
+export function JournalEntries({ limit, showMore = false }: JournalEntriesProps) {
   let allEntries = getJournalPosts()
+    .sort((a, b) => {
+      if (
+        new Date(a.metadata.publishedAt) > new Date(b.metadata.publishedAt)
+      ) {
+        return -1
+      }
+      return 1
+    })
+
+  const entries = limit ? allEntries.slice(0, limit) : allEntries;
 
   return (
     <div>
-      <h2 className="text-xl font-semibold mb-4">Journal</h2>
       <div>
-        {allEntries
-        .sort((a, b) => {
-          if (
-            new Date(a.metadata.publishedAt) > new Date(b.metadata.publishedAt)
-          ) {
-            return -1
-          }
-          return 1
-        })
-        .map((post) => (
+        {entries.map((post) => (
           <Link
             key={post.slug}
             className="flex flex-col space-y-1 mb-4"
@@ -34,6 +39,16 @@ export function JournalEntries() {
           </Link>
         ))}
       </div>
+      {showMore && (
+        <div className="mt-8">
+          <Link 
+            href="/journal" 
+            className="text-neutral-300 hover:text-white underline"
+          >
+            View all entries →
+          </Link>
+        </div>
+      )}
     </div>
   )
 }
