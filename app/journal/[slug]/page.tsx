@@ -1,19 +1,19 @@
 import { notFound } from 'next/navigation'
 import { CustomMDX } from 'app/components/mdx'
-import { formatDate, getBlogPosts } from 'app/blog/utils'
+import { formatDate, getJournalPosts } from 'app/journal/utils'
 import { baseUrl } from 'app/sitemap'
 
 export async function generateStaticParams() {
-  let posts = getBlogPosts()
+  let entries = getJournalPosts()
 
-  return posts.map((post) => ({
-    slug: post.slug,
+  return entries.map((entry) => ({
+    slug: entry.slug,
   }))
 }
 
 export function generateMetadata({ params }) {
-  let post = getBlogPosts().find((post) => post.slug === params.slug)
-  if (!post) {
+  let entry = getJournalPosts().find((entry) => entry.slug === params.slug)
+  if (!entry) {
     return
   }
 
@@ -22,7 +22,7 @@ export function generateMetadata({ params }) {
     publishedAt: publishedTime,
     summary: description,
     image,
-  } = post.metadata
+  } = entry.metadata
   let ogImage = image
     ? image
     : `${baseUrl}/og?title=${encodeURIComponent(title)}`
@@ -35,7 +35,7 @@ export function generateMetadata({ params }) {
       description,
       type: 'article',
       publishedTime,
-      url: `${baseUrl}/blog/${post.slug}`,
+      url: `${baseUrl}/journal/${entry.slug}`,
       images: [
         {
           url: ogImage,
@@ -51,10 +51,10 @@ export function generateMetadata({ params }) {
   }
 }
 
-export default function Blog({ params }) {
-  let post = getBlogPosts().find((post) => post.slug === params.slug)
+export default function JournalEntry({ params }) {
+  let entry = getJournalPosts().find((entry) => entry.slug === params.slug)
 
-  if (!post) {
+  if (!entry) {
     notFound()
   }
 
@@ -66,32 +66,32 @@ export default function Blog({ params }) {
         dangerouslySetInnerHTML={{
           __html: JSON.stringify({
             '@context': 'https://schema.org',
-            '@type': 'BlogPosting',
-            headline: post.metadata.title,
-            datePublished: post.metadata.publishedAt,
-            dateModified: post.metadata.publishedAt,
-            description: post.metadata.summary,
-            image: post.metadata.image
-              ? `${baseUrl}${post.metadata.image}`
-              : `/og?title=${encodeURIComponent(post.metadata.title)}`,
-            url: `${baseUrl}/blog/${post.slug}`,
+            '@type': 'Article',
+            headline: entry.metadata.title,
+            datePublished: entry.metadata.publishedAt,
+            dateModified: entry.metadata.publishedAt,
+            description: entry.metadata.summary,
+            image: entry.metadata.image
+              ? `${baseUrl}${entry.metadata.image}`
+              : `/og?title=${encodeURIComponent(entry.metadata.title)}`,
+            url: `${baseUrl}/journal/${entry.slug}`,
             author: {
               '@type': 'Person',
-              name: 'My Portfolio',
+              name: 'Alec M. Wantoch',
             },
           }),
         }}
       />
       <h1 className="title font-semibold text-2xl tracking-tighter">
-        {post.metadata.title}
+        {entry.metadata.title}
       </h1>
       <div className="flex justify-between items-center mt-2 mb-8 text-sm">
         <p className="text-sm text-neutral-600 dark:text-neutral-400">
-          {formatDate(post.metadata.publishedAt)}
+          {formatDate(entry.metadata.publishedAt)}
         </p>
       </div>
       <article className="prose">
-        <CustomMDX source={post.content} />
+        <CustomMDX source={entry.content} />
       </article>
     </section>
   )
