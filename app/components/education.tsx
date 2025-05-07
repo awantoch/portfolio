@@ -45,7 +45,7 @@ export function Education() {
                 <a
                   key={lidx}
                   href={link.url}
-                  className="underline text-neutral-700 dark:text-neutral-300 hover:text-black dark:hover:text-white"
+                  className="underline text-neutral-700 dark:text-neutral-300 hover:opacity-80"
                   target="_blank"
                   rel="noopener noreferrer"
                 >

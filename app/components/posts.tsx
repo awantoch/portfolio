@@ -43,7 +43,7 @@ export function JournalEntries({ limit, showMore = false }: JournalEntriesProps)
         <div className="mt-8">
           <Link 
             href="/journal" 
-            className="underline text-neutral-700 dark:text-neutral-300 hover:text-black dark:hover:text-white"
+            className="underline text-neutral-700 dark:text-neutral-300 hover:opacity-80"
           >
             View all entries →
           </Link>
