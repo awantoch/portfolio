@@ -23,7 +23,7 @@ export default function Page() {
         Alec M. Wantoch
       </h1>
       <p className="mb-4 text-center">
-        {`I am an entrepreneur & computer scientist that seeks to change the world for the better through the optimal use of technology.`}
+        {`I am an entrepreneur & computer scientist that seeks to change the world for the better through practical use of technology.`}
       </p>
       <div className="mt-8 mb-8">
         <Links />
