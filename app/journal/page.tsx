@@ -10,7 +10,7 @@ export const metadata: Metadata = {
     description: METADATA_CONFIG.descriptions.journal,
     images: [
       {
-        url: `${SITE_CONFIG.baseUrl}/og?title=${encodeURIComponent('Journal | Alec M. Wantoch')}`,
+        url: `${SITE_CONFIG.baseUrl}/og?title=${encodeURIComponent('Journal | Alec M. Wantoch')}&description=${encodeURIComponent(METADATA_CONFIG.descriptions.journal)}`,
         width: 1200,
         height: 630,
         alt: 'Journal | Alec M. Wantoch',
@@ -21,7 +21,7 @@ export const metadata: Metadata = {
     card: 'summary_large_image',
     title: 'Journal | Alec M. Wantoch',
     description: METADATA_CONFIG.descriptions.journal,
-    images: [`${SITE_CONFIG.baseUrl}/og?title=${encodeURIComponent('Journal | Alec M. Wantoch')}`],
+    images: [`${SITE_CONFIG.baseUrl}/og?title=${encodeURIComponent('Journal | Alec M. Wantoch')}&description=${encodeURIComponent(METADATA_CONFIG.descriptions.journal)}`],
   },
 }
 

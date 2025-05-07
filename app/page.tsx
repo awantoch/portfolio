@@ -13,7 +13,7 @@ export const metadata: Metadata = {
     description: METADATA_CONFIG.descriptions.home,
     images: [
       {
-        url: `${SITE_CONFIG.baseUrl}/og?title=${encodeURIComponent(SITE_CONFIG.title)}`,
+        url: `${SITE_CONFIG.baseUrl}/og?title=${encodeURIComponent(SITE_CONFIG.title)}&description=${encodeURIComponent(METADATA_CONFIG.descriptions.home)}`,
         width: 1200,
         height: 630,
         alt: SITE_CONFIG.title,
@@ -24,7 +24,7 @@ export const metadata: Metadata = {
     card: 'summary_large_image',
     title: SITE_CONFIG.title,
     description: METADATA_CONFIG.descriptions.home,
-    images: [`${SITE_CONFIG.baseUrl}/og?title=${encodeURIComponent(SITE_CONFIG.title)}`],
+    images: [`${SITE_CONFIG.baseUrl}/og?title=${encodeURIComponent(SITE_CONFIG.title)}&description=${encodeURIComponent(METADATA_CONFIG.descriptions.home)}`],
   },
 }
 

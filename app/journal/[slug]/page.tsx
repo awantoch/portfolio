@@ -25,7 +25,7 @@ export function generateMetadata({ params }) {
   } = entry.metadata
   let ogImage = image
     ? image
-    : `${baseUrl}/og?title=${encodeURIComponent(title)}`
+    : `${baseUrl}/og?title=${encodeURIComponent(title)}&description=${encodeURIComponent(description)}`
 
   return {
     title,
