@@ -48,6 +48,10 @@ const portfolioEntries: PortfolioEntry[] = [
     title: 'Textbook, LLC',
     description: 'Lead Application Developer (2015 - 2016). Architected and built a social network and Cordova apps with strong security.',
   },
+  {
+    title: 'Highmark Inc. (contracted via ComputerAid, Inc.)',
+    description: 'Software Developer (2014 - 2017). Old school healthcare dev stuff. Full-stack development across 3 major projects using Angular.js, Node.js, and Java EE. Led RESTful API development with DB2/Oracle/Teradata.',
+  },
 ];
 
 type PortfolioProps = {
