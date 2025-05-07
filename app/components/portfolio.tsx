@@ -1,10 +1,16 @@
 import React from 'react';
 import Link from 'next/link';
+import { cx } from '../utils';
+
+export type PortfolioLink = {
+  label: string;
+  url: string;
+};
 
 export type PortfolioEntry = {
   title: string;
   description: string;
-  links?: { label: string; url: string }[];
+  links?: PortfolioLink[];
 };
 
 const portfolioEntries: PortfolioEntry[] = [
@@ -54,44 +60,52 @@ const portfolioEntries: PortfolioEntry[] = [
   },
 ];
 
+type PortfolioItemProps = {
+  entry: PortfolioEntry;
+};
+
+const PortfolioItem: React.FC<PortfolioItemProps> = ({ entry }) => (
+  <div className="border-b border-neutral-800 pb-4">
+    <h3 className="font-medium text-lg">{entry.title}</h3>
+    <p className="text-neutral-400 mb-2">{entry.description}</p>
+    {entry.links && (
+      <div className="flex flex-row gap-4">
+        {entry.links.map((link, lidx) => (
+          <a
+            key={lidx}
+            href={link.url}
+            className="underline text-neutral-700 dark:text-neutral-300 hover:opacity-80 transition-opacity"
+            target="_blank"
+            rel="noopener noreferrer"
+          >
+            {link.label}
+          </a>
+        ))}
+      </div>
+    )}
+  </div>
+);
+
 type PortfolioProps = {
   limit?: number;
   showMore?: boolean;
 };
 
-export function Portfolio({ limit, showMore = false }: PortfolioProps) {
+export const Portfolio: React.FC<PortfolioProps> = ({ limit, showMore = false }) => {
   const entries = limit ? portfolioEntries.slice(0, limit) : portfolioEntries;
 
   return (
     <section className="my-8">
       <div className="flex flex-col gap-6">
         {entries.map((entry, idx) => (
-          <div key={idx} className="border-b border-neutral-800 pb-4">
-            <h3 className="font-medium text-lg">{entry.title}</h3>
-            <p className="text-neutral-400 mb-2">{entry.description}</p>
-            {entry.links && (
-              <div className="flex flex-row gap-4">
-                {entry.links.map((link, lidx) => (
-                  <a
-                    key={lidx}
-                    href={link.url}
-                    className="underline text-neutral-700 dark:text-neutral-300 hover:opacity-80"
-                    target="_blank"
-                    rel="noopener noreferrer"
-                  >
-                    {link.label}
-                  </a>
-                ))}
-              </div>
-            )}
-          </div>
+          <PortfolioItem key={idx} entry={entry} />
         ))}
       </div>
       {showMore && (
         <div className="mt-8">
           <Link 
             href="/portfolio" 
-            className="underline text-neutral-700 dark:text-neutral-300 hover:opacity-80"
+            className="underline text-neutral-700 dark:text-neutral-300 hover:opacity-80 transition-opacity"
           >
             View full portfolio →
           </Link>
@@ -99,4 +113,4 @@ export function Portfolio({ limit, showMore = false }: PortfolioProps) {
       )}
     </section>
   );
-} 
+}; 

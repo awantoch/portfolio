@@ -6,8 +6,7 @@ import { Navbar } from './components/nav'
 import Footer from './components/footer'
 import { SITE_CONFIG, OG_CONFIG, METADATA_CONFIG } from './constants'
 import { AnalyticsWrapper } from './components/analytics'
-
-const cx = (...classes) => classes.filter(Boolean).join(' ')
+import { cx } from './utils'
 
 export const metadata: Metadata = {
   metadataBase: new URL(SITE_CONFIG.baseUrl),
@@ -88,15 +87,17 @@ export default function RootLayout({
         GeistMono.variable
       )}
     >
-      <body className="antialiased bg-black text-white">
-        <main className="w-full min-h-[calc(100vh-4rem)] flex flex-col items-center mt-8">
-          <div className="w-full max-w-xl px-4">
-            <Navbar />
-            {children}
-            <Footer />
-            <AnalyticsWrapper />
-          </div>
-        </main>
+      <body className="antialiased min-h-screen bg-black text-white">
+        <div className="flex min-h-screen flex-col">
+          <main className="flex-1 w-full flex flex-col items-center mt-8">
+            <div className="w-full max-w-xl px-4">
+              <Navbar />
+              {children}
+              <Footer />
+            </div>
+          </main>
+          <AnalyticsWrapper />
+        </div>
       </body>
     </html>
   )
