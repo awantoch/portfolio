@@ -1,6 +1,4 @@
-import React from 'react';
 import Link from 'next/link';
-import { cx } from '../utils';
 
 export type PortfolioLink = {
   label: string;
