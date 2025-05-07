@@ -1,3 +1,13 @@
+---
+description: 
+globs: 
+alwaysApply: true
+---
+---
+description: Project Context
+globs: 
+alwaysApply: true
+---
 
 ## Tech  Stack
 - **Next.js 15+** (App Router, TypeScript)
