@@ -1,3 +1,5 @@
+import { DATE_CONFIG } from './constants'
+
 export const cx = (...classes: (string | undefined | null | false)[]) => 
   classes.filter(Boolean).join(' ');
 
@@ -21,20 +23,12 @@ export const formatDate = (date: string | Date, includeRelative = false) => {
       relativeDate = 'Today';
     }
 
-    const fullDate = targetDate.toLocaleDateString('en-US', {
-      month: 'long',
-      day: 'numeric',
-      year: 'numeric',
-    });
+    const fullDate = targetDate.toLocaleDateString(DATE_CONFIG.dateLocale, DATE_CONFIG.dateFormat);
 
     return `${fullDate} (${relativeDate})`;
   }
 
-  return targetDate.toLocaleDateString('en-US', {
-    month: 'long',
-    day: 'numeric',
-    year: 'numeric',
-  });
+  return targetDate.toLocaleDateString(DATE_CONFIG.dateLocale, DATE_CONFIG.dateFormat);
 };
 
 export const truncateText = (text: string, length: number) => {
