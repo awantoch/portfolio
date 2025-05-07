@@ -6,7 +6,7 @@ import { Navbar } from './components/nav'
 import { Analytics } from '@vercel/analytics/react'
 import { SpeedInsights } from '@vercel/speed-insights/next'
 import Footer from './components/footer'
-import { SITE_CONFIG } from './constants'
+import { SITE_CONFIG, OG_CONFIG, METADATA_CONFIG } from './constants'
 
 export const metadata: Metadata = {
   metadataBase: new URL(SITE_CONFIG.baseUrl),
@@ -15,6 +15,15 @@ export const metadata: Metadata = {
     template: `%s | ${SITE_CONFIG.title}`,
   },
   description: SITE_CONFIG.description,
+  keywords: METADATA_CONFIG.keywords,
+  authors: [{ name: METADATA_CONFIG.author }],
+  creator: METADATA_CONFIG.author,
+  publisher: METADATA_CONFIG.author,
+  formatDetection: {
+    email: false,
+    address: false,
+    telephone: false,
+  },
   icons: {
     icon: [
       { url: '/favicon.ico' },
@@ -32,6 +41,21 @@ export const metadata: Metadata = {
     siteName: SITE_CONFIG.title,
     locale: SITE_CONFIG.locale,
     type: 'website',
+    images: [
+      {
+        url: `${SITE_CONFIG.baseUrl}/og?title=${encodeURIComponent(SITE_CONFIG.title)}`,
+        width: OG_CONFIG.imageWidth,
+        height: OG_CONFIG.imageHeight,
+        alt: SITE_CONFIG.title,
+      },
+    ],
+  },
+  twitter: {
+    card: 'summary_large_image',
+    title: SITE_CONFIG.title,
+    description: SITE_CONFIG.description,
+    creator: METADATA_CONFIG.twitterHandle,
+    images: [`${SITE_CONFIG.baseUrl}/og?title=${encodeURIComponent(SITE_CONFIG.title)}`],
   },
   robots: {
     index: true,
@@ -43,6 +67,9 @@ export const metadata: Metadata = {
       'max-image-preview': 'large',
       'max-snippet': -1,
     },
+  },
+  alternates: {
+    canonical: SITE_CONFIG.baseUrl,
   },
 }
 

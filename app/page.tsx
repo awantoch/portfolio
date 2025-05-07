@@ -2,6 +2,31 @@ import { JournalEntries } from 'app/components/posts'
 import { Portfolio } from 'app/components/portfolio'
 import { Links } from 'app/components/links'
 import Image from 'next/image'
+import { Metadata } from 'next'
+import { SITE_CONFIG, METADATA_CONFIG } from './constants'
+
+export const metadata: Metadata = {
+  title: SITE_CONFIG.title,
+  description: METADATA_CONFIG.descriptions.home,
+  openGraph: {
+    title: SITE_CONFIG.title,
+    description: METADATA_CONFIG.descriptions.home,
+    images: [
+      {
+        url: `${SITE_CONFIG.baseUrl}/og?title=${encodeURIComponent(SITE_CONFIG.title)}`,
+        width: 1200,
+        height: 630,
+        alt: SITE_CONFIG.title,
+      },
+    ],
+  },
+  twitter: {
+    card: 'summary_large_image',
+    title: SITE_CONFIG.title,
+    description: METADATA_CONFIG.descriptions.home,
+    images: [`${SITE_CONFIG.baseUrl}/og?title=${encodeURIComponent(SITE_CONFIG.title)}`],
+  },
+}
 
 export default function Page() {
   return (
@@ -23,7 +48,7 @@ export default function Page() {
         Alec M. Wantoch
       </h1>
       <p className="mb-4 text-center">
-        {`I am an entrepreneur & computer scientist that seeks to change the world for the better through practical use of technology.`}
+        {METADATA_CONFIG.descriptions.home}
       </p>
       <div className="mt-8 mb-8">
         <Links />
