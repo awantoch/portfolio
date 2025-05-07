@@ -3,10 +3,11 @@ import type { Metadata } from 'next'
 import { GeistSans } from 'geist/font/sans'
 import { GeistMono } from 'geist/font/mono'
 import { Navbar } from './components/nav'
-import { Analytics } from '@vercel/analytics/react'
-import { SpeedInsights } from '@vercel/speed-insights/next'
 import Footer from './components/footer'
 import { SITE_CONFIG, OG_CONFIG, METADATA_CONFIG } from './constants'
+import { AnalyticsWrapper } from './components/analytics'
+
+const cx = (...classes) => classes.filter(Boolean).join(' ')
 
 export const metadata: Metadata = {
   metadataBase: new URL(SITE_CONFIG.baseUrl),
@@ -73,8 +74,6 @@ export const metadata: Metadata = {
   },
 }
 
-const cx = (...classes) => classes.filter(Boolean).join(' ')
-
 export default function RootLayout({
   children,
 }: {
@@ -94,8 +93,7 @@ export default function RootLayout({
           <Navbar />
           {children}
           <Footer />
-          <Analytics />
-          <SpeedInsights />
+          <AnalyticsWrapper />
         </main>
       </body>
     </html>

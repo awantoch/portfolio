@@ -40,7 +40,7 @@ export default function Page() {
             width={128}
             height={128}
             priority
-            quality={100}
+            quality={85}
           />
         </div>
       </div>
