@@ -87,7 +87,7 @@ export default function RootLayout({
         GeistMono.variable
       )}
     >
-      <body className="antialiased min-h-screen bg-black text-white">
+      <body className="antialiased min-h-screen bg-custom-gradient text-white">
         <div className="flex min-h-screen flex-col">
           <main className="flex-1 w-full flex flex-col items-center mt-8">
             <div className="w-full max-w-xl px-4">

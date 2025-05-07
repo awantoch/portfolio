@@ -175,3 +175,7 @@ table {
 .link {
   @apply underline text-neutral-700 dark:text-neutral-300 hover:opacity-80 transition-opacity;
 }
+
+.bg-custom-gradient {
+  background: radial-gradient(ellipse at 60% 0%, #20132b 0%, #120c18 100%);
+}
