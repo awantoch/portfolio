@@ -16,75 +16,31 @@ function ArrowIcon() {
   )
 }
 
+const links = [
+  { href: 'https://github.com/awantoch', label: 'github' },
+  { href: 'https://linkedin.com/in/awantoch', label: 'linkedin' },
+  { href: 'https://instagram.com/awantoch', label: 'instagram' },
+  { href: 'https://x.com/alecw', label: 'x' },
+  { href: 'https://youtube.com/@AlecWantoch', label: 'youtube' },
+  { href: 'mailto:alec@wantoch.com', label: 'email' },
+]
+
 export function Links() {
   return (
     <ul className="grid grid-cols-3 gap-4 w-full max-w-2xl mx-auto text-neutral-600 dark:text-neutral-300">
-      <li className="text-center">
-        <a
-          className="flex items-center justify-center transition-all hover:text-neutral-800 dark:hover:text-neutral-100"
-          rel="noopener noreferrer"
-          target="_blank"
-          href="https://github.com/awantoch"
-        >
-          <ArrowIcon />
-          <p className="ml-2 h-7">github</p>
-        </a>
-      </li>
-      <li className="text-center">
-        <a
-          className="flex items-center justify-center transition-all hover:text-neutral-800 dark:hover:text-neutral-100"
-          rel="noopener noreferrer"
-          target="_blank"
-          href="https://linkedin.com/in/awantoch"
-        >
-          <ArrowIcon />
-          <p className="ml-2 h-7">linkedin</p>
-        </a>
-      </li>
-      <li className="text-center">
-        <a
-          className="flex items-center justify-center transition-all hover:text-neutral-800 dark:hover:text-neutral-100"
-          rel="noopener noreferrer"
-          target="_blank"
-          href="https://instagram.com/awantoch"
-        >
-          <ArrowIcon />
-          <p className="ml-2 h-7">instagram</p>
-        </a>
-      </li>
-      <li className="text-center">
-        <a
-          className="flex items-center justify-center transition-all hover:text-neutral-800 dark:hover:text-neutral-100"
-          rel="noopener noreferrer"
-          target="_blank"
-          href="https://x.com/alecw"
-        >
-          <ArrowIcon />
-          <p className="ml-2 h-7">x</p>
-        </a>
-      </li>
-      <li className="text-center">
-        <a
-          className="flex items-center justify-center transition-all hover:text-neutral-800 dark:hover:text-neutral-100"
-          rel="noopener noreferrer"
-          target="_blank"
-          href="https://youtube.com/awantoch"
-        >
-          <ArrowIcon />
-          <p className="ml-2 h-7">youtube</p>
-        </a>
-      </li>
-      <li className="text-center">
-        <a
-          className="flex items-center justify-center transition-all hover:text-neutral-800 dark:hover:text-neutral-100"
-          rel="noopener noreferrer"
-          target="_blank"
-          href="mailto:alec@wantoch.com"
-        >
-          <ArrowIcon />
-          <p className="ml-2 h-7">email</p>
-        </a>
-      </li>
+      {links.map(({ href, label }) => (
+        <li key={href} className="text-center">
+          <a
+            className="flex items-center justify-center transition-all hover:text-neutral-800 dark:hover:text-neutral-100"
+            rel="noopener noreferrer"
+            target="_blank"
+            href={href}
+          >
+            <ArrowIcon />
+            <p className="ml-2 h-7">{label}</p>
+          </a>
+        </li>
+      ))}
     </ul>
   )
 } 
