@@ -1,4 +1,5 @@
 import { Portfolio } from 'app/components/portfolio'
+import { Education } from 'app/components/education'
 import { Metadata } from 'next'
 import { SITE_CONFIG, METADATA_CONFIG } from '../constants'
 
@@ -30,6 +31,8 @@ export default function PortfolioPage() {
     <section>
       <h1 className="font-semibold text-2xl mb-8 tracking-tighter">Portfolio</h1>
       <Portfolio />
+      <h1 className="font-semibold text-2xl mb-8 tracking-tighter mt-16">Education</h1>
+      <Education />
     </section>
   )
 } 
