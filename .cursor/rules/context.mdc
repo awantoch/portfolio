@@ -44,18 +44,19 @@ alwaysApply: true
   ├─ /components        # atomic, typed React components
   ├─ /journal          # MDX posts
   │  ├─ /posts         # MDX content files
-  │  │  └─ *.mdx      # individual posts
+  │  │  └─ *.mdx      # individual posts, filename used as route path
   │  ├─ /[slug]       # dynamic post routes
-  │  ├─ page.tsx      # journal index
-  │  └─ utils.ts      # journal helpers
+  │  │  └─ [page.tsx](mdc:app/journal/[slug]/page.tsx)     # individual posts, filename used as route path
+  │  ├─ [page.tsx](mdc:app/journal/page.tsx)      # journal index
+  │  └─ [utils.ts](mdc:app/journal/utils.ts)      # journal helpers
   ├─ /portfolio        # portfolio items
   ├─ /og              # OG‑image functions
   ├─ /rss             # RSS generation
-  ├─ layout.tsx       # root layout + metadata
-  ├─ page.tsx         # home page
-  ├─ constants.ts
-  ├─ utils.ts
-  └─ global.css
+  ├─ [layout.tsx](mdc:app/layout.tsx)       # root layout + metadata
+  ├─ [page.tsx](mdc:app/page.tsx)         # home page
+  ├─ [constants.ts](mdc:app/constants.ts)
+  ├─ [utils.ts](mdc:app/utils.ts)
+  └─ [global.css](mdc:app/global.css)
 /vercel.json          # config + cron jobs
 
 Please search the codebase as frequently as possible, especially if you don't have context.

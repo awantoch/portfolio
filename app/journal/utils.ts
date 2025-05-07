@@ -1,6 +1,5 @@
 import fs from 'fs'
 import path from 'path'
-import { DATE_CONFIG } from '../constants'
 import { formatDate } from '../utils'
 
 type Metadata = {
