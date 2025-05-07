@@ -11,7 +11,7 @@ const links = [
 
 export function Links() {
   return (
-    <ul className="grid grid-cols-3 gap-4 w-full max-w-2xl mx-auto text-neutral-600 dark:text-neutral-300">
+    <ul className="grid grid-cols-3 gap-4 w-full max-w-2xl mx-auto text-neutral-300">
       {links.map(({ href, label }) => (
         <li key={href} className="text-center">
           <a

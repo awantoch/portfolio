@@ -72,7 +72,7 @@ const PortfolioItem: React.FC<PortfolioItemProps> = ({ entry }) => (
           <a
             key={lidx}
             href={link.url}
-            className="underline text-neutral-700 dark:text-neutral-300 hover:opacity-80 transition-opacity"
+            className="underline text-neutral-300 hover:opacity-80 transition-opacity"
             target="_blank"
             rel="noopener noreferrer"
           >
@@ -103,7 +103,7 @@ export const Portfolio: React.FC<PortfolioProps> = ({ limit, showMore = false })
         <div className="mt-8">
           <Link 
             href="/portfolio" 
-            className="underline text-neutral-700 dark:text-neutral-300 hover:opacity-80 transition-opacity"
+            className="underline text-neutral-300 hover:opacity-80 transition-opacity"
           >
             View full portfolio →
           </Link>

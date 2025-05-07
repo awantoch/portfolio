@@ -32,7 +32,7 @@ export default function Page() {
   return (
     <section>
       <div className="flex justify-center mb-6 mt-2">
-        <div className="w-32 h-32 rounded-xl overflow-hidden shadow-lg border-2 border-neutral-200 dark:border-neutral-800 bg-neutral-100 dark:bg-neutral-900 flex items-center justify-center">
+        <div className="w-32 h-32 rounded-xl overflow-hidden shadow-lg border-2 border-neutral-800 bg-neutral-900 flex items-center justify-center">
           <Image
             src="/headshot.png"
             alt="Headshot"
@@ -44,10 +44,10 @@ export default function Page() {
           />
         </div>
       </div>
-      <h1 className="mb-4 text-2xl font-semibold tracking-tighter text-center text-neutral-900 dark:text-neutral-100">
+      <h1 className="mb-4 text-2xl font-semibold tracking-tighter text-center text-neutral-100">
         Alec M. Wantoch
       </h1>
-      <p className="mb-4 text-center text-neutral-700 dark:text-neutral-300">
+      <p className="mb-4 text-center text-neutral-300">
         {METADATA_CONFIG.descriptions.home}
       </p>
       <div className="mt-8 mb-8">
