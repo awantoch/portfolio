@@ -3,7 +3,7 @@ export const SITE_CONFIG = {
   description: 'A continuous work in progress.',
   locale: 'en_US',
   language: 'en',
-  baseUrl: process.env.NEXT_PUBLIC_BASE_URL || 'https://wantoch.com',
+  baseUrl: process.env.NEXT_PUBLIC_BASE_URL || 'https://alec.wantoch.com',
 } as const
 
 export const METADATA_CONFIG = {

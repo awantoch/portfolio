@@ -2,6 +2,7 @@ import { notFound } from 'next/navigation'
 import { CustomMDX } from 'app/components/mdx'
 import { formatDate, getJournalPosts } from 'app/journal/utils'
 import { baseUrl } from 'app/sitemap'
+import Image from 'next/image'
 
 export async function generateStaticParams() {
   let entries = getJournalPosts()
@@ -26,7 +27,7 @@ export async function generateMetadata(props) {
   } = entry.metadata
   let ogImage = image
     ? image
-    : `${baseUrl}/og?title=${encodeURIComponent(title)}&description=${encodeURIComponent(description)}`
+    : `/og?title=${encodeURIComponent(title)}&description=${encodeURIComponent(description)}`
 
   return {
     title,
@@ -39,7 +40,7 @@ export async function generateMetadata(props) {
       url: `${baseUrl}/journal/${entry.slug}`,
       images: [
         {
-          url: ogImage,
+          url: image ? `${baseUrl}${image}` : `${baseUrl}${ogImage}`,
         },
       ],
     },
@@ -47,7 +48,7 @@ export async function generateMetadata(props) {
       card: 'summary_large_image',
       title,
       description,
-      images: [ogImage],
+      images: [image ? `${baseUrl}${image}` : `${baseUrl}${ogImage}`],
     },
   }
 }
@@ -59,6 +60,16 @@ export default async function JournalEntry(props) {
   if (!entry) {
     notFound()
   }
+
+  let {
+    title,
+    publishedAt,
+    summary: description,
+    image,
+  } = entry.metadata
+  let ogImage = image
+    ? image
+    : `/og?title=${encodeURIComponent(title)}&description=${encodeURIComponent(description)}`
 
   return (
     <section>
@@ -75,7 +86,7 @@ export default async function JournalEntry(props) {
             description: entry.metadata.summary,
             image: entry.metadata.image
               ? `${baseUrl}${entry.metadata.image}`
-              : `/og?title=${encodeURIComponent(entry.metadata.title)}`,
+              : `${baseUrl}/og?title=${encodeURIComponent(entry.metadata.title)}`,
             url: `${baseUrl}/journal/${entry.slug}`,
             author: {
               '@type': 'Person',
@@ -91,6 +102,19 @@ export default async function JournalEntry(props) {
         <p className="text-sm text-neutral-400">
           {formatDate(entry.metadata.publishedAt)}
         </p>
+      </div>
+      <div className="mb-8">
+        <Image
+          src={ogImage}
+          alt={entry.metadata.title}
+          width={1200}
+          height={630}
+          className="rounded-lg w-full"
+          priority
+          quality={75}
+          placeholder="blur"
+          blurDataURL="data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMTIwMCIgaGVpZ2h0PSI2MzAiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+PHJlY3Qgd2lkdGg9IjEyMDAiIGhlaWdodD0iNjMwIiBmaWxsPSIjMTgxODFiIi8+PC9zdmc+"
+        />
       </div>
       <article className="prose">
         <CustomMDX source={entry.content} />
