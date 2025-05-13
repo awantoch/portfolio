@@ -104,24 +104,23 @@ const HtmlUtils = {
   fixForKit(html: string, baseUrl: string = SITE_CONFIG.baseUrl): string {
     if (!html) return '';
     
-    // Process the HTML using more efficient replacements
-    let processedHtml = html
-      // Fix empty href attributes in links
-      .replace(/<a\s+href=['"]?(?:['"]|\s+|\>)/gi, '<a href="#"')
-      
-      // Convert relative URLs in links to absolute
-      .replace(
-        /<a\s+(?:[^>]*?\s+)?href=['"](?!\s*(?:https?:|mailto:|tel:|#))([^'"]+)['"]/gi,
-        (match, relativeUrl) => match.replace(relativeUrl, this.toAbsoluteUrl(relativeUrl, baseUrl))
-      )
-      
-      // Convert relative image URLs to absolute
-      .replace(
-        /<img(?:\s+[^>]*?)?(?:\s+src=['"](?!\s*(?:https?:|data:))([^'"]+)['"])/gi,
-        (match, relativeUrl) => match.replace(relativeUrl, this.toAbsoluteUrl(relativeUrl, baseUrl))
-      );
+    // Process the HTML using efficient regex-based replacements
+    // Fix empty href attributes in links
+    let processedHtml = html.replace(/<a\s+href=['"]?(?:['"]|\s+|\>)/gi, '<a href="#"');
     
-    // Handle YouTube embeds separately
+    // Convert relative URLs in links to absolute
+    processedHtml = processedHtml.replace(
+      /<a\s+(?:[^>]*?\s+)?href=['"](?!\s*(?:https?:|mailto:|tel:|#))([^'"]+)['"]/gi,
+      (match, relativeUrl) => match.replace(relativeUrl, this.toAbsoluteUrl(relativeUrl, baseUrl))
+    );
+    
+    // Convert relative image URLs to absolute
+    processedHtml = processedHtml.replace(
+      /<img(?:\s+[^>]*?)?(?:\s+src=['"](?!\s*(?:https?:|data:))([^'"]+)['"])/gi,
+      (match, relativeUrl) => match.replace(relativeUrl, this.toAbsoluteUrl(relativeUrl, baseUrl))
+    );
+    
+    // Handle YouTube embeds
     processedHtml = processedHtml.replace(
       /<iframe\s+[^>]*?src=['"](?:\/\/|https?:\/\/)?(?:www\.)?youtube(?:-nocookie)?\.com\/embed\/([^'"?]+)(?:[^'"]*?)['"][^>]*?><\/iframe>/gi,
       (match, videoId) => {
@@ -155,24 +154,18 @@ const HtmlUtils = {
   extractFirstImage(html: string, baseUrl: string = SITE_CONFIG.baseUrl): string | null {
     if (!html) return null;
     
-    // Try to find image with proper attributes first (better quality images)
-    const strategies = [
-      // Look for images with specific classes that might indicate featured images
-      /<img[^>]+class=["'](?:[^"']*\b(?:featured|hero|cover|thumbnail)\b[^"']*)["'][^>]+src=["']([^"']+)["'][^>]*>/i,
-      // Look for the first image with specified width/height (likely to be intentional)
-      /<img[^>]+(?:width|height)=["'][^"']+["'][^>]+src=["']([^"']+)["'][^>]*>/i,
-      // Fall back to any image
-      /<img[^>]+src=["']([^"']+)["'][^>]*>/i
-    ];
+    // Single prioritized regex for finding images
+    // First tries to find featured/hero images, then falls back to any image
+    const imgRegex = /<img[^>]+(class=["'][^"']*(?:featured|hero|cover|thumbnail)[^"']*["'][^>]+|(?:width|height)=["'][^"']+["'][^>]+)?src=["']([^"']+)["'][^>]*>/i;
+    const match = imgRegex.exec(html);
     
-    for (const regex of strategies) {
-      const match = regex.exec(html);
-      if (match && match[1]) {
-        return this.toAbsoluteUrl(match[1], baseUrl);
-      }
+    if (match && match[2]) {
+      return this.toAbsoluteUrl(match[2], baseUrl);
     }
     
-    return null;
+    // If no match found with the prioritized approach, try simple image match
+    const simpleMatch = /<img[^>]+src=["']([^"']+)["'][^>]*>/i.exec(html);
+    return simpleMatch && simpleMatch[1] ? this.toAbsoluteUrl(simpleMatch[1], baseUrl) : null;
   },
 
   /**
@@ -200,26 +193,39 @@ const HtmlUtils = {
   extractMainContent(fullHtml: string): string {
     if (!fullHtml) return '';
     
-    // Try to extract content from article tag first
-    const articleMatch = fullHtml.match(/<article[^>]*>([\s\S]*?)<\/article>/i);
-    if (articleMatch && articleMatch[1]) {
-      return articleMatch[1];
+    try {
+      // Your MDX content is always rendered in <article class="prose"> tags
+      // This is the most direct target for extraction
+      const articleRegex = /<article[^>]*class="[^"]*prose[^"]*"[^>]*>([\s\S]*?)<\/article>/i;
+      const articleMatch = articleRegex.exec(fullHtml);
+      if (articleMatch && articleMatch[1]) {
+        return articleMatch[1];
+      }
+      
+      // Fallback to any article tag if the prose class isn't found
+      const simpleArticleRegex = /<article[^>]*>([\s\S]*?)<\/article>/i;
+      const simpleArticleMatch = simpleArticleRegex.exec(fullHtml);
+      if (simpleArticleMatch && simpleArticleMatch[1]) {
+        return simpleArticleMatch[1];
+      }
+      
+      // Fix broken images in content
+      const fixImages = (content: string): string => {
+        if (!content) return '';
+        return content.replace(
+          /<img[^>]+src=["'](?!\s*(?:https?:|data:))([^'"]+)['"]/gi,
+          (match, relativeUrl) => match.replace(relativeUrl, this.toAbsoluteUrl(relativeUrl))
+        );
+      };
+      
+      // If we can't find article tags, return empty string to avoid sending the whole page
+      // This is safer than returning potentially unrelated content
+      return '';
+    } catch (error) {
+      console.error('Error extracting article content:', error);
+      return '';
     }
-    
-    // Fall back to main tag if article not found
-    const mainMatch = fullHtml.match(/<main[^>]*>([\s\S]*?)<\/main>/i);
-    if (mainMatch && mainMatch[1]) {
-      return mainMatch[1];
-    }
-    
-    // Last resort: try to find content div
-    const contentMatch = fullHtml.match(/<div[^>]*(?:id|class)=["'](?:content|post-content|entry-content)["'][^>]*>([\s\S]*?)<\/div>/i);
-    if (contentMatch && contentMatch[1]) {
-      return contentMatch[1];
-    }
-    
-    return fullHtml;
-  }
+  },
 };
 
 /**
