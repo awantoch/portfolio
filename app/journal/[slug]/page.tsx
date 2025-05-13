@@ -11,7 +11,8 @@ export async function generateStaticParams() {
   }))
 }
 
-export function generateMetadata({ params }) {
+export async function generateMetadata(props) {
+  const params = await props.params;
   let entry = getJournalPosts().find((entry) => entry.slug === params.slug)
   if (!entry) {
     return
@@ -51,7 +52,8 @@ export function generateMetadata({ params }) {
   }
 }
 
-export default function JournalEntry({ params }) {
+export default async function JournalEntry(props) {
+  const params = await props.params;
   let entry = getJournalPosts().find((entry) => entry.slug === params.slug)
 
   if (!entry) {
