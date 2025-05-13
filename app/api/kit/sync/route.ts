@@ -74,6 +74,7 @@ async function syncPost(post: Post, forceSync: boolean): Promise<SyncResult> {
   try {
     // Double-check sync status for safety
     if (!forceSync && await isPostSynced(post)) {
+      console.log(`✅ Post "${post.metadata.title}" (${post.slug}) already synced - skipping`);
       return {
         slug: post.slug,
         title: post.metadata.title,
@@ -85,6 +86,8 @@ async function syncPost(post: Post, forceSync: boolean): Promise<SyncResult> {
     // Create broadcast on Kit
     const result = await createKitBroadcast(post);
     
+    console.log(`✅ Successfully synced post "${post.metadata.title}" (${post.slug}) to Kit with ID ${result.broadcast.id}`);
+    
     return {
       slug: post.slug,
       title: post.metadata.title,
@@ -92,7 +95,7 @@ async function syncPost(post: Post, forceSync: boolean): Promise<SyncResult> {
       success: true
     };
   } catch (error) {
-    console.error(`Error syncing post ${post.slug}:`, error);
+    console.error(`❌ Error syncing post ${post.slug}:`, error);
     return {
       slug: post.slug,
       title: post.metadata.title,
@@ -107,25 +110,32 @@ async function syncPost(post: Post, forceSync: boolean): Promise<SyncResult> {
  */
 export async function GET(request: NextRequest) {
   try {
+    console.log('🔄 Kit sync process started');
+    
     // Parse request parameters
     const { searchParams } = new URL(request.url);
     const slug = searchParams.get('slug');
     const forceSync = searchParams.get('force') === 'true';
     
+    console.log(`Parameters: slug=${slug || 'all'}, force=${forceSync}`);
+    
     // Check authorization
     if (!isAuthorized(request)) {
+      console.error('❌ Unauthorized sync attempt');
       return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
     }
 
     try {
       // Fetch posts
       const posts = await getPosts();
+      console.log(`📚 Found ${posts.length} total posts`);
       
       // Determine which posts to sync
       const { postsToSync, syncedPostsInfo } = await getPostsToSync(posts, slug, forceSync);
       
       // If no posts need syncing, return early with success
       if (postsToSync.length === 0) {
+        console.log('✅ No new posts to sync');
         return NextResponse.json(
           { 
             success: true,
@@ -136,6 +146,8 @@ export async function GET(request: NextRequest) {
         );
       }
 
+      console.log(`🔄 Syncing ${postsToSync.length} posts to Kit`);
+      
       // Sync posts to Kit in parallel
       const syncResults = await Promise.all(
         postsToSync.map(post => syncPost(post, forceSync))
@@ -143,11 +155,17 @@ export async function GET(request: NextRequest) {
 
       // Get final sync status
       const updatedSyncedPosts = await getSyncedPosts(posts);
+      
+      const successCount = syncResults.filter(result => result.success).length;
+      const failCount = syncResults.filter(result => !result.success).length;
+      
+      console.log(`✅ Sync completed: ${successCount} succeeded, ${failCount} failed, ${updatedSyncedPosts.length} total synced posts`);
 
       // Return results grouped by success/failure
       return NextResponse.json(
         { 
           success: true,
+          message: `Successfully synced ${successCount} posts, ${failCount} failed`,
           synced: syncResults.filter((result): result is SyncSuccess => result.success),
           failed: syncResults.filter((result): result is SyncError => !result.success),
           allSynced: updatedSyncedPosts
@@ -155,14 +173,14 @@ export async function GET(request: NextRequest) {
         { status: 200 }
       );
     } catch (error) {
-      console.error('Error in sync process:', error);
+      console.error('❌ Error in sync process:', error);
       return NextResponse.json(
         { success: false, error: error instanceof Error ? error.message : String(error) },
         { status: error instanceof Error && error.message.includes('not found') ? 404 : 500 }
       );
     }
   } catch (error) {
-    console.error('Error in Kit sync API route:', error);
+    console.error('❌ Error in Kit sync API route:', error);
     return NextResponse.json(
       { success: false, error: error instanceof Error ? error.message : String(error) },
       { status: 500 }
