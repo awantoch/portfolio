@@ -15,7 +15,7 @@ export function Navbar() {
                 <Link
                   key={path}
                   href={path}
-                  className="hover:opacity-80 flex align-middle py-1 px-2 m-1"
+                  className="hover:opacity-80 flex align-middle py-1 px-2 m-1 interactive-soft"
                 >
                   {name}
                 </Link>

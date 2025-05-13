@@ -176,3 +176,32 @@ table {
 .animate-fade-in {
   animation: fade-in 0.3s ease-out forwards;
 }
+
+/* Add interactive utility class for cards and links */
+@layer components {
+  /* Reusable base card style matching subscribe component */
+  .card-base {
+    @apply bg-[#20132b] border border-neutral-800 rounded-lg transition-all duration-300;
+  }
+  .interactive {
+    @apply transition-all duration-300 transform;
+  }
+  .interactive:hover {
+    @apply scale-[1.02] shadow-lg shadow-purple-700/30;
+  }
+  .interactive:active {
+    @apply scale-[0.98] shadow-md shadow-purple-700/20;
+  }
+  /* Softer glow for inline links without visible edges */
+  .interactive-soft {
+    @apply transition-all duration-200 ease-in-out;
+  }
+  .interactive-soft:hover {
+    /* subtle purple text glow anchored at bottom */
+    text-shadow: 0 2px 2px rgba(139,92,246,0.4), 0 4px 4px rgba(139,92,246,0.3);
+  }
+  .interactive-soft:active {
+    /* minimal bottom glow on active */
+    text-shadow: 0 1px 1px rgba(139,92,246,0.3);
+  }
+}

@@ -64,7 +64,7 @@ export function SubscribeForm({
   const isLoading = status === 'loading';
   
   return (
-    <div className={`w-full ${compact ? 'py-6' : 'py-8'} px-6 bg-[#20132b] rounded-lg border border-neutral-800 transition-shadow duration-300 ${isFocused ? 'shadow-lg shadow-purple-900/30' : ''}`}>
+    <div className={`card-base w-full ${compact ? 'py-6' : 'py-8'} px-6 ${isFocused ? 'shadow-lg shadow-purple-900/30' : ''}`}>
       <div className={`max-w-md mx-auto ${compact ? 'space-y-3' : 'space-y-4'}`}>
         <div className="text-center">
           <h3 className={`${compact ? 'text-lg' : 'text-xl'} font-semibold text-white`}>{title}</h3>

@@ -15,7 +15,7 @@ export function Links() {
       {links.map(({ href, label }) => (
         <li key={href} className="text-center">
           <a
-            className="flex items-center justify-center hover:opacity-80"
+            className="flex items-center justify-center interactive-soft"
             rel="noopener noreferrer"
             target="_blank"
             href={href}
