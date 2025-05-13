@@ -3,6 +3,7 @@ import Image from 'next/image'
 import { MDXRemote } from 'next-mdx-remote/rsc'
 import { highlight } from 'sugar-high'
 import React from 'react'
+import { CopyButton } from './copy-button'
 
 function Table({ data }) {
   let headers = data.headers.map((header, index) => (
@@ -50,7 +51,12 @@ function RoundedImage(props) {
 
 function Code({ children, ...props }) {
   let codeHTML = highlight(children)
-  return <code dangerouslySetInnerHTML={{ __html: codeHTML }} {...props} />
+  return (
+    <div className="relative group">
+      <CopyButton content={children} />
+      <code dangerouslySetInnerHTML={{ __html: codeHTML }} {...props} />
+    </div>
+  )
 }
 
 function slugify(str) {
