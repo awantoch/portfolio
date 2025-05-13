@@ -14,7 +14,6 @@ const nextConfig = {
         hostname: 'alec.wantoch.com',
       },
     ],
-    domains: ['wantoch.com', 'alec.wantoch.com'],
   },
 }
 

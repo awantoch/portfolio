@@ -4,6 +4,7 @@ import { Links } from 'app/components/links'
 import Image from 'next/image'
 import { Metadata } from 'next'
 import { SITE_CONFIG, METADATA_CONFIG } from './constants'
+import { SubscribeForm } from './components/subscribe-form'
 
 export const metadata: Metadata = {
   title: SITE_CONFIG.title,
@@ -57,6 +58,15 @@ export default function Page() {
         <h2 className="text-xl font-semibold mb-4">Journal</h2>
         <JournalEntries limit={5} showMore={true} />
       </div>
+      
+      <div className="my-10">
+        <SubscribeForm 
+          title="Stay in the loop" 
+          subtitle="Get notified when I publish new content" 
+          compact={true}
+        />
+      </div>
+      
       <div className="my-8">
         <h2 className="text-xl font-semibold mb-4">Portfolio</h2>
         <Portfolio limit={3} showMore={true} />

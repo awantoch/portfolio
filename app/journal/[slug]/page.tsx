@@ -3,6 +3,7 @@ import { CustomMDX } from 'app/components/mdx'
 import { formatDate, getJournalPosts } from 'app/journal/utils'
 import { baseUrl } from 'app/sitemap'
 import Image from 'next/image'
+import { SubscribeForm } from 'app/components/subscribe-form'
 
 export async function generateStaticParams() {
   let entries = getJournalPosts()
@@ -119,6 +120,13 @@ export default async function JournalEntry(props) {
       <article className="prose">
         <CustomMDX source={entry.content} />
       </article>
+      
+      <div className="mt-12">
+        <SubscribeForm 
+          title="Well since you read the whole thing..." 
+          subtitle="'preciate it yo! Might as well subscribe 😉"
+        />
+      </div>
     </section>
   )
 }

@@ -7,6 +7,9 @@ export const SITE_CONFIG = {
   googleAnalyticsId: process.env.NEXT_PUBLIC_GA_ID || 'G-2HZ0CQ2GH5',
 } as const
 
+// Add Kit form ID for subscriptions via Kit Forms API
+export const KIT_FORM_ID = 8050362;
+
 export const METADATA_CONFIG = {
   keywords: [
     'Alec Wantoch',
@@ -19,7 +22,7 @@ export const METADATA_CONFIG = {
     'head of product',
     'blockchain engineer',
     'web3 gaming expert',
-    'full‑stack developer',
+    'full-stack developer',
     'security engineer',
     'Valist',
     'HyperPlay',
@@ -37,7 +40,7 @@ export const METADATA_CONFIG = {
   twitterHandle: '@alecw',
   descriptions: {
     home:
-      'Entrepreneur, product leader, and computer scientist building to create real‑world impact.',
+      'Entrepreneur, product leader, and computer scientist building to create real-world impact.',
     portfolio:
       'Explore my track record founding startups, scaling product, architecting infrastructure, and delivering results.',
     journal:

@@ -1,6 +1,7 @@
 import { JournalEntries } from 'app/components/posts'
 import { Metadata } from 'next'
 import { SITE_CONFIG, METADATA_CONFIG } from '../constants'
+import { SubscribeForm } from 'app/components/subscribe-form'
 
 export const metadata: Metadata = {
   title: 'Journal',
@@ -30,6 +31,13 @@ export default function JournalPage() {
     <section>
       <h1 className="font-semibold text-2xl mb-8 tracking-tighter">Journal</h1>
       <JournalEntries />
+      
+      <div className="mt-12">
+        <SubscribeForm 
+          title="Join the adventure" 
+          subtitle="Follow along the journey with new entries & other goodies!"
+        />
+      </div>
     </section>
   )
 }

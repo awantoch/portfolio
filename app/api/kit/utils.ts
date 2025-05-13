@@ -50,6 +50,20 @@ type KitBroadcastsListResponse = {
   };
 };
 
+// Type for Kit subscriber
+export type KitSubscriber = {
+  id: number;
+  first_name: string | null;
+  email_address: string;
+  state: string;
+  created_at: string;
+  fields: Record<string, string>;
+};
+
+export type KitSubscriberResponse = {
+  subscriber: KitSubscriber;
+};
+
 export type KitSyncStatus = {
   slug: string;
   kitId: number;
@@ -74,7 +88,6 @@ export const KIT_CONFIG = {
   baseUrl: 'https://api.kit.com',
   apiVersion: 'v4',
   templateId: 4311751,
-  tokenKey: 'KIT_API_KEY',
   perPage: 1000, // Maximum allowed by Kit API
 };
 
@@ -127,21 +140,43 @@ const HtmlUtils = {
       }
     );
     
-    // Add responsive styling to images without existing style
+    // Handle code blocks - preserve syntax highlighting but remove copy button
+    processedHtml = processedHtml.replace(
+      /<div class="relative group">([\s\S]*?)<\/div>/gi,
+      (match, content) => {
+        // Remove the copy button since it won't work in email
+        return content.replace(/<button[^>]*>[\s\S]*?<\/button>/gi, '');
+      }
+    );
+    
+    // Ensure tables work with the template's table styles
+    processedHtml = processedHtml.replace(
+      /<table>([\s\S]*?)<\/table>/gi,
+      (match, content) => {
+        // Just ensure the table has the basic structure, let the template handle styling
+        return `<table>${content}</table>`;
+      }
+    );
+    
+    // Ensure images are responsive but don't override template styles
     processedHtml = processedHtml.replace(
       /<img((?:\s+[^>]*)?)>/gi,
       (match, attrs) => {
         if (!/\sstyle\s*=/.test(attrs)) {
-          return `<img${attrs} style="max-width:100%; height:auto; display:block; margin:25px auto; border-radius:4px;">`;
+          return `<img${attrs} style="max-width:100%; height:auto;">`;
         }
         return match;
       }
     );
     
-    // Add a wrapper class to code blocks to ensure proper display in emails
+    // Preserve heading anchor links but let template handle styling
     processedHtml = processedHtml.replace(
-      /<pre><code([^>]*)>([\s\S]*?)<\/code><\/pre>/gi,
-      '<div class="code-block" style="background:#1e1e1e; color:#d4d4d4; padding:15px; margin:25px 0; overflow-x:auto; border-radius:5px; font-family:monospace; font-size:14px; line-height:1.5;"><pre style="margin:0;"><code$1>$2</code></pre></div>'
+      /<h([1-6])\s+id="([^"]+)">([\s\S]*?)<\/h\1>/gi,
+      (match, level, id, content) => {
+        return `<h${level} id="${id}">
+          <a href="#${id}" style="color:inherit; text-decoration:none;">${content}</a>
+        </h${level}>`;
+      }
     );
     
     return processedHtml;
@@ -394,9 +429,9 @@ export async function getPosts(): Promise<Post[]> {
  * Get the Kit API token from environment variables
  */
 export function getKitToken(): string {
-  const token = process.env[KIT_CONFIG.tokenKey];
+  const token = process.env.KIT_API_KEY;
   if (!token) {
-    throw new Error(`${KIT_CONFIG.tokenKey} environment variable is not set`);
+    throw new Error('KIT_API_KEY environment variable is not set');
   }
   return token;
 }
@@ -406,10 +441,9 @@ export function getKitToken(): string {
  */
 export async function getKitBroadcasts(): Promise<KitBroadcast[]> {
   const token = getKitToken();
-  const url = `${KIT_CONFIG.baseUrl}/${KIT_CONFIG.apiVersion}/broadcasts?per_page=${KIT_CONFIG.perPage}`;
+  const url = `${KIT_CONFIG.baseUrl}/${KIT_CONFIG.apiVersion}/broadcasts?limit=${KIT_CONFIG.perPage}`;
   
   const response = await fetch(url, {
-    method: 'GET',
     headers: {
       'Accept': 'application/json',
       'X-Kit-Api-Key': token,
@@ -417,11 +451,10 @@ export async function getKitBroadcasts(): Promise<KitBroadcast[]> {
   });
 
   if (!response.ok) {
-    const errorText = await response.text();
-    throw new Error(`Kit API error: ${response.status} - ${errorText}`);
+    throw new Error(`Kit API error: ${response.status} - ${response.statusText}`);
   }
 
-  const data = await response.json() as KitBroadcastsListResponse;
+  const data: KitBroadcastsListResponse = await response.json();
   return data.broadcasts;
 }
 
@@ -505,4 +538,178 @@ export async function getSyncedPosts(posts: Post[]): Promise<KitSyncStatus[]> {
     console.error('Error getting synced posts:', error);
     return [];
   }
+}
+
+/**
+ * Subscribe data interface with source tracking
+ */
+export interface SubscribeData {
+  email_address: string;
+  referrer?: string;    // Where the visitor came from in the site
+  http_referrer?: string; // HTTP referrer header
+  entry_title?: string; // Title of the journal entry they subscribed from (used for UTM Content)
+  // Standard UTM parameters
+  utm_source?: string;  // Identifies which site sent the traffic
+  utm_medium?: string;  // Identifies the marketing medium
+  utm_campaign?: string; // Identifies a specific campaign
+  utm_content?: string; // Identifies what specifically was clicked
+  utm_term?: string;    // Identifies search terms
+}
+
+/**
+ * Create a new subscriber in Kit or update existing one
+ * @param data The subscriber data including email address and tracking info
+ * @returns The subscriber information from Kit API
+ */
+export async function createKitSubscriber(data: string | SubscribeData): Promise<KitSubscriberResponse> {
+  console.log('KIT UTIL - createKitSubscriber called with:', JSON.stringify(data, null, 2));
+  
+  // Support backwards compatibility with just passing an email string
+  const subscribeData: SubscribeData = typeof data === 'string' 
+    ? { email_address: data }
+    : data;
+    
+  if (!subscribeData.email_address) {
+    console.error('KIT UTIL - Missing email address');
+    throw new Error('Email address is required');
+  }
+  
+  const token = getKitToken();
+  const url = `${KIT_CONFIG.baseUrl}/${KIT_CONFIG.apiVersion}/subscribers`;
+  
+  // Build custom fields exactly as documented by Kit
+  const fields: Record<string, string> = {};
+  
+  // Map fields using the exact names from Kit documentation
+  if (subscribeData.referrer) {
+    fields['Referrer'] = subscribeData.referrer;
+  }
+  
+  if (subscribeData.http_referrer) {
+    fields['HTTP Referrer'] = subscribeData.http_referrer;
+  }
+  
+  // Standard UTM parameters with exact Kit field names 
+  if (subscribeData.utm_source) {
+    fields['UTM Source'] = subscribeData.utm_source;
+  }
+  
+  if (subscribeData.utm_medium) {
+    fields['UTM Medium'] = subscribeData.utm_medium;
+  }
+  
+  if (subscribeData.utm_campaign) {
+    fields['UTM Campaign'] = subscribeData.utm_campaign;
+  }
+  
+  if (subscribeData.utm_content) {
+    fields['UTM Content'] = subscribeData.utm_content;
+  } else if (subscribeData.entry_title) {
+    // For journal entries, use the entry title as UTM Content
+    fields['UTM Content'] = subscribeData.entry_title;
+  }
+  
+  if (subscribeData.utm_term) {
+    fields['UTM Term'] = subscribeData.utm_term;
+  }
+  
+  // Log EXACTLY what we're sending to Kit API
+  console.log('KIT UTIL - REQUEST TO KIT API:', {
+    url: url,
+    headers: {
+      'Content-Type': 'application/json',
+      'Accept': 'application/json',
+      'X-Kit-Api-Key': 'REDACTED', // Don't log the actual token
+    },
+    body: {
+      email_address: subscribeData.email_address,
+      state: 'active',
+      fields: fields,
+    }
+  });
+  
+  try {
+    const response = await fetch(url, {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'Accept': 'application/json',
+        'X-Kit-Api-Key': token,
+      },
+      body: JSON.stringify({
+        email_address: subscribeData.email_address,
+        state: 'active',
+        fields: fields,
+      }),
+    });
+    
+    const responseData = await response.json();
+    
+    // Log the full Kit API response
+    console.log('KIT UTIL - RESPONSE FROM KIT API:', JSON.stringify(responseData, null, 2));
+    
+    // Error handling
+    if (!response.ok) {
+      console.error('KIT UTIL - ERROR FROM KIT API:', {
+        status: response.status,
+        statusText: response.statusText,
+        data: responseData
+      });
+      
+      const errorMessage = responseData.errors && responseData.errors.length > 0 
+        ? responseData.errors[0] 
+        : `Failed to subscribe (${response.status})`;
+      throw new Error(errorMessage);
+    }
+    
+    console.log('KIT UTIL - SUCCESSFUL SUBSCRIPTION WITH FIELDS:', 
+      responseData.subscriber?.fields || 'NO FIELDS RETURNED');
+    
+    return responseData;
+  } catch (error) {
+    console.error('KIT UTIL - ERROR IN API CALL:', error);
+    throw error;
+  }
+}
+
+// Type for Kit form subscriber
+export type KitFormSubscriber = {
+  id: number;
+  email_address: string;
+  created_at: string;
+  fields: Record<string, string>;
+};
+
+export type KitFormSubscriberResponse = {
+  subscriber: KitFormSubscriber;
+  errors?: string[];
+};
+
+/**
+ * Add a subscriber to a Kit Form to capture referrer and UTM attribution
+ */
+export async function addSubscriberToForm(
+  formId: number,
+  data: { email_address: string; referrer: string }
+): Promise<KitFormSubscriber> {
+  const token = getKitToken();
+  const url = `${KIT_CONFIG.baseUrl}/${KIT_CONFIG.apiVersion}/forms/${formId}/subscribers`;
+  
+  const response = await fetch(url, {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+      'Accept': 'application/json',
+      'X-Kit-Api-Key': token,
+    },
+    body: JSON.stringify(data),
+  });
+
+  const responseData = await response.json() as KitFormSubscriberResponse;
+  if (!response.ok) {
+    const msg = responseData.errors?.length ? responseData.errors.join(', ') : `Failed to add subscriber to form (${response.status})`;
+    throw new Error(msg);
+  }
+
+  return responseData.subscriber;
 } 
