@@ -33,7 +33,7 @@ type SyncResult = SyncError | SyncSuccess;
  */
 function isAuthorized(request: NextRequest): boolean {
   const secretKey = process.env.CRON_SECRET;
-  if (!secretKey) return true; // Allow all if no secret is set
+  if (!secretKey) return false; // Require secret to be set
   
   const authHeader = request.headers.get('Authorization');
   return authHeader === `Bearer ${secretKey}`;
