@@ -4,6 +4,7 @@ export const SITE_CONFIG = {
   locale: 'en_US',
   language: 'en',
   baseUrl: process.env.NEXT_PUBLIC_BASE_URL || 'https://alec.wantoch.com',
+  googleAnalyticsId: process.env.NEXT_PUBLIC_GA_ID || 'G-2HZ0CQ2GH5',
 } as const
 
 export const METADATA_CONFIG = {
