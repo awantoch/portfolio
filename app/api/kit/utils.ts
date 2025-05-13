@@ -80,115 +80,211 @@ export const KIT_CONFIG = {
 };
 
 /**
- * Convert a relative URL to absolute
+ * HTML processing utilities for Kit emails
  */
-function toAbsoluteUrl(url: string, baseUrl: string = SITE_CONFIG.baseUrl): string {
-  if (!url || url.startsWith('http') || url.startsWith('data:') || url.startsWith('#')) {
-    return url;
-  }
-  
-  const formattedBase = baseUrl.endsWith('/') ? baseUrl.slice(0, -1) : baseUrl;
-  const formattedPath = url.startsWith('/') ? url : `/${url}`;
-  
-  return `${formattedBase}${formattedPath}`;
-}
-
-/**
- * Fix HTML issues that would cause problems in Kit emails
- * and ensure images and embedded content render correctly
- */
-function fixHtmlForKit(html: string, baseUrl: string = SITE_CONFIG.baseUrl): string {
-  if (!html) return '';
-  
-  // Process the HTML using more efficient replacements
-  let processedHtml = html
-    // Fix empty href attributes in links
-    .replace(/<a\s+href=['"]?(?:['"]|\s+|\>)/gi, '<a href="#"')
-    
-    // Convert relative URLs in links to absolute
-    .replace(
-      /<a\s+(?:[^>]*?\s+)?href=['"](?!\s*(?:https?:|mailto:|tel:|#))([^'"]+)['"]/gi,
-      (match, relativeUrl) => match.replace(relativeUrl, toAbsoluteUrl(relativeUrl, baseUrl))
-    )
-    
-    // Convert relative image URLs to absolute
-    .replace(
-      /<img(?:\s+[^>]*?)?(?:\s+src=['"](?!\s*(?:https?:|data:))([^'"]+)['"])/gi,
-      (match, relativeUrl) => match.replace(relativeUrl, toAbsoluteUrl(relativeUrl, baseUrl))
-    );
-  
-  // Handle YouTube embeds separately - this had a regex error
-  processedHtml = processedHtml.replace(
-    /<iframe\s+[^>]*?src=['"](?:\/\/|https?:\/\/)?(?:www\.)?youtube(?:-nocookie)?\.com\/embed\/([^'"?]+)(?:[^'"]*?)['"][^>]*?><\/iframe>/gi,
-    (match, videoId) => {
-      return `<iframe src="https://www.youtube.com/embed/${videoId}?rel=0" frameborder="0" allowfullscreen style="max-width:100%; width:100%; aspect-ratio:16/9; margin:20px auto; display:block;"></iframe>`;
+const HtmlUtils = {
+  /**
+   * Convert a relative URL to absolute
+   */
+  toAbsoluteUrl(url: string, baseUrl: string = SITE_CONFIG.baseUrl): string {
+    if (!url || url.startsWith('http') || url.startsWith('data:') || url.startsWith('#')) {
+      return url;
     }
-  );
-  
-  // Add responsive styling to images without existing style
-  processedHtml = processedHtml.replace(
-    /<img((?:\s+[^>]*)?)>/gi,
-    (match, attrs) => {
-      if (!/\sstyle\s*=/.test(attrs)) {
-        return `<img${attrs} style="max-width:100%; height:auto; display:block; margin:20px auto;">`;
+    
+    const formattedBase = baseUrl.endsWith('/') ? baseUrl.slice(0, -1) : baseUrl;
+    const formattedPath = url.startsWith('/') ? url : `/${url}`;
+    
+    return `${formattedBase}${formattedPath}`;
+  },
+
+  /**
+   * Fix HTML issues that would cause problems in Kit emails
+   * and ensure images and embedded content render correctly
+   */
+  fixForKit(html: string, baseUrl: string = SITE_CONFIG.baseUrl): string {
+    if (!html) return '';
+    
+    // Process the HTML using more efficient replacements
+    let processedHtml = html
+      // Fix empty href attributes in links
+      .replace(/<a\s+href=['"]?(?:['"]|\s+|\>)/gi, '<a href="#"')
+      
+      // Convert relative URLs in links to absolute
+      .replace(
+        /<a\s+(?:[^>]*?\s+)?href=['"](?!\s*(?:https?:|mailto:|tel:|#))([^'"]+)['"]/gi,
+        (match, relativeUrl) => match.replace(relativeUrl, this.toAbsoluteUrl(relativeUrl, baseUrl))
+      )
+      
+      // Convert relative image URLs to absolute
+      .replace(
+        /<img(?:\s+[^>]*?)?(?:\s+src=['"](?!\s*(?:https?:|data:))([^'"]+)['"])/gi,
+        (match, relativeUrl) => match.replace(relativeUrl, this.toAbsoluteUrl(relativeUrl, baseUrl))
+      );
+    
+    // Handle YouTube embeds separately
+    processedHtml = processedHtml.replace(
+      /<iframe\s+[^>]*?src=['"](?:\/\/|https?:\/\/)?(?:www\.)?youtube(?:-nocookie)?\.com\/embed\/([^'"?]+)(?:[^'"]*?)['"][^>]*?><\/iframe>/gi,
+      (match, videoId) => {
+        return `<iframe src="https://www.youtube.com/embed/${videoId}?rel=0" frameborder="0" allowfullscreen style="max-width:100%; width:100%; aspect-ratio:16/9; margin:20px auto; display:block;"></iframe>`;
       }
-      return match;
+    );
+    
+    // Add responsive styling to images without existing style
+    processedHtml = processedHtml.replace(
+      /<img((?:\s+[^>]*)?)>/gi,
+      (match, attrs) => {
+        if (!/\sstyle\s*=/.test(attrs)) {
+          return `<img${attrs} style="max-width:100%; height:auto; display:block; margin:20px auto;">`;
+        }
+        return match;
+      }
+    );
+    
+    // Add a wrapper class to code blocks to ensure proper display in emails
+    processedHtml = processedHtml.replace(
+      /<pre><code([^>]*)>([\s\S]*?)<\/code><\/pre>/gi,
+      '<div class="code-block" style="background:#1e1e1e; color:#d4d4d4; padding:15px; margin:20px 0; overflow-x:auto; border-radius:5px; font-family:monospace;"><pre><code$1>$2</code></pre></div>'
+    );
+    
+    return processedHtml;
+  },
+
+  /**
+   * Extract image from HTML content with fallbacks
+   */
+  extractFirstImage(html: string, baseUrl: string = SITE_CONFIG.baseUrl): string | null {
+    if (!html) return null;
+    
+    // Try to find image with proper attributes first (better quality images)
+    const strategies = [
+      // Look for images with specific classes that might indicate featured images
+      /<img[^>]+class=["'](?:[^"']*\b(?:featured|hero|cover|thumbnail)\b[^"']*)["'][^>]+src=["']([^"']+)["'][^>]*>/i,
+      // Look for the first image with specified width/height (likely to be intentional)
+      /<img[^>]+(?:width|height)=["'][^"']+["'][^>]+src=["']([^"']+)["'][^>]*>/i,
+      // Fall back to any image
+      /<img[^>]+src=["']([^"']+)["'][^>]*>/i
+    ];
+    
+    for (const regex of strategies) {
+      const match = regex.exec(html);
+      if (match && match[1]) {
+        return this.toAbsoluteUrl(match[1], baseUrl);
+      }
     }
-  );
-  
-  // Add a wrapper class to code blocks to ensure proper display in emails
-  processedHtml = processedHtml.replace(
-    /<pre><code([^>]*)>([\s\S]*?)<\/code><\/pre>/gi,
-    '<div class="code-block" style="background:#1e1e1e; color:#d4d4d4; padding:15px; margin:20px 0; overflow-x:auto; border-radius:5px; font-family:monospace;"><pre><code$1>$2</code></pre></div>'
-  );
-  
-  return processedHtml;
-}
+    
+    return null;
+  },
+
+  /**
+   * Extract all images from the HTML content and return as array
+   */
+  extractAllImages(html: string, baseUrl: string = SITE_CONFIG.baseUrl): string[] {
+    if (!html) return [];
+    
+    const images: string[] = [];
+    const imgRegex = /<img[^>]+src=["']([^"']+)["'][^>]*>/gi;
+    let match;
+    
+    while ((match = imgRegex.exec(html)) !== null) {
+      if (match[1]) {
+        images.push(this.toAbsoluteUrl(match[1], baseUrl));
+      }
+    }
+    
+    return images;
+  },
+
+  /**
+   * Extract main content from HTML page
+   */
+  extractMainContent(fullHtml: string): string {
+    if (!fullHtml) return '';
+    
+    // Try to extract content from article tag first
+    const articleMatch = fullHtml.match(/<article[^>]*>([\s\S]*?)<\/article>/i);
+    if (articleMatch && articleMatch[1]) {
+      return articleMatch[1];
+    }
+    
+    // Fall back to main tag if article not found
+    const mainMatch = fullHtml.match(/<main[^>]*>([\s\S]*?)<\/main>/i);
+    if (mainMatch && mainMatch[1]) {
+      return mainMatch[1];
+    }
+    
+    // Last resort: try to find content div
+    const contentMatch = fullHtml.match(/<div[^>]*(?:id|class)=["'](?:content|post-content|entry-content)["'][^>]*>([\s\S]*?)<\/div>/i);
+    if (contentMatch && contentMatch[1]) {
+      return contentMatch[1];
+    }
+    
+    return fullHtml;
+  }
+};
 
 /**
- * Extract image from HTML content with fallbacks
+ * Email template generation utilities
  */
-function extractImageFromHtml(html: string, baseUrl: string = SITE_CONFIG.baseUrl): string | null {
-  if (!html) return null;
+const EmailTemplates = {
+  /**
+   * Create email header with title and optional featured image
+   */
+  createHeader(title: string, postUrl: string, thumbnailUrl: string | null): string {
+    return `
+      <div style="margin-bottom:30px;">
+        <h1 style="font-size:24px; font-weight:600; line-height:1.2; margin:0 0 15px 0;">
+          ${title}
+        </h1>
+        <div style="text-align:left; margin-bottom:20px;">
+          <a href="${postUrl}" style="font-size:12px; color:#666; text-decoration:none;">
+            View in browser →
+          </a>
+        </div>
+        ${thumbnailUrl ? `
+        <div style="margin:25px 0;">
+          <img src="${thumbnailUrl}" alt="${title}" style="max-width:100%; width:100%; height:auto; display:block; border-radius:5px;">
+        </div>
+        ` : ''}
+      </div>
+    `;
+  },
   
-  // Try to find image with proper attributes first (better quality images)
-  const strategies = [
-    // Look for images with specific classes that might indicate featured images
-    /<img[^>]+class=["'](?:[^"']*\b(?:featured|hero|cover|thumbnail)\b[^"']*)["'][^>]+src=["']([^"']+)["'][^>]*>/i,
-    // Look for the first image with specified width/height (likely to be intentional)
-    /<img[^>]+(?:width|height)=["'][^"']+["'][^>]+src=["']([^"']+)["'][^>]*>/i,
-    // Fall back to any image
-    /<img[^>]+src=["']([^"']+)["'][^>]*>/i
-  ];
+  /**
+   * Create email footer with attribution link
+   */
+  createFooter(postUrl: string): string {
+    return `
+      <div style="margin-top:30px; padding-top:20px; border-top:1px solid #e5e5e5;">
+        <p style="font-size:14px; color:#666;">
+          Originally published at <a href="${postUrl}" style="color:#333; text-decoration:underline;">${SITE_CONFIG.title}</a>
+        </p>
+      </div>
+    `;
+  },
   
-  for (const regex of strategies) {
-    const match = regex.exec(html);
-    if (match && match[1]) {
-      return toAbsoluteUrl(match[1], baseUrl);
-    }
+  /**
+   * Create complete email content from post data
+   */
+  createEmailContent(post: Post): { content: string, thumbnailUrl: string | null } {
+    const { title, summary } = post.metadata;
+    const postUrl = post.url || `${SITE_CONFIG.baseUrl}/journal/${post.slug}`;
+    
+    // Get thumbnail - use specified image or extract from content
+    const thumbnailUrl = post.metadata.image || HtmlUtils.extractFirstImage(post.content);
+    
+    // Fix HTML for email clients
+    const fixedContent = HtmlUtils.fixForKit(post.content);
+    
+    // Combine header, content and footer
+    const emailContent = `
+      ${EmailTemplates.createHeader(title, postUrl, thumbnailUrl)}
+      ${fixedContent}
+      ${EmailTemplates.createFooter(postUrl)}
+    `;
+    
+    return { content: emailContent, thumbnailUrl };
   }
-  
-  return null;
-}
-
-/**
- * Extract all images from the HTML content and return as array
- */
-function extractAllImagesFromHtml(html: string, baseUrl: string = SITE_CONFIG.baseUrl): string[] {
-  if (!html) return [];
-  
-  const images: string[] = [];
-  const imgRegex = /<img[^>]+src=["']([^"']+)["'][^>]*>/gi;
-  let match;
-  
-  while ((match = imgRegex.exec(html)) !== null) {
-    if (match[1]) {
-      images.push(toAbsoluteUrl(match[1], baseUrl));
-    }
-  }
-  
-  return images;
-}
+};
 
 /**
  * Fetches posts from the RSS feed and their full content
@@ -228,7 +324,7 @@ export async function getPosts(): Promise<Post[]> {
       const publishedAt = extract(/<pubDate>([\s\S]*?)<\/pubDate>/) || new Date().toISOString();
       
       // Try to extract image from RSS description
-      const imageFromRSS = extractImageFromHtml(description);
+      const imageFromRSS = HtmlUtils.extractFirstImage(description);
       
       if (!title || !link) continue;
       
@@ -249,24 +345,13 @@ export async function getPosts(): Promise<Post[]> {
         const content = await postResponse.text();
         
         // Extract article content from the HTML
-        let articleContent = description;
-        const articleMatch = content.match(/<article[^>]*>([\s\S]*?)<\/article>/i);
-        
-        if (articleMatch && articleMatch[1]) {
-          articleContent = articleMatch[1];
-        } else {
-          // Fall back to alternatives if article tag not found
-          const mainMatch = content.match(/<main[^>]*>([\s\S]*?)<\/main>/i);
-          if (mainMatch && mainMatch[1]) {
-            articleContent = mainMatch[1];
-          }
-        }
+        const articleContent = HtmlUtils.extractMainContent(content);
         
         // Process content for Kit - this preserves all images and formatting
-        const fixedContent = fixHtmlForKit(articleContent);
+        const fixedContent = HtmlUtils.fixForKit(articleContent);
         
         // Extract first image from article content for thumbnail
-        const featuredImage = extractImageFromHtml(articleContent);
+        const featuredImage = HtmlUtils.extractFirstImage(articleContent);
         
         posts.push({
           metadata: {
@@ -290,7 +375,7 @@ export async function getPosts(): Promise<Post[]> {
             image: imageFromRSS || undefined,
           },
           slug,
-          content: fixHtmlForKit(description),
+          content: HtmlUtils.fixForKit(description),
           url: link
         });
       }
@@ -349,48 +434,8 @@ export async function createKitBroadcast(post: Post): Promise<KitBroadcastRespon
   const token = getKitToken();
   const url = `${KIT_CONFIG.baseUrl}/${KIT_CONFIG.apiVersion}/broadcasts`;
   
-  // Format the content for Kit
-  const { title, publishedAt, summary, image } = post.metadata;
-  
-  // Apply HTML fixes to ensure all content renders properly
-  const fixedContent = fixHtmlForKit(post.content);
-  
-  // Create a clean header with title, featured image, and view in browser link
-  const postUrl = post.url || `${SITE_CONFIG.baseUrl}/journal/${post.slug}`;
-  const thumbnailUrl = image || extractImageFromHtml(fixedContent);
-  
-  // Header with conditional image
-  const emailHeader = `
-    <div style="margin-bottom:30px;">
-      <h1 style="font-size:24px; font-weight:600; line-height:1.2; margin:0 0 15px 0;">
-        ${title}
-      </h1>
-      <div style="text-align:left; margin-bottom:20px;">
-        <a href="${postUrl}" style="font-size:12px; color:#666; text-decoration:none;">
-          View in browser →
-        </a>
-      </div>
-      ${thumbnailUrl ? `
-      <div style="margin:25px 0;">
-        <img src="${thumbnailUrl}" alt="${title}" style="max-width:100%; width:100%; height:auto; display:block; border-radius:5px;">
-      </div>
-      ` : ''}
-    </div>
-  `;
-  
-  // Add footer attribution
-  const footerAttribution = `
-    <div style="margin-top:30px; padding-top:20px; border-top:1px solid #e5e5e5;">
-      <p style="font-size:14px; color:#666;">
-        Originally published at <a href="${postUrl}" style="color:#333; text-decoration:underline;">${SITE_CONFIG.title}</a>
-      </p>
-    </div>
-  `;
-  
-  // Combine all content parts
-  const contentWithLinks = `${emailHeader}${fixedContent}${footerAttribution}`;
-  
-  // Use specified image for Kit thumbnail (already extracted above)
+  // Format the content for Kit using our template utilities
+  const { content: emailContent, thumbnailUrl } = EmailTemplates.createEmailContent(post);
   
   const response = await fetch(url, {
     method: 'POST',
@@ -402,15 +447,15 @@ export async function createKitBroadcast(post: Post): Promise<KitBroadcastRespon
     body: JSON.stringify({
       email_template_id: KIT_CONFIG.templateId,
       email_address: null,
-      content: contentWithLinks,
-      description: summary,
+      content: emailContent,
+      description: post.metadata.summary,
       public: true,
-      published_at: new Date(publishedAt).toISOString(),
+      published_at: new Date(post.metadata.publishedAt).toISOString(),
       send_at: null,
-      thumbnail_alt: title,
+      thumbnail_alt: post.metadata.title,
       thumbnail_url: thumbnailUrl,
-      preview_text: summary,
-      subject: title,
+      preview_text: post.metadata.summary,
+      subject: post.metadata.title,
       subscriber_filter: null,
     }),
   });
