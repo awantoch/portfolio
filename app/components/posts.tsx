@@ -21,20 +21,29 @@ export function JournalEntries({ limit, showMore = false }: JournalEntriesProps)
 
   return (
     <div>
-      <div>
+      <div className="space-y-4">
         {entries.map((post) => (
           <Link
             key={post.slug}
-            className="flex flex-col space-y-1 mb-4"
+            className="flex flex-col group"
             href={`/journal/${post.slug}`}
           >
-            <div className="flex flex-row items-baseline gap-x-2">
-              <p className="text-neutral-400 min-w-[120px] whitespace-nowrap tabular-nums">
-                {formatDate(post.metadata.publishedAt, false)}
-              </p>
-              <p className="text-neutral-100 tracking-tight font-semibold">
-                {post.metadata.title}
-              </p>
+            <div className="flex flex-col space-y-1">
+              <div className="flex flex-row items-baseline gap-x-2">
+                <p className="text-neutral-400 min-w-[120px] whitespace-nowrap tabular-nums">
+                  {formatDate(post.metadata.publishedAt, false)}
+                </p>
+                <div>
+                  <p className="text-neutral-100 tracking-tight font-semibold group-hover:underline">
+                    {post.metadata.title}
+                  </p>
+                  {post.metadata.summary && (
+                    <p className="text-sm text-neutral-400">
+                      {post.metadata.summary}
+                    </p>
+                  )}
+                </div>
+              </div>
             </div>
           </Link>
         ))}
