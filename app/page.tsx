@@ -53,11 +53,13 @@ export default function Page() {
       <div className="mt-8 mb-8">
         <Links />
       </div>
-      <h2 className="text-xl font-semibold mb-4">Portfolio</h2>
-      <Portfolio limit={3} showMore={true} />
       <div className="my-8">
         <h2 className="text-xl font-semibold mb-4">Journal</h2>
         <JournalEntries limit={5} showMore={true} />
+      </div>
+      <div className="my-8">
+        <h2 className="text-xl font-semibold mb-4">Portfolio</h2>
+        <Portfolio limit={3} showMore={true} />
       </div>
     </section>
   )
