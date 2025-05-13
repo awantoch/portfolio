@@ -134,7 +134,7 @@ const HtmlUtils = {
       /<img((?:\s+[^>]*)?)>/gi,
       (match, attrs) => {
         if (!/\sstyle\s*=/.test(attrs)) {
-          return `<img${attrs} style="max-width:100%; height:auto; display:block; margin:20px auto;">`;
+          return `<img${attrs} style="max-width:100%; height:auto; display:block; margin:25px auto; border-radius:4px;">`;
         }
         return match;
       }
@@ -143,7 +143,7 @@ const HtmlUtils = {
     // Add a wrapper class to code blocks to ensure proper display in emails
     processedHtml = processedHtml.replace(
       /<pre><code([^>]*)>([\s\S]*?)<\/code><\/pre>/gi,
-      '<div class="code-block" style="background:#1e1e1e; color:#d4d4d4; padding:15px; margin:20px 0; overflow-x:auto; border-radius:5px; font-family:monospace;"><pre><code$1>$2</code></pre></div>'
+      '<div class="code-block" style="background:#1e1e1e; color:#d4d4d4; padding:15px; margin:25px 0; overflow-x:auto; border-radius:5px; font-family:monospace; font-size:14px; line-height:1.5;"><pre style="margin:0;"><code$1>$2</code></pre></div>'
     );
     
     return processedHtml;
@@ -231,21 +231,13 @@ const EmailTemplates = {
    */
   createHeader(title: string, postUrl: string, thumbnailUrl: string | null): string {
     return `
-      <div style="margin-bottom:30px;">
-        <h1 style="font-size:24px; font-weight:600; line-height:1.2; margin:0 0 15px 0;">
-          ${title}
-        </h1>
-        <div style="text-align:left; margin-bottom:20px;">
-          <a href="${postUrl}" style="font-size:12px; color:#666; text-decoration:none;">
-            View in browser →
-          </a>
-        </div>
-        ${thumbnailUrl ? `
-        <div style="margin:25px 0;">
-          <img src="${thumbnailUrl}" alt="${title}" style="max-width:100%; width:100%; height:auto; display:block; border-radius:5px;">
-        </div>
-        ` : ''}
-      </div>
+      <h1 style="font-size:26px; font-weight:600; line-height:1.3; margin:0 0 15px 0;">
+        ${title}
+      </h1>
+      <a href="${postUrl}" style="font-size:13px; color:#666; text-decoration:none; display:block; margin-bottom:20px;">
+        View in browser →
+      </a>
+      ${thumbnailUrl ? `<img src="${thumbnailUrl}" alt="${title}" style="max-width:100%; width:100%; height:auto; display:block; border-radius:5px; margin-bottom:25px;">` : ''}
     `;
   },
   
@@ -254,11 +246,10 @@ const EmailTemplates = {
    */
   createFooter(postUrl: string): string {
     return `
-      <div style="margin-top:30px; padding-top:20px; border-top:1px solid #e5e5e5;">
-        <p style="font-size:14px; color:#666;">
-          Originally published at <a href="${postUrl}" style="color:#333; text-decoration:underline;">${SITE_CONFIG.title}</a>
-        </p>
-      </div>
+      <hr style="border:none; height:1px; background-color:#e5e5e5; margin:25px 0 15px 0;">
+      <p style="font-size:14px; color:#666; margin:0;">
+        Originally published at <a href="${postUrl}" style="color:#333; text-decoration:underline;">${SITE_CONFIG.title}</a>
+      </p>
     `;
   },
   
@@ -275,11 +266,13 @@ const EmailTemplates = {
     // Fix HTML for email clients
     const fixedContent = HtmlUtils.fixForKit(post.content);
     
-    // Combine header, content and footer
+    // Combine header, content and footer with clean structure
     const emailContent = `
-      ${EmailTemplates.createHeader(title, postUrl, thumbnailUrl)}
-      ${fixedContent}
-      ${EmailTemplates.createFooter(postUrl)}
+      <div style="max-width:600px; margin:0 auto; padding:20px 0; font-size:16px; line-height:1.6;">
+        ${EmailTemplates.createHeader(title, postUrl, thumbnailUrl)}
+        ${fixedContent}
+        ${EmailTemplates.createFooter(postUrl)}
+      </div>
     `;
     
     return { content: emailContent, thumbnailUrl };
