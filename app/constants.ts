@@ -48,11 +48,11 @@ export const NAV_ITEMS = {
   '/': {
     name: 'home',
   },
-  '/portfolio': {
-    name: 'portfolio',
-  },
   '/journal': {
     name: 'journal',
+  },
+  '/portfolio': {
+    name: 'portfolio',
   },
   'mailto:alec@wantoch.com': {
     name: 'contact me',
