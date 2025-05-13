@@ -1,4 +1,3 @@
-import { formatDate } from 'app/utils';
 import { SITE_CONFIG } from 'app/constants';
 
 // Types for Kit API
