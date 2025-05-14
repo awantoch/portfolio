@@ -27,9 +27,9 @@ export async function generateMetadata(props) {
     summary: description,
     image,
   } = entry.metadata
-  let ogImage = image
-    ? image
-    : `/og?title=${encodeURIComponent(title)}&description=${encodeURIComponent(description)}&path=/journal/${entry.slug}&bg=dark`
+  let metaOgImage = image
+    ? `${baseUrl}${image}`
+    : `${baseUrl}/og?title=${encodeURIComponent(title)}&description=${encodeURIComponent(description)}&path=/journal/${entry.slug}`
 
   return {
     title,
@@ -43,7 +43,7 @@ export async function generateMetadata(props) {
       siteName: SITE_CONFIG.title,
       images: [
         {
-          url: image ? `${baseUrl}${image}` : `${baseUrl}${ogImage}`,
+          url: metaOgImage,
         },
       ],
     },
@@ -51,7 +51,7 @@ export async function generateMetadata(props) {
       card: 'summary_large_image',
       title,
       description,
-      images: [image ? `${baseUrl}${image}` : `${baseUrl}${ogImage}`],
+      images: [metaOgImage],
     },
   }
 }
@@ -93,7 +93,7 @@ export default async function JournalEntry(props) {
             url: `${baseUrl}/journal/${entry.slug}`,
             author: {
               '@type': 'Person',
-              name: 'Alec M. Wantoch',
+              name: SITE_CONFIG.title,
             },
           }),
         }}
