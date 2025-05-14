@@ -29,6 +29,21 @@
 html {
   min-width: 360px;
   color-scheme: dark;
+  /* Fallback solid background (for bounce) */
+  background-color: #120c18;
+  position: relative;
+}
+
+/* Fixed radial gradient background behind all content */
+html::before {
+  content: '';
+  position: fixed;
+  inset: 0;
+  background: radial-gradient(ellipse at 60% 0%, #20132b 0%, #120c18 100%);
+  background-size: cover;
+  background-repeat: no-repeat;
+  z-index: -2;
+  pointer-events: none;
 }
 
 /* Prose styles */

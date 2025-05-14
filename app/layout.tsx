@@ -83,13 +83,12 @@ export default function RootLayout({
     <html
       lang={SITE_CONFIG.language}
       className={cx(
-        'text-white bg-black',
+        'text-white',
         GeistSans.variable,
         GeistMono.variable
       )}
     >
       <body className="antialiased min-h-screen text-white">
-        <div className="fixed inset-0 bg-custom-gradient" style={{ zIndex: -2 }} />
         <FlowerOfLife />
         <div className="flex min-h-screen flex-col relative" style={{ zIndex: 0 }}>
           <main className="flex-1 w-full flex flex-col items-center mt-4">
