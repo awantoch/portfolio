@@ -319,7 +319,7 @@ const EmailTemplates = {
       <table width="100%" cellpadding="0" cellspacing="0" border="0" style="background:${CARD_BG_COLOR};">
         <tr>
           <td align="center">
-            <table width="600" cellpadding="0" cellspacing="0" border="0" style="background:${CARD_BG_COLOR}; border-radius:12px; border:1px solid #27272a; margin:32px auto;">
+            <table width="100%" cellpadding="0" cellspacing="0" border="0" style="max-width:600px; background:${CARD_BG_COLOR}; border-radius:12px; border:1px solid #27272a; margin:32px auto;">
               <tr>
                 <td style="padding:32px 24px 24px 24px; font-family:'Inter', Arial, Helvetica, sans-serif; color:#fff; word-break:break-word; overflow-wrap:break-word;">
                   ${EmailTemplates.createHeader(title, postUrl, thumbnailUrl)}
