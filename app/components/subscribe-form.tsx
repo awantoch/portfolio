@@ -122,7 +122,7 @@ export function SubscribeForm({
               ) : (
                 <span className="flex items-center gap-2 group">
                   Subscribe
-                  <ArrowIcon className="transform transition-transform group-hover:translate-x-0.5" />
+                  <ArrowIcon />
                 </span>
               )}
             </button>
