@@ -101,15 +101,11 @@ export function SubscribeForm({
             <button
               type="submit"
               disabled={isLoading}
-              className="w-full flex items-center justify-center px-4 py-2 
-                bg-gradient-to-r from-purple-800 via-[#20132b] to-indigo-900 
+              className="w-full flex items-center justify-center px-4 py-2
+                bg-gradient-to-r from-purple-800 via-[#20132b] to-indigo-900
                 hover:bg-gradient-to-r hover:from-purple-700 hover:via-[#2d1d3e] hover:to-indigo-800
-                focus:outline-none focus:ring-2 focus:ring-purple-500 focus:ring-offset-2 focus:ring-offset-neutral-900 
-                disabled:opacity-50 rounded-md transition-all duration-300 
-                shadow-md hover:shadow-lg hover:shadow-purple-700/20
-                border border-purple-700/50
-                transform hover:scale-[1.02] active:scale-[0.98]
-                cursor-pointer hover:cursor-pointer disabled:cursor-not-allowed"
+                focus:outline-none focus:ring-2 focus:ring-purple-500 focus:ring-offset-2 focus:ring-offset-neutral-900
+                disabled:opacity-50 rounded-md shadow-md border border-purple-700/50 interactive cursor-pointer disabled:cursor-not-allowed"
             >
               {isLoading ? (
                 <span className="flex items-center gap-2">
