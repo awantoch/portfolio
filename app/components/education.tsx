@@ -20,7 +20,7 @@ const educationEntries: EducationEntry[] = [
     school: 'Chester County Technical College High School',
     degree: 'Computer Information Systems',
     year: '2014',
-    description: 'Advanced technical education program with intensive focus on Computer Information Systems. Served as Teacher\'s Assistant under Mr. Phillip Paul Fuchs, M.S., while accumulating over 1,000 hours of hands-on experience in Computer Science before graduation.',
+    description: 'Advanced technical education program with intensive focus on Computer Information Systems. Served as Teacher\'s Assistant under Mr. Phillip Paul Fuchs, M.S., attended for half of the day for 3 years, gaining rigorous hands-on experience in Computer Science before graduation.',
     links: [
       { label: 'CIS Program', url: 'http://cis.tchs.info/' },
       { label: 'School Website', url: 'http://www.cciu.org/tchspennocksbridge' },
@@ -29,31 +29,44 @@ const educationEntries: EducationEntry[] = [
   },
 ];
 
+type EducationItemProps = {
+  entry: EducationEntry;
+};
+
+const EducationItem: React.FC<EducationItemProps> = ({ entry }) => (
+  <div className="border-b border-neutral-800 pb-4">
+    <div className="flex flex-col md:flex-row md:items-baseline md:justify-between mb-1">
+      <h3 className="font-medium text-lg text-neutral-100">{entry.degree}</h3>
+      <span className="text-sm text-neutral-300 tabular-nums">{entry.year}</span>
+    </div>
+    <p className="text-neutral-300 mb-2">{entry.school}</p>
+    <p className="text-neutral-300 mb-2">{entry.description}</p>
+    {entry.links && (
+      <div className="flex flex-row gap-4">
+        {entry.links.map((link, idx) => (
+          <a
+            key={idx}
+            href={link.url}
+            className="underline text-neutral-300 hover:opacity-80 interactive-soft"
+            target="_blank"
+            rel="noopener noreferrer"
+          >
+            {link.label}
+          </a>
+        ))}
+      </div>
+    )}
+  </div>
+);
+
 export function Education() {
   return (
-    <div className="flex flex-col gap-6">
-      {educationEntries.map((entry, idx) => (
-        <div key={idx} className="border-b border-neutral-800 pb-4">
-          <h3 className="font-medium text-lg">{entry.school}</h3>
-          <p className="text-neutral-400">{entry.degree} (graduated {entry.year})</p>
-          <p className="text-neutral-400 mb-2">{entry.description}</p>
-          {entry.links && (
-            <div className="flex flex-row gap-4">
-              {entry.links.map((link, lidx) => (
-                <a
-                  key={lidx}
-                  href={link.url}
-                  className="underline text-neutral-300 hover:opacity-80 interactive-soft"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                >
-                  {link.label}
-                </a>
-              ))}
-            </div>
-          )}
-        </div>
-      ))}
-    </div>
+    <section>
+      <div className="flex flex-col gap-6">
+        {educationEntries.map((entry, idx) => (
+          <EducationItem key={idx} entry={entry} />
+        ))}
+      </div>
+    </section>
   );
 } 
