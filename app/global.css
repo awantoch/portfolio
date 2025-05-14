@@ -240,11 +240,11 @@ svg#flower circle {
   stroke: #00ffea;
   stroke-width: 1.5;
   stroke-linecap: round;
-  animation: drawCycle 19s linear infinite;
+  animation: drawCycle 33s linear infinite;
 }
 
 @keyframes drawCycle {
-  /* 3s draw (0%→15.79%), 13s hold (15.79%→84.21%), 3s reverse (84.21%→100%) */
+  /* 5.2s draw (0%→15.79%), 22.6s hold (15.79%→84.21%), 5.2s reverse (84.21%→100%) */
   0% { stroke-dashoffset: var(--len); }
   15.79% { stroke-dashoffset: 0; }
   84.21% { stroke-dashoffset: 0; }

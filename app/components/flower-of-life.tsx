@@ -60,7 +60,7 @@ export function FlowerOfLife() {
         pointerEvents: 'none',
         zIndex: -1,
         filter: 'hue-rotate(0deg)',
-        animation: 'hue 3.33s linear infinite',
+        animation: 'hue 5.2s linear infinite',
         opacity: 0.03
       }}
     />
