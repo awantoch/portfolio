@@ -21,33 +21,34 @@ export function JournalEntries({ limit, showMore = false }: JournalEntriesProps)
 
   return (
     <div>
-      <div className="space-y-4">
+      <ul className="space-y-4">
         {entries.map((post) => (
-          <Link
-            key={post.slug}
-            href={`/journal/${post.slug}`}
-            className="block card-base card-base--dark p-4 space-y-2 group interactive"
-          >
-            <div className="flex flex-col space-y-1">
-              <div className="flex flex-row items-baseline gap-x-2">
-                <p className="hidden md:block text-neutral-400 min-w-[120px] whitespace-nowrap tabular-nums">
-                  {formatDate(post.metadata.publishedAt, false)}
-                </p>
-                <div>
-                  <p className="text-neutral-100 tracking-tight font-semibold">
-                    {post.metadata.title}
+          <li key={post.slug}>
+            <Link
+              href={`/journal/${post.slug}`}
+              className="block card-base card-base--dark p-4 space-y-2 group interactive"
+            >
+              <div className="flex flex-col space-y-1">
+                <div className="flex flex-row items-baseline gap-x-2">
+                  <p className="hidden md:block text-neutral-400 min-w-[120px] whitespace-nowrap tabular-nums">
+                    {formatDate(post.metadata.publishedAt, false)}
                   </p>
-                  {post.metadata.summary && (
-                    <p className="text-sm text-neutral-400">
-                      {post.metadata.summary}
+                  <div>
+                    <p className="text-neutral-100 tracking-tight font-semibold">
+                      {post.metadata.title}
                     </p>
-                  )}
+                    {post.metadata.summary && (
+                      <p className="text-sm text-neutral-400">
+                        {post.metadata.summary}
+                      </p>
+                    )}
+                  </div>
                 </div>
               </div>
-            </div>
-          </Link>
+            </Link>
+          </li>
         ))}
-      </div>
+      </ul>
       {showMore && (
         <div className="mt-8">
           <Link 

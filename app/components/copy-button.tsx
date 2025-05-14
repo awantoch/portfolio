@@ -16,6 +16,8 @@ export function CopyButton({ content }: { content: string }) {
   return (
     <button
       onClick={copyToClipboard}
+      aria-live="polite"
+      aria-atomic="true"
       className="absolute z-10 right-2 top-2 px-2 py-1 text-xs rounded bg-neutral-800 hover:bg-neutral-700 transition-colors cursor-pointer"
     >
       {copied ? 'Copied!' : 'Copy'}

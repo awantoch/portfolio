@@ -28,11 +28,15 @@ export const metadata: Metadata = {
 
 export default function PortfolioPage() {
   return (
-    <section>
-      <h1 className="font-semibold text-2xl mb-8 tracking-tighter">Portfolio</h1>
-      <Portfolio />
-      <h1 className="font-semibold text-2xl mb-8 tracking-tighter mt-16">Education</h1>
-      <Education />
-    </section>
+    <>
+      <section role="region" aria-labelledby="portfolio-heading">
+        <h1 id="portfolio-heading" className="font-semibold text-2xl mb-8 tracking-tighter">Portfolio</h1>
+        <Portfolio />
+      </section>
+      <section role="region" aria-labelledby="education-heading">
+        <h2 id="education-heading" className="font-semibold text-2xl mb-8 tracking-tighter mt-16">Education</h2>
+        <Education />
+      </section>
+    </>
   )
 } 

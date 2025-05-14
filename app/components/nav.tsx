@@ -6,6 +6,7 @@ export function Navbar() {
     <aside className="mb-4 tracking-tight flex justify-center">
       <div className="lg:sticky lg:top-20">
         <nav
+          aria-label="Main navigation"
           className="flex flex-row items-start justify-center md:overflow-auto md:relative"
           id="nav"
         >

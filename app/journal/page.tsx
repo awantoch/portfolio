@@ -28,8 +28,8 @@ export const metadata: Metadata = {
 
 export default function JournalPage() {
   return (
-    <section>
-      <h1 className="font-semibold text-2xl mb-8 tracking-tighter">Journal</h1>
+    <section role="region" aria-labelledby="journal-heading">
+      <h1 id="journal-heading" className="font-semibold text-2xl mb-8 tracking-tighter">Journal</h1>
       <JournalEntries />
       
       <div className="mt-12">

@@ -33,7 +33,7 @@ export const metadata: Metadata = {
 
 export default function Page() {
   return (
-    <section>
+    <section role="region" aria-labelledby="home-heading">
       <div className="flex justify-center mb-6 mt-2">
         <div className="w-32 h-32 rounded-xl overflow-hidden shadow-lg border-2 border-neutral-800 bg-neutral-900 flex items-center justify-center">
           <Image
@@ -47,7 +47,7 @@ export default function Page() {
           />
         </div>
       </div>
-      <h1 className="mb-4 text-2xl font-semibold tracking-tighter text-center text-neutral-100">
+      <h1 id="home-heading" className="mb-4 text-2xl font-semibold tracking-tighter text-center text-neutral-100">
         Alec M. Wantoch
       </h1>
       <p className="mb-4 text-center text-neutral-300">
@@ -56,10 +56,10 @@ export default function Page() {
       <div className="mt-8 mb-8">
         <Links />
       </div>
-      <div className="my-8">
-        <h2 className="text-xl font-semibold mb-4">Journal</h2>
+      <section role="region" aria-labelledby="journal-heading" className="my-8">
+        <h2 id="journal-heading" className="text-xl font-semibold mb-4">Journal</h2>
         <JournalEntries limit={5} showMore={true} />
-      </div>
+      </section>
       
       <div className="my-10">
         <SubscribeForm 
@@ -69,10 +69,10 @@ export default function Page() {
         />
       </div>
       
-      <div className="my-8">
-        <h2 className="text-xl font-semibold mb-4">Portfolio</h2>
+      <section role="region" aria-labelledby="portfolio-heading" className="my-8">
+        <h2 id="portfolio-heading" className="text-xl font-semibold mb-4">Portfolio</h2>
         <Portfolio limit={3} showMore={true} />
-      </div>
+      </section>
     </section>
   )
 }
