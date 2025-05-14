@@ -20,11 +20,14 @@ export function FlowerOfLife() {
       const W = window.innerWidth, H = window.innerHeight;
       svg.setAttribute('viewBox', `0 0 ${W} ${H}`);
       const cx = W/2, cy = H/2;
-      const extent = Math.ceil(Math.max(W,H)/(2*r))+1;
+      // calculate extents to cover full viewport
+      const yExtent = Math.ceil((H/2 + r) / dy);
+      const xExtent = Math.ceil((W/2 + r) / dx + yExtent / 2);
       
-      for(let j=-extent;j<=extent;j++) {
-        for(let i=-extent;i<=extent;i++) {
-          const x = cx + dx*(i + j/2), y = cy + dy*j;
+      for (let j = -yExtent; j <= yExtent; j++) {
+        for (let i = -xExtent; i <= xExtent; i++) {
+          const x = cx + dx * (i + j / 2);
+          const y = cy + dy * j;
           const c = document.createElementNS(svg.namespaceURI,'circle') as SVGElement;
           c.setAttribute('cx', x.toString());
           c.setAttribute('cy', y.toString());
