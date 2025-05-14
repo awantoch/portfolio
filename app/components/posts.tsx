@@ -26,7 +26,7 @@ export function JournalEntries({ limit, showMore = false }: JournalEntriesProps)
           <Link
             key={post.slug}
             href={`/journal/${post.slug}`}
-            className="block card-base p-4 space-y-2 group interactive"
+            className="block card-base card-base--dark p-4 space-y-2 group interactive"
           >
             <div className="flex flex-col space-y-1">
               <div className="flex flex-row items-baseline gap-x-2">
