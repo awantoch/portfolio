@@ -19,7 +19,7 @@ const links = [
 function SocialLink({ href, label, Icon }: { href: string; label: string; Icon: React.FC<{ className?: string }> }) {
   return (
     <a
-      className="flex flex-col items-center justify-center gap-1 md:gap-2 card-base interactive-soft py-2 md:py-4 hover:shadow-lg hover:shadow-purple-700/30 focus-visible:ring-2 focus-visible:ring-purple-500 hover:scale-[1.04]"
+      className="flex flex-col items-center justify-center gap-1 md:gap-2 card-base interactive py-2 md:py-4 focus-visible:ring-2 focus-visible:ring-purple-500"
       rel="noopener noreferrer"
       target="_blank"
       href={href}

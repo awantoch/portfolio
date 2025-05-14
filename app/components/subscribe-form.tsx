@@ -72,7 +72,7 @@ export function SubscribeForm({
         </div>
         
         {status === 'success' ? (
-          <div role="status" aria-live="polite" className="bg-purple-900/30 border border-purple-700/50 rounded-md p-3 text-center transform transition-all duration-300 animate-fade-in">
+          <div role="status" aria-live="polite" className="bg-purple-900/30 border border-purple-700/50 rounded-md p-3 text-center animate-fade-in">
             <p className="text-purple-200">{message}</p>
           </div>
         ) : (
