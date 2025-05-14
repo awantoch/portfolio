@@ -56,7 +56,7 @@ export function FlowerOfLife() {
             ? len * (1 - p / startHold)
             : p < endHold
             ? 0
-            : len * ((p - endHold) / (1 - endHold));
+            : -len * ((p - endHold) / (1 - endHold));
         const baseAlpha = 0.3;
         let alpha;
         if (p < startHold - fadeTime) {
