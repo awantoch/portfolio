@@ -240,7 +240,7 @@ svg#flower circle {
   stroke: #00ffea;
   stroke-width: 1.5;
   stroke-linecap: round;
-  animation: drawCycle 19s ease-out infinite;
+  animation: drawCycle 19s linear infinite;
 }
 
 @keyframes drawCycle {
