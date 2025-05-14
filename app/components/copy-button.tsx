@@ -14,7 +14,7 @@ export function CopyButton({ content }: { content: string }) {
   return (
     <button
       onClick={copyToClipboard}
-      className="absolute right-2 top-2 px-2 py-1 text-xs rounded bg-neutral-800 hover:bg-neutral-700 transition-colors opacity-0 group-hover:opacity-100 cursor-pointer"
+      className="absolute right-2 top-2 px-2 py-1 text-xs rounded bg-neutral-800 hover:bg-neutral-700 transition-colors cursor-pointer"
     >
       {copied ? 'Copied!' : 'Copy'}
     </button>
