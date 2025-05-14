@@ -27,7 +27,10 @@ export function ShareSection({ url, title, slug }: ShareSectionProps) {
 
   const copyShareUrl = `${url}?utm_source=clipboard&utm_medium=share&utm_campaign=${slug}`
   const nativeShareUrl = `${url}?utm_source=native&utm_medium=share&utm_campaign=${slug}`
-  const canNativeShare = typeof navigator !== 'undefined' && Boolean(navigator.share)
+  const [canNativeShare, setCanNativeShare] = React.useState(true)
+  React.useEffect(() => {
+    setCanNativeShare(typeof navigator !== 'undefined' && Boolean(navigator.share))
+  }, [])
 
   const [copied, setCopied] = React.useState(false)
   const handleCopy = () => {
