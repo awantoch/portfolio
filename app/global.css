@@ -218,3 +218,24 @@ table {
 .card-base--purple {
   background: var(--color-card-bg);
 }
+
+/* Flower of Life Animation: slower draw/erase cycle with pause */
+svg#flower circle {
+  fill: none;
+  stroke: #00ffea;
+  stroke-width: 1.5;
+  stroke-linecap: round;
+  animation: drawCycle 19s ease-out infinite;
+}
+
+@keyframes drawCycle {
+  /* 6s draw (0%→31.58%), 7s hold (31.58%→68.42%), 6s reverse (68.42%→100%) */
+  0% { stroke-dashoffset: var(--len); }
+  31.58% { stroke-dashoffset: 0; }
+  68.42% { stroke-dashoffset: 0; }
+  100% { stroke-dashoffset: var(--len); }
+}
+
+@keyframes hue {
+  to { filter: hue-rotate(360deg); }
+}

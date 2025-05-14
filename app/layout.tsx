@@ -7,6 +7,7 @@ import Footer from './components/footer'
 import { SITE_CONFIG, OG_CONFIG, METADATA_CONFIG } from './constants'
 import { AnalyticsWrapper } from './components/analytics'
 import { cx } from './utils'
+import { FlowerOfLife } from './components/flower-of-life'
 
 export const metadata: Metadata = {
   metadataBase: new URL(SITE_CONFIG.baseUrl),
@@ -87,8 +88,10 @@ export default function RootLayout({
         GeistMono.variable
       )}
     >
-      <body className="antialiased min-h-screen bg-custom-gradient text-white">
-        <div className="flex min-h-screen flex-col">
+      <body className="antialiased min-h-screen text-white">
+        <div className="fixed inset-0 bg-custom-gradient" style={{ zIndex: -2 }} />
+        <FlowerOfLife />
+        <div className="flex min-h-screen flex-col relative" style={{ zIndex: 0 }}>
           <main className="flex-1 w-full flex flex-col items-center mt-4">
             <div className="w-full max-w-xl px-4">
               <Navbar />
