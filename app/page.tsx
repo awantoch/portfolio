@@ -64,7 +64,7 @@ export default function Page() {
       <div className="my-10">
         <SubscribeForm 
           title="Stay in the loop" 
-          subtitle="Get notified when I publish new content" 
+          subtitle="Get notified from my personal email when I publish new content" 
           compact={true}
         />
       </div>
