@@ -30,7 +30,7 @@ export function JournalEntries({ limit, showMore = false }: JournalEntriesProps)
           >
             <div className="flex flex-col space-y-1">
               <div className="flex flex-row items-baseline gap-x-2">
-                <p className="text-neutral-400 min-w-[120px] whitespace-nowrap tabular-nums">
+                <p className="hidden md:block text-neutral-400 min-w-[120px] whitespace-nowrap tabular-nums">
                   {formatDate(post.metadata.publishedAt, false)}
                 </p>
                 <div>
