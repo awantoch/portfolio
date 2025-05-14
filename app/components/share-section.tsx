@@ -27,11 +27,13 @@ export function ShareSection({ url, title, slug }: ShareSectionProps) {
 
   const copyShareUrl = `${url}?utm_source=clipboard&utm_medium=share&utm_campaign=${slug}`
   const nativeShareUrl = `${url}?utm_source=native&utm_medium=share&utm_campaign=${slug}`
-  const canNativeShare = Boolean(navigator.share)
+  const canNativeShare = typeof navigator !== 'undefined' && Boolean(navigator.share)
 
   const [copied, setCopied] = React.useState(false)
   const handleCopy = () => {
-    navigator.clipboard.writeText(copyShareUrl)
+    if (typeof navigator !== 'undefined' && navigator.clipboard) {
+      navigator.clipboard.writeText(copyShareUrl)
+    }
     setCopied(true)
     setTimeout(() => setCopied(false), 2000)
   }
@@ -74,7 +76,11 @@ export function ShareSection({ url, title, slug }: ShareSectionProps) {
       </button>
       {canNativeShare && (
         <button
-          onClick={() => navigator.share({ title, url: nativeShareUrl })}
+          onClick={() => {
+            if (typeof navigator !== 'undefined' && navigator.share) {
+              navigator.share({ title, url: nativeShareUrl })
+            }
+          }}
           aria-label="Native share"
           className="flex items-center justify-center card-base interactive-soft p-2 hover:shadow-lg hover:shadow-purple-700/30 focus-visible:ring-2 focus-visible:ring-purple-500 hover:scale-[1.04] cursor-pointer"
         >

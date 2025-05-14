@@ -6,7 +6,9 @@ export function CopyButton({ content }: { content: string }) {
   const [copied, setCopied] = React.useState(false)
 
   const copyToClipboard = () => {
-    navigator.clipboard.writeText(content)
+    if (typeof navigator !== 'undefined' && navigator.clipboard) {
+      navigator.clipboard.writeText(content)
+    }
     setCopied(true)
     setTimeout(() => setCopied(false), 2000)
   }
