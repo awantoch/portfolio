@@ -230,12 +230,12 @@ table {
   }
   .interactive-soft:hover {
     /* subtle purple text glow anchored at bottom */
-    text-shadow: 0 2px 2px rgba(139,92,246,0.4), 0 4px 4px rgba(139,92,246,0.3);
+    text-shadow: 0 1px 1px rgba(139,92,246,0.3), 0 2px 2px rgba(139,92,246,0.2);
     @apply duration-100;
   }
   .interactive-soft:active {
     /* minimal bottom glow on active */
-    text-shadow: 0 1px 1px rgba(139,92,246,0.3);
+    text-shadow: 0 1px 1px rgba(139,92,246,0.2);
   }
 }
 
