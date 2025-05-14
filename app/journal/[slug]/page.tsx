@@ -5,6 +5,7 @@ import { baseUrl } from 'app/sitemap'
 import Image from 'next/image'
 import { SubscribeForm } from 'app/components/subscribe-form'
 import { SITE_CONFIG } from 'app/constants'
+import { ShareSection } from 'app/components/share-section'
 
 export async function generateStaticParams() {
   let entries = getJournalPosts()
@@ -121,9 +122,11 @@ export default async function JournalEntry(props) {
           />
         </div>
       </div>
+      <ShareSection url={`${baseUrl}/journal/${entry.slug}`} title={title} slug={entry.slug} />
       <article className="prose">
         <CustomMDX source={entry.content} />
       </article>
+      <ShareSection url={`${baseUrl}/journal/${entry.slug}`} title={title} slug={entry.slug} />
       
       <div className="mt-12">
         <SubscribeForm 
