@@ -34,7 +34,7 @@ export function JournalEntries({ limit, showMore = false }: JournalEntriesProps)
                   {formatDate(post.metadata.publishedAt, false)}
                 </p>
                 <div>
-                  <p className="text-neutral-100 tracking-tight font-semibold group-hover:underline">
+                  <p className="text-neutral-100 tracking-tight font-semibold">
                     {post.metadata.title}
                   </p>
                   {post.metadata.summary && (
