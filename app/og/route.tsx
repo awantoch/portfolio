@@ -1,14 +1,17 @@
 import { ImageResponse } from 'next/og'
-import { OG_CONFIG, METADATA_CONFIG, SITE_CONFIG } from '../constants'
+import { OG_CONFIG, METADATA_CONFIG, SITE_CONFIG, CARD_BG_COLOR, CARD_BG_COLOR_DARK } from '../constants'
 
 // Add cache control
 export const runtime = 'edge'
 
 export async function GET(request: Request) {
-  let url = new URL(request.url)
-  let title = url.searchParams.get('title') || OG_CONFIG.defaultTitle
-  let description = url.searchParams.get('description') || METADATA_CONFIG.descriptions.home
-  
+  const url = new URL(request.url)
+  const title = url.searchParams.get('title') || OG_CONFIG.defaultTitle
+  const description = url.searchParams.get('description') || METADATA_CONFIG.descriptions.home
+  const bg = url.searchParams.get('bg')
+  // Use CSS variable or fallback to hex
+  const backgroundColor = bg === 'dark' ? CARD_BG_COLOR_DARK : CARD_BG_COLOR
+
   // Extract hostname and optional path (no protocol)
   const hostname = new URL(SITE_CONFIG.baseUrl).hostname
   const path = url.searchParams.get('path') || ''
@@ -16,7 +19,7 @@ export async function GET(request: Request) {
 
   return new ImageResponse(
     (
-      <div tw="flex flex-col w-full h-full items-center justify-center" style={{ backgroundColor: '#20132b' }}>
+      <div tw="flex flex-col w-full h-full items-center justify-center" style={{ backgroundColor }}>
         <div
           tw="flex flex-col items-start justify-start max-w-[900px] w-full p-14"
         >

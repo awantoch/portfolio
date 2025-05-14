@@ -22,6 +22,8 @@
   --color-bg: #000000;
   --color-border: #333333;
   --color-muted: #999999;
+  --color-card-bg: #20132b;
+  --color-card-bg-dark: #18181b;
 }
 
 html {
@@ -181,7 +183,8 @@ table {
 @layer components {
   /* Reusable base card style matching subscribe component */
   .card-base {
-    @apply bg-[#20132b] border border-neutral-800 rounded-lg transition-all duration-300;
+    background: var(--color-card-bg);
+    @apply border border-neutral-800 rounded-lg transition-all duration-300;
   }
   .interactive {
     @apply transition-all duration-300 transform;
@@ -204,4 +207,12 @@ table {
     /* minimal bottom glow on active */
     text-shadow: 0 1px 1px rgba(139,92,246,0.3);
   }
+}
+
+/* Card background variants */
+.card-base--dark {
+  background: var(--color-card-bg-dark);
+}
+.card-base--purple {
+  background: var(--color-card-bg);
 }

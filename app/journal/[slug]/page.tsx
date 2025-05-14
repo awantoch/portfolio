@@ -28,7 +28,7 @@ export async function generateMetadata(props) {
   } = entry.metadata
   let ogImage = image
     ? image
-    : `/og?title=${encodeURIComponent(title)}&description=${encodeURIComponent(description)}&path=/journal/${entry.slug}`
+    : `/og?title=${encodeURIComponent(title)}&description=${encodeURIComponent(description)}&path=/journal/${entry.slug}&bg=dark`
 
   return {
     title,
@@ -70,7 +70,7 @@ export default async function JournalEntry(props) {
   } = entry.metadata
   let ogImage = image
     ? image
-    : `/og?title=${encodeURIComponent(title)}&description=${encodeURIComponent(description)}&path=/journal/${entry.slug}`
+    : `/og?title=${encodeURIComponent(title)}&description=${encodeURIComponent(description)}&path=/journal/${entry.slug}&bg=dark`
 
   return (
     <section>
@@ -104,18 +104,20 @@ export default async function JournalEntry(props) {
           {formatDate(entry.metadata.publishedAt)}
         </p>
       </div>
-      <div className="mb-8">
-        <Image
-          src={ogImage}
-          alt={entry.metadata.title}
-          width={1200}
-          height={630}
-          className="rounded-lg w-full"
-          priority
-          quality={75}
-          placeholder="blur"
-          blurDataURL="data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMTIwMCIgaGVpZ2h0PSI2MzAiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+PHJlY3Qgd2lkdGg9IjEyMDAiIGhlaWdodD0iNjMwIiBmaWxsPSIjMTgxODFiIi8+PC9zdmc+"
-        />
+      <div className="mb-8 flex justify-center">
+        <div className="card-base card-base--dark p-2 max-w-3xl w-full">
+          <Image
+            src={ogImage}
+            alt={entry.metadata.title}
+            width={1200}
+            height={630}
+            className="rounded-lg w-full h-auto"
+            priority
+            quality={75}
+            placeholder="blur"
+            blurDataURL="data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMTIwMCIgaGVpZ2h0PSI2MzAiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+PHJlY3Qgd2lkdGg9IjEyMDAiIGhlaWdodD0iNjMwIiBmaWxsPSIjMTgxODFiIi8+PC9zdmc+"
+          />
+        </div>
       </div>
       <article className="prose">
         <CustomMDX source={entry.content} />

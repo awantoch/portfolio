@@ -77,4 +77,8 @@ export const DATE_CONFIG = {
     day: 'numeric',
     year: 'numeric',
   },
-} as const 
+} as const
+
+// Card background colors (keep in sync with CSS variables in global.css)
+export const CARD_BG_COLOR = '#20132b'
+export const CARD_BG_COLOR_DARK = '#18181b' 
