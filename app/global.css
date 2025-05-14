@@ -176,6 +176,7 @@ table {
 
 /* Transitions */
 .transition-opacity {
+  will-change: opacity;
   transition: opacity 0.2s ease-in-out;
 }
 
@@ -201,6 +202,7 @@ table {
 }
 
 .animate-fade-in {
+  will-change: opacity, transform;
   animation: fade-in 0.3s ease-out forwards;
 }
 
@@ -212,6 +214,7 @@ table {
     @apply border border-neutral-800 rounded-lg transition-all duration-300;
   }
   .interactive {
+    will-change: transform;
     @apply transition-all duration-300 transform;
   }
   .interactive:hover {
@@ -222,6 +225,7 @@ table {
   }
   /* Softer glow for inline links without visible edges */
   .interactive-soft {
+    will-change: transform;
     @apply transition-all duration-200 ease-in-out;
   }
   .interactive-soft:hover {
