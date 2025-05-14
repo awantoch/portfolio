@@ -1,4 +1,4 @@
-import { SITE_CONFIG } from 'app/constants';
+import { SITE_CONFIG, CARD_BG_COLOR, CARD_BG_COLOR_DARK } from 'app/constants';
 
 // Types for Kit API
 type KitBroadcast = {
@@ -126,6 +126,12 @@ const HtmlUtils = {
       (match, relativeUrl) => match.replace(relativeUrl, this.toAbsoluteUrl(relativeUrl, baseUrl))
     );
     
+    // Add inline style to all <a> tags for color and underline if not already present
+    processedHtml = processedHtml.replace(
+      /<a(?![^>]*style=)/gi,
+      '<a style="color:#a78bfa; text-decoration:underline;"'
+    );
+    
     // Convert relative image URLs to absolute
     processedHtml = processedHtml.replace(
       /<img(?:\s+[^>]*?)?(?:\s+src=['"](?!\s*(?:https?:|data:))([^'"]+)['"])/gi,
@@ -167,6 +173,12 @@ const HtmlUtils = {
         }
         return match;
       }
+    );
+    
+    // Code block styling: ensure pre-wrap and word-break
+    processedHtml = processedHtml.replace(
+      /<pre([^>]*)>/gi,
+      '<pre$1 style="background:#151419; border-radius:8px; padding:16px; margin:20px 0; overflow-x:auto; font-family:SF Mono, Menlo, Monaco, Consolas, Liberation Mono, Courier New, monospace; font-size:14px; border:1px solid #333; max-width:100%; white-space:pre-wrap; word-break:break-word;">'
     );
     
     // Preserve heading anchor links but let template handle styling
@@ -271,13 +283,13 @@ const EmailTemplates = {
    */
   createHeader(title: string, postUrl: string, thumbnailUrl: string | null): string {
     return `
-      <h1 style="font-size:26px; font-weight:600; line-height:1.3; margin:0 0 15px 0;">
+      <h1 style="font-size:2rem; font-weight:600; margin:0 0 18px 0; letter-spacing:-0.01em; color:#fff;">
         ${title}
       </h1>
-      <a href="${postUrl}" style="font-size:13px; color:#666; text-decoration:none; display:block; margin-bottom:20px;">
+      <a href="${postUrl}" style="font-size:13px; color:#a3a3a3; text-decoration:underline; display:block; margin-bottom:18px;">
         View in browser →
       </a>
-      ${thumbnailUrl ? `<img src="${thumbnailUrl}" alt="${title}" style="max-width:100%; width:100%; height:auto; display:block; border-radius:5px; margin-bottom:25px;">` : ''}
+      ${thumbnailUrl ? `<img src="${thumbnailUrl}" alt="${title}" style="max-width:100%; width:100%; height:auto; display:block; border-radius:10px; margin-bottom:24px;">` : ''}
     `;
   },
   
@@ -286,9 +298,9 @@ const EmailTemplates = {
    */
   createFooter(postUrl: string): string {
     return `
-      <hr style="border:none; height:1px; background-color:#e5e5e5; margin:25px 0 15px 0;">
-      <p style="font-size:14px; color:#666; margin:0;">
-        Originally published at <a href="${postUrl}" style="color:#333; text-decoration:underline;">${SITE_CONFIG.title}</a>
+      <hr style="border:none; height:1px; background-color:#27272a; margin:32px 0 18px 0;">
+      <p style="font-size:14px; color:#a3a3a3; margin:0;">
+        Originally published at <a href="${postUrl}" style="color:#a78bfa; text-decoration:underline;">${SITE_CONFIG.title}</a>
       </p>
     `;
   },
@@ -297,24 +309,31 @@ const EmailTemplates = {
    * Create complete email content from post data
    */
   createEmailContent(post: Post): { content: string, thumbnailUrl: string | null } {
-    const { title, summary } = post.metadata;
+    const { title } = post.metadata;
     const postUrl = post.url || `${SITE_CONFIG.baseUrl}/journal/${post.slug}`;
-    
-    // Get thumbnail - use specified image or extract from content
     const thumbnailUrl = post.metadata.image || HtmlUtils.extractFirstImage(post.content);
-    
-    // Fix HTML for email clients
     const fixedContent = HtmlUtils.fixForKit(post.content);
-    
-    // Combine header, content and footer with clean structure
+
+    // Table-based, bulletproof, minimal HTML structure for email
     const emailContent = `
-      <div style="max-width:600px; margin:0 auto; padding:20px 0; font-size:16px; line-height:1.6;">
-        ${EmailTemplates.createHeader(title, postUrl, thumbnailUrl)}
-        ${fixedContent}
-        ${EmailTemplates.createFooter(postUrl)}
-      </div>
+      <table width="100%" cellpadding="0" cellspacing="0" border="0" style="background:${CARD_BG_COLOR};">
+        <tr>
+          <td align="center">
+            <table width="600" cellpadding="0" cellspacing="0" border="0" style="background:${CARD_BG_COLOR}; border-radius:12px; border:1px solid #27272a; margin:32px auto;">
+              <tr>
+                <td style="padding:32px 24px 24px 24px; font-family:'Inter', Arial, Helvetica, sans-serif; color:#fff; word-break:break-word; overflow-wrap:break-word;">
+                  ${EmailTemplates.createHeader(title, postUrl, thumbnailUrl)}
+                  <div style="background:${CARD_BG_COLOR_DARK}; border-radius:10px; padding:1.5em 1em; color:#e6e6e6; font-size:1.05rem; line-height:1.7;">
+                    ${fixedContent}
+                  </div>
+                  ${EmailTemplates.createFooter(postUrl)}
+                </td>
+              </tr>
+            </table>
+          </td>
+        </tr>
+      </table>
     `;
-    
     return { content: emailContent, thumbnailUrl };
   }
 };
