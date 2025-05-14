@@ -255,6 +255,13 @@ const HtmlUtils = {
         return simpleArticleMatch[1];
       }
       
+      // Also handle prose wrapped in <section> tags
+      const sectionRegex = /<section[^>]*class="[^"]*prose[^"]*"[^>]*>([\s\S]*?)<\/section>/i;
+      const sectionMatch = sectionRegex.exec(fullHtml);
+      if (sectionMatch && sectionMatch[1]) {
+        return sectionMatch[1];
+      }
+      
       // Fix broken images in content
       const fixImages = (content: string): string => {
         if (!content) return '';

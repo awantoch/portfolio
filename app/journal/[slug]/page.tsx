@@ -76,7 +76,7 @@ export default async function JournalEntry(props) {
     : `/og?title=${encodeURIComponent(title)}&description=${encodeURIComponent(description)}&path=/journal/${entry.slug}&bg=dark`
 
   return (
-    <section>
+    <article itemScope itemType="https://schema.org/Article" aria-labelledby="entry-title">
       <script
         type="application/ld+json"
         suppressHydrationWarning
@@ -99,13 +99,13 @@ export default async function JournalEntry(props) {
           }),
         }}
       />
-      <h1 className="title font-semibold text-2xl tracking-tighter">
+      <h1 id="entry-title" itemProp="headline" className="title font-semibold text-2xl tracking-tighter">
         {entry.metadata.title}
       </h1>
       <div className="flex justify-between items-center mt-2 mb-8 text-sm">
-        <p className="text-sm text-neutral-400">
+        <time dateTime={entry.metadata.publishedAt} itemProp="datePublished" className="text-sm text-neutral-400">
           {formatDate(entry.metadata.publishedAt)}
-        </p>
+        </time>
       </div>
       <div className="mb-8 flex justify-center">
         <div className="card-base card-base--dark p-2 max-w-3xl w-full">
@@ -123,9 +123,9 @@ export default async function JournalEntry(props) {
         </div>
       </div>
       <ShareSection url={`${baseUrl}/journal/${entry.slug}`} title={title} slug={entry.slug} />
-      <article className="prose">
+      <section className="prose" aria-label="Journal entry content" itemProp="articleBody" role="article">
         <CustomMDX source={entry.content} />
-      </article>
+      </section>
       <ShareSection url={`${baseUrl}/journal/${entry.slug}`} title={title} slug={entry.slug} />
       
       <div className="mt-12">
@@ -134,6 +134,6 @@ export default async function JournalEntry(props) {
           subtitle="'preciate it yo! Might as well subscribe 😉"
         />
       </div>
-    </section>
+    </article>
   )
 }
