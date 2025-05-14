@@ -58,7 +58,7 @@ export function FlowerOfLife() {
         zIndex: -1,
         filter: 'hue-rotate(0deg)',
         animation: 'hue 10s linear infinite',
-        opacity: 0.02333
+        opacity: 0.03
       }}
     />
   );
