@@ -89,7 +89,7 @@ export default function RootLayout({
     >
       <body className="antialiased min-h-screen bg-custom-gradient text-white">
         <div className="flex min-h-screen flex-col">
-          <main className="flex-1 w-full flex flex-col items-center mt-8">
+          <main className="flex-1 w-full flex flex-col items-center mt-4">
             <div className="w-full max-w-xl px-4">
               <Navbar />
               {children}

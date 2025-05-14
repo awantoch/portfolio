@@ -3,7 +3,7 @@ import { NAV_ITEMS } from '../constants'
 
 export function Navbar() {
   return (
-    <aside className="mb-6 tracking-tight flex justify-center">
+    <aside className="mb-4 tracking-tight flex justify-center">
       <div className="lg:sticky lg:top-20">
         <nav
           className="flex flex-row items-start justify-center md:overflow-auto md:relative"
