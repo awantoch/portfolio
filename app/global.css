@@ -248,7 +248,12 @@ table {
 }
 
 /* Flower of Life Animation: slower draw/erase cycle with pause */
+svg#flower {
+  will-change: filter, opacity;
+}
+
 svg#flower circle {
+  will-change: stroke-dashoffset, opacity;
   fill: none;
   stroke: #00ffea;
   stroke-width: 1.5;
@@ -258,10 +263,22 @@ svg#flower circle {
 
 @keyframes drawCycle {
   /* 5.2s draw (0%→15.79%), 22.6s hold (15.79%→84.21%), 5.2s reverse (84.21%→100%) */
-  0% { stroke-dashoffset: var(--len); }
-  15.79% { stroke-dashoffset: 0; }
-  84.21% { stroke-dashoffset: 0; }
-  100% { stroke-dashoffset: var(--len); }
+  0% {
+    stroke-dashoffset: var(--len);
+    opacity: 1;
+  }
+  15.79% {
+    stroke-dashoffset: 0;
+    opacity: 0.3;
+  }
+  84.21% {
+    stroke-dashoffset: 0;
+    opacity: 0.3;
+  }
+  100% {
+    stroke-dashoffset: var(--len);
+    opacity: 1;
+  }
 }
 
 @keyframes hue {
