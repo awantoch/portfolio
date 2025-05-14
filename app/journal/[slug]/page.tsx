@@ -4,6 +4,7 @@ import { formatDate, getJournalPosts } from 'app/journal/utils'
 import { baseUrl } from 'app/sitemap'
 import Image from 'next/image'
 import { SubscribeForm } from 'app/components/subscribe-form'
+import { SITE_CONFIG } from 'app/constants'
 
 export async function generateStaticParams() {
   let entries = getJournalPosts()
@@ -36,9 +37,10 @@ export async function generateMetadata(props) {
     openGraph: {
       title,
       description,
+      url: `${baseUrl}/journal/${entry.slug}`,
       type: 'article',
       publishedTime,
-      url: `${baseUrl}/journal/${entry.slug}`,
+      siteName: SITE_CONFIG.title,
       images: [
         {
           url: image ? `${baseUrl}${image}` : `${baseUrl}${ogImage}`,

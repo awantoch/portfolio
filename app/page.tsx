@@ -12,6 +12,8 @@ export const metadata: Metadata = {
   openGraph: {
     title: SITE_CONFIG.title,
     description: METADATA_CONFIG.descriptions.home,
+    url: SITE_CONFIG.baseUrl,
+    siteName: SITE_CONFIG.title,
     images: [
       {
         url: `${SITE_CONFIG.baseUrl}/og?title=${encodeURIComponent(SITE_CONFIG.title)}&description=${encodeURIComponent(METADATA_CONFIG.descriptions.home)}`,
