@@ -34,7 +34,7 @@ export async function GET(request: Request) {
           <p tw="mt-8 text-4xl text-neutral-100 max-w-[900px] font-medium leading-relaxed text-left">
             {description}
           </p>
-          <p tw="mt-16 text-xl text-neutral-400 text-left">
+          <p tw="mt-16 text-3xl text-neutral-400 text-left">
             {websiteUrl}
           </p>
         </div>
@@ -44,9 +44,7 @@ export async function GET(request: Request) {
       width: OG_CONFIG.imageWidth,
       height: OG_CONFIG.imageHeight,
       headers: {
-        'Cache-Control': process.env.NODE_ENV === 'development' 
-          ? 'no-store' 
-          : 'public, max-age=86400, s-maxage=86400, stale-while-revalidate=604800',
+        'Cache-Control': 'public, max-age=86400, s-maxage=86400, stale-while-revalidate=604800',
         'Content-Type': 'image/png',
       },
     }
