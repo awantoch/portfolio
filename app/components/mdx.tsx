@@ -32,17 +32,17 @@ function CustomLink(props) {
 
   if (href.startsWith('/')) {
     return (
-      <Link href={href} {...props}>
+      <Link href={href} {...props} className="interactive-soft">
         {props.children}
       </Link>
     )
   }
 
   if (href.startsWith('#')) {
-    return <a {...props} />
+    return <a {...props} className="interactive-soft" />
   }
 
-  return <a target="_blank" rel="noopener noreferrer" {...props} />
+  return <a target="_blank" rel="noopener noreferrer" {...props} className="interactive-soft" />
 }
 
 function RoundedImage(props) {
