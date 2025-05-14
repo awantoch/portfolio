@@ -135,6 +135,14 @@ html::before {
   margin-bottom: 1.25em !important;
 }
 
+/* Add MDX blockquote styling (GitHub-like) */
+.prose blockquote {
+  @apply border-l-4 border-neutral-600 pl-4 italic text-neutral-400 my-4;
+}
+.prose blockquote p {
+  @apply m-0;
+}
+
 /* Scrollbar styles */
 pre::-webkit-scrollbar {
   display: none;
