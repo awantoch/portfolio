@@ -215,7 +215,7 @@ table {
   }
   .interactive {
     will-change: transform;
-    @apply transition-all duration-1000 ease-out transform;
+    @apply transition-all duration-800 ease-out transform;
   }
   .interactive:hover {
     @apply scale-[1.02] shadow-lg shadow-purple-700/30 duration-100;

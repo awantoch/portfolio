@@ -44,7 +44,7 @@ export function ShareSection({ url, title, slug }: ShareSectionProps) {
         target="_blank"
         rel="noopener noreferrer"
         aria-label="Share on X"
-        className="flex items-center justify-center card-base interactive-soft p-2 transition-all duration-200 hover:shadow-lg hover:shadow-purple-700/30 focus-visible:ring-2 focus-visible:ring-purple-500 hover:scale-[1.04]"
+        className="flex items-center justify-center card-base interactive-soft p-2 hover:shadow-lg hover:shadow-purple-700/30 focus-visible:ring-2 focus-visible:ring-purple-500 hover:scale-[1.04]"
       >
         <XIcon className="w-5 h-5 text-neutral-100" />
       </a>
@@ -53,21 +53,21 @@ export function ShareSection({ url, title, slug }: ShareSectionProps) {
         target="_blank"
         rel="noopener noreferrer"
         aria-label="Share on LinkedIn"
-        className="flex items-center justify-center card-base interactive-soft p-2 transition-all duration-200 hover:shadow-lg hover:shadow-purple-700/30 focus-visible:ring-2 focus-visible:ring-purple-500 hover:scale-[1.04]"
+        className="flex items-center justify-center card-base interactive-soft p-2 hover:shadow-lg hover:shadow-purple-700/30 focus-visible:ring-2 focus-visible:ring-purple-500 hover:scale-[1.04]"
       >
         <LinkedInIcon className="w-5 h-5 text-neutral-100" />
       </a>
       <a
         href={emailHref}
         aria-label="Share via Email"
-        className="flex items-center justify-center card-base interactive-soft p-2 transition-all duration-200 hover:shadow-lg hover:shadow-purple-700/30 focus-visible:ring-2 focus-visible:ring-purple-500 hover:scale-[1.04]"
+        className="flex items-center justify-center card-base interactive-soft p-2 hover:shadow-lg hover:shadow-purple-700/30 focus-visible:ring-2 focus-visible:ring-purple-500 hover:scale-[1.04]"
       >
         <EmailIcon className="w-5 h-5 text-neutral-100" />
       </a>
       <button
         onClick={handleCopy}
         aria-label="Copy share link"
-        className="relative flex items-center justify-center card-base interactive-soft p-2 transition-all duration-200 hover:shadow-lg hover:shadow-purple-700/30 focus-visible:ring-2 focus-visible:ring-purple-500 hover:scale-[1.04] cursor-pointer"
+        className="relative flex items-center justify-center card-base interactive-soft p-2 hover:shadow-lg hover:shadow-purple-700/30 focus-visible:ring-2 focus-visible:ring-purple-500 hover:scale-[1.04] cursor-pointer"
       >
         <LinkIcon className={`w-5 h-5 text-neutral-100 transition-all duration-200 ${copied ? 'opacity-0 scale-90' : 'opacity-100 scale-100'}`} />
         <ClipboardCheckIcon className={`absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-5 h-5 text-neutral-100 transition-all duration-200 ${copied ? 'opacity-100 scale-100' : 'opacity-0 scale-90'}`} />
@@ -76,7 +76,7 @@ export function ShareSection({ url, title, slug }: ShareSectionProps) {
         <button
           onClick={() => navigator.share({ title, url: nativeShareUrl })}
           aria-label="Native share"
-          className="flex items-center justify-center card-base interactive-soft p-2 transition-all duration-200 hover:shadow-lg hover:shadow-purple-700/30 focus-visible:ring-2 focus-visible:ring-purple-500 hover:scale-[1.04] cursor-pointer"
+          className="flex items-center justify-center card-base interactive-soft p-2 hover:shadow-lg hover:shadow-purple-700/30 focus-visible:ring-2 focus-visible:ring-purple-500 hover:scale-[1.04] cursor-pointer"
         >
           <NativeShareIcon className="w-5 h-5 text-neutral-100" />
         </button>
