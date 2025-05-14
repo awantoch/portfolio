@@ -88,10 +88,10 @@ export default function RootLayout({
         GeistMono.variable
       )}
     >
-      <body className="antialiased min-h-screen text-white">
+      <body className="antialiased text-white overflow-hidden">
         <FlowerOfLife />
-        <div className="flex min-h-screen flex-col relative" style={{ zIndex: 0 }}>
-          <main className="flex-1 w-full flex flex-col items-center mt-4">
+        <div className="fixed inset-0 overflow-y-auto" style={{ zIndex: 0, WebkitOverflowScrolling: 'touch' }}>
+          <main className="min-h-screen w-full flex flex-col items-center mt-4">
             <div className="w-full max-w-xl px-4">
               <Navbar />
               {children}
