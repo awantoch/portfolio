@@ -49,14 +49,41 @@ function RoundedImage(props) {
   return <Image alt={props.alt} className="rounded-lg" {...props} />
 }
 
-function Code({ children, ...props }) {
-  let codeHTML = highlight(children)
+// Override for fenced code blocks
+function Pre({ children, ...props }) {
+  // MDX gives us <pre><code /></pre>; children is the single <code> element
+  const codeElement = React.Children.only(children)
+  const { className = '', children: codeChildren } = codeElement.props
+  // Flatten code content to a string
+  const codeString = Array.isArray(codeChildren) ? codeChildren.join('') : String(codeChildren)
+  const langMatch = className.match(/language-(\w+)/)
+  const language = langMatch?.[1] ?? ''
+  const isMarkdown = language === 'markdown'
+  // Only highlight non-markdown fences
+  const highlighted = isMarkdown ? codeString : highlight(codeString)
+
   return (
     <div className="relative group">
-      <CopyButton content={children} />
-      <code dangerouslySetInnerHTML={{ __html: codeHTML }} {...props} />
+      <CopyButton content={codeString} />
+      <pre className={className} {...props}>
+        {isMarkdown ? (
+          // Markdown fences: render as plain text
+          <code className={className}>{codeString}</code>
+        ) : (
+          // Other languages: inject highlighted HTML
+          <code
+            className={className}
+            dangerouslySetInnerHTML={{ __html: highlighted }}
+          />
+        )}
+      </pre>
     </div>
   )
+}
+
+// Simple inline code renderer
+function InlineCode({ className, children, ...props }) {
+  return <code className={className} {...props}>{children}</code>
 }
 
 function slugify(str) {
@@ -99,9 +126,10 @@ let components = {
   h4: createHeading(4),
   h5: createHeading(5),
   h6: createHeading(6),
+  pre: Pre,
   Image: RoundedImage,
   a: CustomLink,
-  code: Code,
+  code: InlineCode,
   Table,
 }
 
