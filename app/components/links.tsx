@@ -19,13 +19,13 @@ const links = [
 function SocialLink({ href, label, Icon }: { href: string; label: string; Icon: React.FC<{ className?: string }> }) {
   return (
     <a
-      className="flex flex-col items-center justify-center gap-2 card-base interactive-soft py-2 sm:py-4 transition-all duration-200 hover:shadow-lg hover:shadow-purple-700/30 focus-visible:ring-2 focus-visible:ring-purple-500 hover:scale-[1.04]"
+      className="flex flex-col items-center justify-center gap-1 sm:gap-2 card-base interactive-soft py-2 sm:py-4 transition-all duration-200 hover:shadow-lg hover:shadow-purple-700/30 focus-visible:ring-2 focus-visible:ring-purple-500 hover:scale-[1.04]"
       rel="noopener noreferrer"
       target="_blank"
       href={href}
       aria-label={label}
     >
-      <Icon className="w-6 h-6 mb-1 sm:w-7 sm:h-7 text-neutral-100" />
+      <Icon className="w-6 h-6 mb-0.5 sm:mb-1 sm:w-7 sm:h-7 text-neutral-100" />
       <span className="text-xs sm:text-sm font-medium text-neutral-200 tracking-tight capitalize">{label}</span>
     </a>
   )
