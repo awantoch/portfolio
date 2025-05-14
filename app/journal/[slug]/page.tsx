@@ -123,7 +123,7 @@ export default async function JournalEntry(props) {
         </div>
       </div>
       <ShareSection url={`${baseUrl}/journal/${entry.slug}`} title={title} slug={entry.slug} />
-      <section className="prose" aria-label="Journal entry content" itemProp="articleBody" role="article">
+      <section className="prose" aria-label="Journal entry content" itemProp="articleBody">
         <CustomMDX source={entry.content} />
       </section>
       <ShareSection url={`${baseUrl}/journal/${entry.slug}`} title={title} slug={entry.slug} />

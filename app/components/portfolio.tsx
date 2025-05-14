@@ -129,7 +129,7 @@ type PortfolioItemProps = {
 
 const PortfolioItem: React.FC<PortfolioItemProps> = ({ entry }) => (
   <div className="border-b border-neutral-800 pb-4">
-    <p className="text-neutral-300 mb-2 font-medium">{entry.company}</p>
+    <h2 className="text-neutral-300 mb-2 font-medium">{entry.company}</h2>
     
     {entry.roles.map((role, roleIdx) => (
       <div key={roleIdx} className={roleIdx > 0 ? "mt-3" : ""}>

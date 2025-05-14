@@ -67,7 +67,7 @@ export function SubscribeForm({
     <div className={`card-base w-full ${compact ? 'py-6' : 'py-8'} px-6 ${isFocused ? 'shadow-lg shadow-purple-900/30' : ''}`}>
       <div className={`max-w-md mx-auto ${compact ? 'space-y-3' : 'space-y-4'}`}>
         <div className="text-center">
-          <h3 id="subscribe-title" className={`${compact ? 'text-lg' : 'text-xl'} font-semibold text-white`}>{title}</h3>
+          <h2 id="subscribe-title" className={`${compact ? 'text-lg' : 'text-xl'} font-semibold text-white`}>{title}</h2>
           <p className="text-neutral-300 text-sm mt-1">{subtitle}</p>
         </div>
         
