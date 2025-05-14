@@ -28,7 +28,7 @@ export async function generateMetadata(props) {
   } = entry.metadata
   let ogImage = image
     ? image
-    : `/og?title=${encodeURIComponent(title)}&description=${encodeURIComponent(description)}`
+    : `/og?title=${encodeURIComponent(title)}&description=${encodeURIComponent(description)}&path=/journal/${entry.slug}`
 
   return {
     title,
@@ -70,7 +70,7 @@ export default async function JournalEntry(props) {
   } = entry.metadata
   let ogImage = image
     ? image
-    : `/og?title=${encodeURIComponent(title)}&description=${encodeURIComponent(description)}`
+    : `/og?title=${encodeURIComponent(title)}&description=${encodeURIComponent(description)}&path=/journal/${entry.slug}`
 
   return (
     <section>
