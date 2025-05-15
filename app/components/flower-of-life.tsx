@@ -1,6 +1,6 @@
 'use client';
 
-import { useEffect, useRef } from 'react';
+import { useEffect, useRef, useState } from 'react';
 
 /*
   i gotta say...i think this is pretty much the most beautiful thing i've ever co-created with AI
@@ -11,7 +11,10 @@ import { useEffect, useRef } from 'react';
 
 export function FlowerOfLife() {
   const ref = useRef<HTMLCanvasElement>(null);
+  const [mounted, setMounted] = useState(false);
+
   useEffect(() => {
+    setMounted(true);
     const canvas = ref.current!;
     const ctx = canvas.getContext('2d')!;
     let circles: Array<{ x: number; y: number; r: number; len: number; phase: number; breathCycles: number; fadeTime: number }> = [];
@@ -112,7 +115,8 @@ export function FlowerOfLife() {
         willChange: 'filter, opacity',
         filter: 'hue-rotate(0deg)',
         animation: 'hue 5s linear infinite',
-        opacity: 0.03,
+        opacity: mounted ? 0.03 : 0,
+        transition: 'opacity 1.333s ease-in-out',
       }}
     />
   );
