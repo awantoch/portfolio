@@ -64,7 +64,7 @@ export const NAV_ITEMS = {
 } as const
 
 export const OG_CONFIG = {
-  defaultTitle: 'Alec M. Wantoch',
+  defaultTitle: SITE_CONFIG.title,
   imageWidth: 1200,
   imageHeight: 630,
 } as const
