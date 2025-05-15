@@ -15,6 +15,10 @@ const nextConfig = {
       },
     ],
   },
+  turbopack: {
+    // Add MDX to resolve extensions
+    resolveExtensions: ['.mdx', '.tsx', '.ts', '.jsx', '.js', '.json', '.css'],
+  },
 }
 
 module.exports = nextConfig 
