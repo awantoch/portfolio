@@ -57,7 +57,7 @@ export function FlowerOfLife() {
             : p < endHold
             ? 0
             : -len * ((p - endHold) / (1 - endHold));
-        const baseAlpha = 0.3;
+        const baseAlpha = 0.333;
         let alpha;
         if (p < startHold - fadeTime) {
           // before fade to hold: full opacity
@@ -70,7 +70,7 @@ export function FlowerOfLife() {
           // multiple breathing cycles during hold
           const inner = (p - startHold) / (endHold - startHold);
           const breath = (1 - Math.cos(2 * Math.PI * breathCycles * inner)) / 2;
-          alpha = baseAlpha + 0.7 * breath;
+          alpha = baseAlpha + 1 * breath;
         } else if (p < endHold + fadeTime) {
           // fade from baseAlpha back up to full opacity
           const t2 = (p - endHold) / fadeTime;
