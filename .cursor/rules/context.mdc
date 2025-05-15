@@ -72,6 +72,13 @@ This repository is a personal portfolio and journal built with Next.js (App Rout
 - **Frontmatter**: `title`, `date`, `description`, `tags`
 - **Parser**: `app/journal/utils.ts` uses regex to extract metadata & content
 - **Renderer**: `CustomMDX` wraps `MDXRemote` with tailored web & email-safe components (code highlighting, headings with anchors, link/image overrides, tables, YouTube embeds)
+- **IMPORTANT**: Always use ASCII characters (not typographic/curly quotes or dashes) in:
+  - YAML frontmatter
+  - Code comments
+  - Configuration files
+  - Command-line arguments
+  - File paths
+  - Any other context where special characters might cause parsing issues
 
 ## 6. API Integrations & Edge Functions
 - **Subscribe**: `/api/kit/subscribe` (Edge) for Kit Forms API
