@@ -122,65 +122,175 @@ function createHeading(level) {
 // Email-safe MDX component variants
 const emailComponents = {
   h1: ({ children }) => (
-    <h1 style={{ fontSize: '24px', fontWeight: 'bold', margin: '0 0 16px' }}>
+    <h1
+      style={{
+        fontSize: '36px',
+        fontWeight: 500,
+        letterSpacing: '-0.025em',
+        marginTop: '24px',
+        marginBottom: '8px',
+      }}
+    >
       {children}
     </h1>
   ),
   h2: ({ children }) => (
-    <h2 style={{ fontSize: '20px', fontWeight: 'bold', margin: '0 0 12px' }}>
+    <h2
+      style={{
+        fontSize: '20px',
+        fontWeight: 500,
+        letterSpacing: '-0.025em',
+        marginTop: '24px',
+        marginBottom: '8px',
+      }}
+    >
       {children}
     </h2>
   ),
   h3: ({ children }) => (
-    <h3 style={{ fontSize: '18px', fontWeight: 'bold', margin: '0 0 12px' }}>
+    <h3
+      style={{
+        fontSize: '20px',
+        fontWeight: 500,
+        letterSpacing: '-0.025em',
+        marginTop: '24px',
+        marginBottom: '8px',
+      }}
+    >
       {children}
     </h3>
   ),
   h4: ({ children }) => (
-    <h4 style={{ fontSize: '16px', fontWeight: 'bold', margin: '0 0 8px' }}>
+    <h4
+      style={{
+        fontSize: '18px',
+        fontWeight: 500,
+        letterSpacing: '-0.025em',
+        marginTop: '24px',
+        marginBottom: '8px',
+      }}
+    >
       {children}
     </h4>
   ),
   h5: ({ children }) => (
-    <h5 style={{ fontSize: '14px', fontWeight: 'bold', margin: '0 0 6px' }}>
+    <h5
+      style={{
+        fontSize: '16px',
+        fontWeight: 500,
+        marginTop: '16px',
+        marginBottom: '6px',
+      }}
+    >
       {children}
     </h5>
   ),
   h6: ({ children }) => (
-    <h6 style={{ fontSize: '12px', fontWeight: 'bold', margin: '0 0 4px' }}>
+    <h6
+      style={{
+        fontSize: '14px',
+        fontWeight: 500,
+        marginTop: '14px',
+        marginBottom: '4px',
+      }}
+    >
       {children}
     </h6>
   ),
   p: ({ children }) => (
-    <p style={{ fontSize: '16px', lineHeight: '1.5', margin: '0 0 16px' }}>
+    <p
+      style={{
+        fontSize: '16px',
+        lineHeight: 1.5,
+        margin: '16px 0',
+      }}
+    >
       {children}
     </p>
   ),
   a: ({ href, children }) => (
-    <a href={href} style={{ color: '#1a0dab', textDecoration: 'underline' }}>
+    <a
+      href={href}
+      style={{
+        color: '#ffffff',
+        textDecoration: 'underline',
+        textDecorationColor: '#ffffff',
+        textUnderlineOffset: '2px',
+        textDecorationThickness: '1px',
+      }}
+    >
       {children}
     </a>
   ),
   img: ({ alt, src }) => (
-    <img src={src} alt={alt} style={{ maxWidth: '100%', height: 'auto', display: 'block', margin: '0 0 16px' }} />
+    <img
+      src={src}
+      alt={alt}
+      style={{ maxWidth: '100%', height: 'auto', display: 'block', margin: '0 auto 16px' }}
+    />
   ),
   pre: ({ children }) => (
-    <pre style={{ background: '#f6f8fa', padding: '16px', overflowX: 'auto', margin: '0 0 16px' }}>
+    <pre
+      style={{
+        background: '#18181b',
+        color: '#e5e7eb',
+        padding: '8px 12px',
+        border: '1px solid #27272a',
+        borderRadius: '8px',
+        overflowX: 'auto',
+        margin: '16px 0',
+        fontFamily: 'monospace',
+        fontSize: '14px',
+        lineHeight: 1.5,
+        whiteSpace: 'pre-wrap',
+        wordBreak: 'break-word',
+      }}
+    >
       {children}
     </pre>
   ),
-  code: ({ children }) => (
-    <code style={{ background: '#f6f8fa', padding: '2px 4px', borderRadius: '4px' }}>
-      {children}
-    </code>
-  ),
+  code: ({ children, className, ...props }) => {
+    const isBlock = typeof className === 'string' && className.startsWith('language-')
+    if (isBlock) {
+      return <code className={className} {...props}>{children}</code>
+    }
+    return (
+      <code
+        style={{
+          background: '#f6f8fa',
+          padding: '2px 4px',
+          borderRadius: '8px',
+          fontFamily: 'monospace',
+          fontSize: '14px',
+          lineHeight: '20px',
+          color: '#1f2937',
+        }}
+        {...props}
+      >
+        {children}
+      </code>
+    )
+  },
   table: ({ children }) => (
-    <table style={{ borderCollapse: 'collapse', width: '100%', margin: '0 0 16px' }}>
+    <table
+      style={{
+        borderCollapse: 'collapse',
+        width: '100%',
+        margin: '16px 0',
+      }}
+    >
       {children}
     </table>
   ),
   th: ({ children }) => (
-    <th style={{ border: '1px solid #ddd', padding: '8px', background: '#f6f8fa' }}>
+    <th
+      style={{
+        border: '1px solid #ddd',
+        padding: '8px',
+        background: '#f6f8fa',
+        fontWeight: 500,
+      }}
+    >
       {children}
     </th>
   ),

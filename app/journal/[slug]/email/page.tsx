@@ -15,11 +15,11 @@ export default async function EmailPage({ params }) {
 
   const { title, publishedAt } = entry.metadata
   return (
-    <article style={{ fontFamily: 'Arial, sans-serif', color: '#000' }}>
+    <article style={{ fontFamily: 'Arial, sans-serif', color: '#ffffff' }}>
       <h1 style={{ fontSize: '24px', fontWeight: 'bold', margin: '0 0 16px' }}>
         {title}
       </h1>
-      <time dateTime={publishedAt} style={{ fontSize: '14px', color: '#555', display: 'block', marginBottom: '24px' }}>
+      <time dateTime={publishedAt} style={{ fontSize: '14px', color: '#999999', display: 'block', marginBottom: '24px' }}>
         {formatDate(publishedAt)}
       </time>
       <EmailMDX source={entry.content} />
