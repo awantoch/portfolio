@@ -17,20 +17,29 @@ export function FlowerOfLife() {
     setMounted(true);
     const canvas = ref.current!;
     const ctx = canvas.getContext('2d')!;
-    let circles: Array<{ x: number; y: number; r: number; phase: number; jitter: number }> = [];
+    // core constants
+    const RADIUS = 50;
     const duration = 33000;
+    const INV_DURATION = 1 / duration;
+    const INV50 = 1 / 50;
+    const SWIRL_FREQ_INV = 1 / 5000;
+    const SWIRL_AMP = 0.0005;
+    const sin = Math.sin, cos = Math.cos;
+    const TWO_PI = Math.PI * 2;
+    const FREQ1 = TWO_PI * 3;
+    const FREQ2 = TWO_PI * 5;
+    let circles: Array<{ x: number; y: number; offset: number; phase360: number }> = [];
 
     function init() {
       const W = (canvas.width = window.innerWidth);
       const H = (canvas.height = window.innerHeight);
       circles = [];
-      const r = 50;
-      const dx = r;
-      const dy = (r * Math.sqrt(3)) / 2;
+      const dx = RADIUS;
+      const dy = (RADIUS * Math.sqrt(3)) / 2;
       const cx = W / 2;
       const cy = H / 2;
-      const yExtent = Math.ceil((H / 2 + r) / dy);
-      const xExtent = Math.ceil((W / 2 + r) / dx + yExtent / 2);
+      const yExtent = Math.ceil((H / 2 + RADIUS) / dy);
+      const xExtent = Math.ceil((W / 2 + RADIUS) / dx + yExtent / 2);
       for (let j = -yExtent; j <= yExtent; j++) {
         for (let i = -xExtent; i <= xExtent; i++) {
           const x = cx + dx * (i + j / 2);
@@ -38,52 +47,49 @@ export function FlowerOfLife() {
           const normalizedX = (x - cx) / (W / 2);
           const normalizedY = (y - cy) / (H / 2);
           const phase = (normalizedX + normalizedY) * 0.2;
-          const randomBreathCycles = 2 + Math.random() * 2;
-          const jitter = (randomBreathCycles - 2) / 2;
-          circles.push({ x, y, r, phase, jitter });
+          // random offset within [0, 0.5)
+          const rand = Math.random();
+          const offset = phase + rand * 0.5;
+          const phase360 = phase * 360;
+          circles.push({ x, y, offset, phase360 });
         }
       }
     }
 
     let rafId: number;
-    // bind math functions and constants once
-    const sin = Math.sin;
-    const cos = Math.cos;
-    const TWO_PI = Math.PI * 2;
-    const FREQ1 = TWO_PI * 3;
-    const FREQ2 = TWO_PI * 5;
     function draw(time: number) {
       // Simplified fractal breathing with fancy math for performance
       const W = canvas.width;
       const H = canvas.height;
       ctx.clearRect(0, 0, W, H);
-      const tNorm = time / duration; // normalized time 0-1
+      const tNorm = time * INV_DURATION;
 
-      // Swirl effect (lightweight)
+      // Swirl effect
       ctx.save();
       ctx.globalCompositeOperation = 'lighter';
-      const swirl = sin(time / 5000) * 0.0005;
+      const swirl = sin(time * SWIRL_FREQ_INV) * SWIRL_AMP;
       ctx.translate(W / 2, H / 2);
       ctx.rotate(swirl);
       ctx.translate(-W / 2, -H / 2);
 
       const len = circles.length;
       for (let idx = 0; idx < len; idx++) {
-        const { x, y, r, phase, jitter } = circles[idx];
-        const pBase = (tNorm + phase) % 1;
-        const p = (pBase + jitter * 0.5) % 1;
+        const { x, y, offset, phase360 } = circles[idx];
+        // phase progression
+        const p = tNorm + offset;
         // Fractal-like wave combination
         const w1 = sin(FREQ1 * p);
         const w2 = cos(FREQ2 * p + w1);
-        const fract = w1 * 0.5 + w2 * 0.5;
-        const norm = (fract + 1) / 2;
-        // Dynamic radius and color
-        const hue = (time / 50 + phase * 360) % 360;
-        ctx.globalAlpha = norm * 0.4 + 0.6;
+        // normalize to [0,1]
+        const norm = (w1 + w2 + 2) * 0.25;
+        // compute hue and alpha
+        const hue = time * INV50 + phase360;
+        const alpha = norm * 0.4 + 0.6;
+        ctx.globalAlpha = alpha;
         ctx.strokeStyle = `hsl(${hue},70%,50%)`;
         ctx.lineWidth = 1 + norm;
         ctx.beginPath();
-        ctx.arc(x, y, r, 0, TWO_PI);
+        ctx.arc(x, y, RADIUS, 0, TWO_PI);
         ctx.stroke();
       }
 
