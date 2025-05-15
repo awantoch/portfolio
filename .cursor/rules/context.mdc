@@ -1,5 +1,108 @@
 ---
-description:
-globs:
-alwaysApply: false
+description: Project Context & Conventions
+globs: ["**/*"]
+alwaysApply: true
 ---
+
+# Project Overview
+
+This repository is a personal portfolio and journal built with Next.js (App Router, v15+) using TypeScript and TailwindCSS. Content is authored in MDX and dynamically rendered. The site is deployed on Vercel with Analytics and Speed Insights integration.
+
+## 1. Tech Stack
+- **Framework**: Next.js 15+ (App Router, Server and Edge Runtime)
+- **Language**: TypeScript (strict typing, functional components)
+- **Styling**: TailwindCSS, Geist Sans & Mono fonts, global CSS with custom variables
+- **Content**: MDX via next-mdx-remote for blog/journal posts
+- **Deployment**: Vercel (serverless & Edge Functions), Vercel Analytics & Speed Insights
+
+## 2. Core Dependencies
+```json
+{
+  "react": "^19.x",
+  "react-dom": "^19.x",
+  "next": "^15.x",
+  "tailwindcss": "^4.x",
+  "postcss": "^8.x",
+  "@tailwindcss/postcss": "^4.x",
+  "next-mdx-remote": "^5.x",
+  "geist": "^1.x",
+  "@vercel/analytics": "^1.x",
+  "@vercel/speed-insights": "^1.x",
+  "sugar-high": "^0.9.x",
+  "typescript": "^5.x"
+}
+```
+
+## 3. Directory Structure
+```
+/app
+  /components      # Atomic React components (mdx.tsx, posts.tsx, portfolio.tsx, nav.tsx, share-section.tsx, subscribe-form.tsx, analytics.tsx, flower-of-life.tsx, icons.tsx, etc.)
+  /journal         # MDX blog posts
+    /posts         # *.mdx (frontmatter + content)
+    /[slug]        # dynamic route: page.tsx with generateStaticParams & generateMetadata
+    page.tsx       # journal index page
+    utils.ts       # parseFrontmatter, getJournalSlugs, getJournalPost, getJournalPosts
+  /portfolio       # portfolio entries listing
+  /og              # Dynamic OG image Edge Function (next/og ImageResponse)
+  /rss             # RSS feed generator (server function)
+  /api             # API routes
+    /kit
+      /subscribe   # Edge runtime: Kit Forms subscribe
+      /sync        # Node runtime: Kit sync (cron, CRON_SECRET)
+  sitemap.ts       # Sitemap generator for static + dynamic routes
+  layout.tsx       # Root layout (metadata, fonts, navbar, footer, global styles)
+  page.tsx         # Home page
+  constants.ts     # SITE_CONFIG, METADATA_CONFIG, NAV_ITEMS, OG_CONFIG, DATE_CONFIG, KIT_FORM_ID
+  utils.ts         # cx, formatDate (locale + relative)
+  global.css       # Tailwind directives, CSS variables, custom utilities, animations
+/next.config.js    # Remote image patterns
+/postcss.config.js
+/vercel.json       # Vercel cron definitions
+/tsconfig.json
+/package.json
+```
+
+## 4. Routing & Data Fetching
+- File-based routing via Next.js App Router
+- `generateStaticParams()` & `generateMetadata()` in `/journal/[slug]/page.tsx`
+- `app/sitemap.ts` exports all routes for `sitemap.xml`
+- `app/rss/route.ts` returns RSS feed, sorted by `publishedAt`
+
+## 5. MDX Content & Rendering
+- **Frontmatter**: `title`, `date`, `description`, `tags`
+- **Parser**: `app/journal/utils.ts` uses regex to extract metadata & content
+- **Renderer**: `CustomMDX` wraps `MDXRemote` with tailored web & email-safe components (code highlighting, headings with anchors, link/image overrides, tables, YouTube embeds)
+
+## 6. API Integrations & Edge Functions
+- **Subscribe**: `/api/kit/subscribe` (Edge) for Kit Forms API
+- **Sync**: `/api/kit/sync` (Node) to publish posts to Kit on a schedule; verifies `CRON_SECRET`
+- Helpers in `app/api/utils.ts`: `createKitBroadcast`, `isPostSynced`, `getSyncedPosts`
+
+## 7. OG Image Generation
+- `app/og/route.tsx` (Edge) uses `next/og`'s `ImageResponse` + Tailwind (`tw` prop)
+- Sets caching headers for performance
+
+## 8. Styling & CSS
+- `global.css`: imports Tailwind, sets CSS variables for colors & syntax highlighting, defines base/prose styles, custom utilities (`.interactive`, `.interactive-soft`, `.card-base`)
+- Fonts loaded via `geist/font` in `layout.tsx`
+
+## 9. Metadata & SEO
+- **Root**: in `layout.tsx` - title templating, icons, robots, OpenGraph, Twitter, alternates
+- **Per-page**: `metadata` export or `generateMetadata` in page files
+- Centralized in `constants.ts` for consistency
+
+## 10. Performance & Accessibility
+- `next/image` with priority, quality control, blur placeholders
+- Vercel Analytics & Speed Insights via dynamic imports
+- Semantic HTML, ARIA labels, keyboard-focus styles
+- Unit tests recommended for components, a11y, SEO
+
+## 11. CI & Security
+- Conventional commits, small PRs, deployable `main`
+- Secrets via ENV: `NEXT_PUBLIC_*`, `CRON_SECRET`, `KIT_FORM_ID`
+- Use Zod for payload validation; enforce CSP, CORS, rate limiting
+
+## 12. Cron Jobs (Vercel)
+- Defined in `/vercel.json` under `crons`
+- **Syntax**: `MIN HOUR DOM MON DOW` (UTC), no named values
+- **Authorization**: Bearer `CRON_SECRET
