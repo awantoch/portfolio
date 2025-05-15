@@ -124,11 +124,11 @@ const emailComponents = {
   h1: ({ children }) => (
     <h1
       style={{
-        fontSize: '36px',
-        fontWeight: 500,
+        fontSize: '2.25rem',
+        fontWeight: 700,
+        margin: '32px 0 16px 0',
+        color: '#fff',
         letterSpacing: '-0.025em',
-        marginTop: '24px',
-        marginBottom: '8px',
       }}
     >
       {children}
@@ -137,11 +137,11 @@ const emailComponents = {
   h2: ({ children }) => (
     <h2
       style={{
-        fontSize: '20px',
-        fontWeight: 500,
+        fontSize: '1.5rem',
+        fontWeight: 600,
+        margin: '28px 0 12px 0',
+        color: '#fff',
         letterSpacing: '-0.025em',
-        marginTop: '24px',
-        marginBottom: '8px',
       }}
     >
       {children}
@@ -150,11 +150,11 @@ const emailComponents = {
   h3: ({ children }) => (
     <h3
       style={{
-        fontSize: '20px',
-        fontWeight: 500,
+        fontSize: '1.25rem',
+        fontWeight: 600,
+        margin: '24px 0 10px 0',
+        color: '#fff',
         letterSpacing: '-0.025em',
-        marginTop: '24px',
-        marginBottom: '8px',
       }}
     >
       {children}
@@ -163,11 +163,11 @@ const emailComponents = {
   h4: ({ children }) => (
     <h4
       style={{
-        fontSize: '18px',
-        fontWeight: 500,
-        letterSpacing: '-0.025em',
-        marginTop: '24px',
-        marginBottom: '8px',
+        fontSize: '1.125rem',
+        fontWeight: 600,
+        margin: '20px 0 8px 0',
+        color: '#fff',
+        letterSpacing: '-0.015em',
       }}
     >
       {children}
@@ -176,10 +176,10 @@ const emailComponents = {
   h5: ({ children }) => (
     <h5
       style={{
-        fontSize: '16px',
-        fontWeight: 500,
-        marginTop: '16px',
-        marginBottom: '6px',
+        fontSize: '1rem',
+        fontWeight: 600,
+        margin: '18px 0 6px 0',
+        color: '#fff',
       }}
     >
       {children}
@@ -188,10 +188,10 @@ const emailComponents = {
   h6: ({ children }) => (
     <h6
       style={{
-        fontSize: '14px',
-        fontWeight: 500,
-        marginTop: '14px',
-        marginBottom: '4px',
+        fontSize: '0.875rem',
+        fontWeight: 600,
+        margin: '16px 0 4px 0',
+        color: '#fff',
       }}
     >
       {children}
@@ -200,9 +200,10 @@ const emailComponents = {
   p: ({ children }) => (
     <p
       style={{
-        fontSize: '16px',
-        lineHeight: 1.5,
+        fontSize: '1rem',
+        lineHeight: 1.6,
         margin: '16px 0',
+        color: '#fff',
       }}
     >
       {children}
@@ -212,9 +213,9 @@ const emailComponents = {
     <a
       href={href}
       style={{
-        color: '#ffffff',
+        color: '#fff',
         textDecoration: 'underline',
-        textDecorationColor: '#ffffff',
+        textDecorationColor: '#fff',
         textUnderlineOffset: '2px',
         textDecorationThickness: '1px',
       }}
@@ -234,14 +235,14 @@ const emailComponents = {
       style={{
         background: '#18181b',
         color: '#e5e7eb',
-        padding: '8px 12px',
+        padding: '12px 16px',
         border: '1px solid #27272a',
         borderRadius: '8px',
         overflowX: 'auto',
-        margin: '16px 0',
+        margin: '18px 0',
         fontFamily: 'monospace',
-        fontSize: '14px',
-        lineHeight: 1.5,
+        fontSize: '15px',
+        lineHeight: 1.6,
         whiteSpace: 'pre-wrap',
         wordBreak: 'break-word',
       }}
@@ -257,13 +258,12 @@ const emailComponents = {
     return (
       <code
         style={{
-          background: '#f6f8fa',
-          padding: '2px 4px',
-          borderRadius: '8px',
+          background: '#282a36',
+          color: '#fff',
+          padding: '2px 6px',
+          borderRadius: '6px',
           fontFamily: 'monospace',
-          fontSize: '14px',
-          lineHeight: '20px',
-          color: '#1f2937',
+          fontSize: '0.95em',
         }}
         {...props}
       >
@@ -276,7 +276,8 @@ const emailComponents = {
       style={{
         borderCollapse: 'collapse',
         width: '100%',
-        margin: '16px 0',
+        margin: '18px 0',
+        color: '#fff',
       }}
     >
       {children}
@@ -285,22 +286,66 @@ const emailComponents = {
   th: ({ children }) => (
     <th
       style={{
-        border: '1px solid #ddd',
+        border: '1px solid #444',
         padding: '8px',
-        background: '#f6f8fa',
-        fontWeight: 500,
+        background: '#232136',
+        color: '#fff',
+        fontWeight: 600,
       }}
     >
       {children}
     </th>
   ),
   td: ({ children }) => (
-    <td style={{ border: '1px solid #ddd', padding: '8px' }}>
+    <td style={{ border: '1px solid #444', padding: '8px', color: '#fff' }}>
       {children}
     </td>
   ),
   Table: Table,
   Image: RoundedImage,
+  blockquote: ({ children }) => (
+    <blockquote
+      style={{
+        borderLeft: '4px solid #6b7280', // neutral-600
+        paddingLeft: '1em',
+        fontStyle: 'italic',
+        color: '#a3a3a3', // neutral-400
+        margin: '16px 0',
+      }}
+    >
+      {children}
+    </blockquote>
+  ),
+  ul: ({ children }) => (
+    <ul
+      style={{
+        listStyleType: 'disc',
+        paddingLeft: '1.5em',
+        color: '#fff',
+        margin: '16px 0',
+      }}
+    >
+      {children}
+    </ul>
+  ),
+  ol: ({ children }) => (
+    <ol
+      style={{
+        listStyleType: 'decimal',
+        paddingLeft: '1.5em',
+        color: '#fff',
+        margin: '16px 0',
+      }}
+    >
+      {children}
+    </ol>
+  ),
+  li: ({ children }) => (
+    <li style={{ marginBottom: '6px' }}>{children}</li>
+  ),
+  strong: ({ children }) => (
+    <strong style={{ fontWeight: 600 }}>{children}</strong>
+  ),
 }
 
 // Rename original override map to webComponents
