@@ -1,0 +1,9 @@
+{
+  "autoapply": true,
+  "rules": {
+    "context": {
+      "enabled": true,
+      "alwaysAttach": true
+    }
+  }
+} 
