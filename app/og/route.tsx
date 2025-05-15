@@ -1,7 +1,10 @@
 import { ImageResponse } from 'next/og'
 import { OG_CONFIG, METADATA_CONFIG, SITE_CONFIG, CARD_BG_COLOR, CARD_BG_COLOR_DARK } from '../constants'
+import { GeistSans } from 'geist/font/sans'
 
-export const runtime = 'edge'
+// Using Node.js because dynamically loading WebAssembly is not supported in edge runtime yet
+// All good tho since we cache and it's still basically the same generation time
+// export const runtime = 'edge'
 
 export async function GET(request: Request) {
   try {
@@ -18,7 +21,7 @@ export async function GET(request: Request) {
 
     return new ImageResponse(
       (
-        <div tw="flex flex-col w-full h-full items-center justify-center" style={{ backgroundColor }}>
+        <div tw="flex flex-col w-full h-full items-center justify-center" style={{ backgroundColor, fontFamily: GeistSans.style.fontFamily }}>
           <div
             tw="flex flex-col items-start justify-start max-w-[900px] w-full p-14"
           >
