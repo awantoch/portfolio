@@ -115,7 +115,7 @@ export function FlowerOfLife() {
         willChange: 'filter, opacity',
         filter: 'hue-rotate(0deg)',
         animation: 'hue 5s linear infinite',
-        opacity: mounted ? 0.03 : 0,
+        opacity: mounted ? 0.08 : 0,
         transition: 'opacity 1.333s ease-in-out',
       }}
     />
