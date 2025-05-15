@@ -119,7 +119,82 @@ function createHeading(level) {
   return Heading
 }
 
-let components = {
+// Email-safe MDX component variants
+const emailComponents = {
+  h1: ({ children }) => (
+    <h1 style={{ fontSize: '24px', fontWeight: 'bold', margin: '0 0 16px' }}>
+      {children}
+    </h1>
+  ),
+  h2: ({ children }) => (
+    <h2 style={{ fontSize: '20px', fontWeight: 'bold', margin: '0 0 12px' }}>
+      {children}
+    </h2>
+  ),
+  h3: ({ children }) => (
+    <h3 style={{ fontSize: '18px', fontWeight: 'bold', margin: '0 0 12px' }}>
+      {children}
+    </h3>
+  ),
+  h4: ({ children }) => (
+    <h4 style={{ fontSize: '16px', fontWeight: 'bold', margin: '0 0 8px' }}>
+      {children}
+    </h4>
+  ),
+  h5: ({ children }) => (
+    <h5 style={{ fontSize: '14px', fontWeight: 'bold', margin: '0 0 6px' }}>
+      {children}
+    </h5>
+  ),
+  h6: ({ children }) => (
+    <h6 style={{ fontSize: '12px', fontWeight: 'bold', margin: '0 0 4px' }}>
+      {children}
+    </h6>
+  ),
+  p: ({ children }) => (
+    <p style={{ fontSize: '16px', lineHeight: '1.5', margin: '0 0 16px' }}>
+      {children}
+    </p>
+  ),
+  a: ({ href, children }) => (
+    <a href={href} style={{ color: '#1a0dab', textDecoration: 'underline' }}>
+      {children}
+    </a>
+  ),
+  img: ({ alt, src }) => (
+    <img src={src} alt={alt} style={{ maxWidth: '100%', height: 'auto', display: 'block', margin: '0 0 16px' }} />
+  ),
+  pre: ({ children }) => (
+    <pre style={{ background: '#f6f8fa', padding: '16px', overflowX: 'auto', margin: '0 0 16px' }}>
+      {children}
+    </pre>
+  ),
+  code: ({ children }) => (
+    <code style={{ background: '#f6f8fa', padding: '2px 4px', borderRadius: '4px' }}>
+      {children}
+    </code>
+  ),
+  table: ({ children }) => (
+    <table style={{ borderCollapse: 'collapse', width: '100%', margin: '0 0 16px' }}>
+      {children}
+    </table>
+  ),
+  th: ({ children }) => (
+    <th style={{ border: '1px solid #ddd', padding: '8px', background: '#f6f8fa' }}>
+      {children}
+    </th>
+  ),
+  td: ({ children }) => (
+    <td style={{ border: '1px solid #ddd', padding: '8px' }}>
+      {children}
+    </td>
+  ),
+  Table: Table,
+  Image: RoundedImage,
+}
+
+// Rename original override map to webComponents
+const webComponents = {
   h1: createHeading(1),
   h2: createHeading(2),
   h3: createHeading(3),
@@ -133,11 +208,42 @@ let components = {
   Table,
 }
 
+// Enforce that every web component has a matching email variant
+type ComponentKey = keyof typeof webComponents
+type ComponentVariants = {
+  [K in ComponentKey]: {
+    web: typeof webComponents[K]
+    email: typeof emailComponents[K]
+  }
+}
+
+const componentVariants: ComponentVariants = {
+  h1: { web: webComponents.h1, email: emailComponents.h1 },
+  h2: { web: webComponents.h2, email: emailComponents.h2 },
+  h3: { web: webComponents.h3, email: emailComponents.h3 },
+  h4: { web: webComponents.h4, email: emailComponents.h4 },
+  h5: { web: webComponents.h5, email: emailComponents.h5 },
+  h6: { web: webComponents.h6, email: emailComponents.h6 },
+  pre: { web: webComponents.pre, email: emailComponents.pre },
+  a: { web: webComponents.a, email: emailComponents.a },
+  code: { web: webComponents.code, email: emailComponents.code },
+  Table: { web: webComponents.Table, email: emailComponents.Table },
+  Image: { web: webComponents.Image, email: emailComponents.Image },
+}
+
+// Derive final sets for MDXRemote
+const componentsForWeb = Object.fromEntries(
+  Object.entries(componentVariants).map(([k, v]) => [k, v.web])
+) as Record<ComponentKey, any>
+const componentsForEmail = Object.fromEntries(
+  Object.entries(componentVariants).map(([k, v]) => [k, v.email])
+) as Record<ComponentKey, any>
+
+// Export wrappers
 export function CustomMDX(props) {
-  return (
-    <MDXRemote
-      {...props}
-      components={{ ...components, ...(props.components || {}) }}
-    />
-  )
+  return <MDXRemote {...props} components={componentsForWeb} />
+}
+
+export function EmailMDX(props) {
+  return <MDXRemote {...props} components={componentsForEmail} />
 }

@@ -57,21 +57,22 @@ export async function generateMetadata(props) {
   }
 }
 
-export default async function JournalEntry(props) {
-  const params = await props.params;
-  let entry = getJournalPosts().find((entry) => entry.slug === params.slug)
-
-  if (!entry) {
-    notFound()
+// Add a type for journal posts
+type JournalPost = {
+  metadata: {
+    title: string
+    publishedAt: string
+    summary: string
+    image?: string
   }
+  slug: string
+  content: string
+}
 
-  let {
-    title,
-    publishedAt,
-    summary: description,
-    image,
-  } = entry.metadata
-  let ogImage = image
+// Web renderer
+function WebJournalEntry({ entry }: { entry: JournalPost }) {
+  const { title, publishedAt, summary: description, image } = entry.metadata
+  const ogImage = image
     ? image
     : `/og?title=${encodeURIComponent(title)}&description=${encodeURIComponent(description)}&path=/journal/${entry.slug}&bg=dark`
 
@@ -136,4 +137,15 @@ export default async function JournalEntry(props) {
       </div>
     </article>
   )
+}
+
+export default async function JournalEntry({ params }) {
+  const { slug } = await params;
+  const entry = getJournalPosts().find((entry) => entry.slug === slug);
+
+  if (!entry) {
+    notFound();
+  }
+
+  return <WebJournalEntry entry={entry} />;
 }

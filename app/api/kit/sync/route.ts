@@ -3,12 +3,9 @@ import {
   createKitBroadcast, 
   isPostSynced, 
   getSyncedPosts,
-  getPosts,
   type Post
 } from '../utils';
-
-// Set to edge runtime for better performance
-export const runtime = 'edge';
+import { getJournalPosts } from 'app/journal/utils';
 
 // Custom error types for better error handling
 type SyncError = {
@@ -127,7 +124,7 @@ export async function GET(request: NextRequest) {
 
     try {
       // Fetch posts
-      const posts = await getPosts();
+      const posts = await getJournalPosts();
       console.log(`📚 Found ${posts.length} total posts`);
       
       // Determine which posts to sync
