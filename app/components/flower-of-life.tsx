@@ -14,7 +14,7 @@ export function FlowerOfLife() {
   useEffect(() => {
     const canvas = ref.current!;
     const ctx = canvas.getContext('2d')!;
-    let circles: Array<{ x: number; y: number; r: number; len: number; phase: number }> = [];
+    let circles: Array<{ x: number; y: number; r: number; len: number; phase: number; breathCycles: number; fadeTime: number }> = [];
     const duration = 33000;
 
     function init() {
@@ -32,62 +32,63 @@ export function FlowerOfLife() {
         for (let i = -xExtent; i <= xExtent; i++) {
           const x = cx + dx * (i + j / 2);
           const y = cy + dy * j;
-          const phase = 0;
+          const normalizedX = (x - cx) / (W / 2);
+          const normalizedY = (y - cy) / (H / 2);
+          const phase = (normalizedX + normalizedY) * 0.2;
           const len = 2 * Math.PI * r;
-          circles.push({ x, y, r, len, phase });
+          const randomBreathCycles = 2 + Math.random() * 2;
+          const randomFadeTime = 0.03 + Math.random() * 0.04;
+          circles.push({ 
+            x, 
+            y, 
+            r, 
+            len, 
+            phase,
+            breathCycles: randomBreathCycles,
+            fadeTime: randomFadeTime
+          });
         }
       }
     }
 
     let rafId: number;
     function draw(time: number) {
-      ctx.clearRect(0, 0, canvas.width, canvas.height);
-      const t = time % duration;
-      circles.forEach(({ x, y, r, len, phase }) => {
-        const p = t / duration;
-        // breathing parameters
-        const fadeTime = 0.05; // portion of cycle for fade transitions
-        const startHold = 0.2;
-        const endHold = 0.8;
-        const breathCycles = 3; // number of opacity breaths in hold phase
-        // calculate dash offset: draw in, hold, then erase
-        const offset =
-          p < startHold
-            ? len * (1 - p / startHold)
-            : p < endHold
-            ? 0
-            : -len * ((p - endHold) / (1 - endHold));
-        const baseAlpha = 0.333;
-        let alpha;
-        if (p < startHold - fadeTime) {
-          // before fade to hold: full opacity
-          alpha = 1;
-        } else if (p < startHold) {
-          // fade from 1 down to baseAlpha
-          const t1 = (p - (startHold - fadeTime)) / fadeTime;
-          alpha = 1 - t1 * (1 - baseAlpha);
-        } else if (p < endHold) {
-          // multiple breathing cycles during hold
-          const inner = (p - startHold) / (endHold - startHold);
-          const breath = (1 - Math.cos(2 * Math.PI * breathCycles * inner)) / 2;
-          alpha = baseAlpha + 1 * breath;
-        } else if (p < endHold + fadeTime) {
-          // fade from baseAlpha back up to full opacity
-          const t2 = (p - endHold) / fadeTime;
-          alpha = baseAlpha + t2 * (1 - baseAlpha);
-        } else {
-          // after hold: full opacity
-          alpha = 1;
-        }
-        ctx.globalAlpha = alpha;
-        ctx.setLineDash([len, len]);
-        ctx.lineDashOffset = offset;
-        ctx.strokeStyle = '#00ffea';
-        ctx.lineWidth = 1.5;
+      // Simplified fractal breathing with fancy math for performance
+      const W = canvas.width;
+      const H = canvas.height;
+      ctx.clearRect(0, 0, W, H);
+      const tNorm = time / duration; // normalized time 0-1
+
+      // Swirl effect (lightweight)
+      ctx.save();
+      ctx.globalCompositeOperation = 'lighter';
+      const swirl = Math.sin(time / 5000) * 0.0005;
+      ctx.translate(W / 2, H / 2);
+      ctx.rotate(swirl);
+      ctx.translate(-W / 2, -H / 2);
+
+      circles.forEach(({ x, y, r, phase, breathCycles }) => {
+        // Randomly jitter the wave using breathCycles (range 2–4)
+        const jitter = (breathCycles - 2) / 2; // normalize to 0–1
+        const pBase = (tNorm + phase) % 1;
+        const p = (pBase + jitter * 0.5) % 1; // add up to 0.5 phase jitter
+        // Fractal-like wave combination
+        const w1 = Math.sin(2 * Math.PI * 3 * p);
+        const w2 = Math.cos(2 * Math.PI * 5 * p + w1);
+        const fract = w1 * 0.5 + w2 * 0.5;
+        const norm = (fract + 1) / 2;
+        // Dynamic radius and color
+        const dr = r;
+        const hue = (time / 50 + phase * 360) % 360;
+        ctx.globalAlpha = norm * 0.4 + 0.6;
+        ctx.strokeStyle = `hsl(${hue},70%,50%)`;
+        ctx.lineWidth = 1 + norm;
         ctx.beginPath();
-        ctx.arc(x, y, r, 0, Math.PI * 2);
+        ctx.arc(x, y, dr, 0, Math.PI * 2);
         ctx.stroke();
       });
+
+      ctx.restore();
       rafId = requestAnimationFrame(draw);
     }
 
