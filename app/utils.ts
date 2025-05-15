@@ -29,9 +29,4 @@ export const formatDate = (date: string | Date, includeRelative = false) => {
   }
 
   return targetDate.toLocaleDateString(DATE_CONFIG.dateLocale, DATE_CONFIG.dateFormat);
-};
-
-export const truncateText = (text: string, length: number) => {
-  if (text.length <= length) return text;
-  return text.slice(0, length) + '...';
 }; 
