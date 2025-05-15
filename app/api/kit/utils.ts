@@ -238,41 +238,22 @@ const HtmlUtils = {
    */
   extractMainContent(fullHtml: string): string {
     if (!fullHtml) return '';
-    
     try {
-      // Your MDX content is always rendered in <article class="prose"> tags
-      // This is the most direct target for extraction
-      const articleRegex = /<article[^>]*class="[^"]*prose[^"]*"[^>]*>([\s\S]*?)<\/article>/i;
-      const articleMatch = articleRegex.exec(fullHtml);
-      if (articleMatch && articleMatch[1]) {
-        return articleMatch[1];
+      // Match MDX content wrapped in <article class="prose"> or <section class="prose">
+      const wrapperRegex = /<(?:article|section)[^>]*class="[^"]*prose[^"]*"[^>]*>([\s\S]*?)<\/(?:article|section)>/i;
+      const wrapperMatch = wrapperRegex.exec(fullHtml);
+      if (wrapperMatch && wrapperMatch[1]) {
+        return wrapperMatch[1];
       }
       
-      // Fallback to any article tag if the prose class isn't found
+      // Fallback to any <article> tag if needed
       const simpleArticleRegex = /<article[^>]*>([\s\S]*?)<\/article>/i;
       const simpleArticleMatch = simpleArticleRegex.exec(fullHtml);
       if (simpleArticleMatch && simpleArticleMatch[1]) {
         return simpleArticleMatch[1];
       }
       
-      // Also handle prose wrapped in <section> tags
-      const sectionRegex = /<section[^>]*class="[^"]*prose[^"]*"[^>]*>([\s\S]*?)<\/section>/i;
-      const sectionMatch = sectionRegex.exec(fullHtml);
-      if (sectionMatch && sectionMatch[1]) {
-        return sectionMatch[1];
-      }
-      
-      // Fix broken images in content
-      const fixImages = (content: string): string => {
-        if (!content) return '';
-        return content.replace(
-          /<img[^>]+src=["'](?!\s*(?:https?:|data:))([^'"]+)['"]/gi,
-          (match, relativeUrl) => match.replace(relativeUrl, this.toAbsoluteUrl(relativeUrl))
-        );
-      };
-      
-      // If we can't find article tags, return empty string to avoid sending the whole page
-      // This is safer than returning potentially unrelated content
+      // No matching wrapper found
       return '';
     } catch (error) {
       console.error('Error extracting article content:', error);
