@@ -1,5 +1,6 @@
 import { notFound } from 'next/navigation'
-import { getJournalPosts, formatDate } from 'app/journal/utils'
+import { getJournalPosts } from 'app/journal/utils'
+import { formatDate } from 'app/utils'
 import { EmailMDX } from 'app/components/mdx'
 
 export async function generateStaticParams() {

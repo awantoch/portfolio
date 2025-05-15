@@ -1,6 +1,7 @@
 import { notFound } from 'next/navigation'
 import { CustomMDX } from 'app/components/mdx'
-import { formatDate, getJournalPosts } from 'app/journal/utils'
+import { getJournalPosts } from 'app/journal/utils'
+import { formatDate } from 'app/utils'
 import { baseUrl } from 'app/sitemap'
 import Image from 'next/image'
 import { SubscribeForm } from 'app/components/subscribe-form'

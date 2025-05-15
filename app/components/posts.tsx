@@ -1,5 +1,6 @@
 import Link from 'next/link'
-import { formatDate, getJournalPosts } from 'app/journal/utils'
+import { getJournalPosts } from 'app/journal/utils'
+import { formatDate } from 'app/utils'
 
 type JournalEntriesProps = {
   limit?: number;

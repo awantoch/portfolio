@@ -1,6 +1,5 @@
 import fs from 'fs'
 import path from 'path'
-import { formatDate } from '../utils'
 
 type Metadata = {
   title: string
@@ -27,31 +26,33 @@ function parseFrontmatter(fileContent: string) {
   return { metadata: metadata as Metadata, content }
 }
 
-function getMDXFiles(dir) {
-  return fs.readdirSync(dir).filter((file) => path.extname(file) === '.mdx')
+// Directory containing MDX files
+const postsDirectory = path.join(process.cwd(), 'app', 'journal', 'posts')
+
+/**
+ * Return all slugs (filenames without extension) for journal posts
+ */
+export function getJournalSlugs(): string[] {
+  return fs.readdirSync(postsDirectory)
+    .filter((file) => path.extname(file) === '.mdx')
+    .map((file) => path.basename(file, path.extname(file)))
 }
 
-function readMDXFile(filePath) {
-  let rawContent = fs.readFileSync(filePath, 'utf-8')
-  return parseFrontmatter(rawContent)
+/**
+ * Read and parse a single journal post by slug
+ */
+export function getJournalPost(slug: string): { metadata: Metadata; content: string; slug: string } {
+  const fullPath = path.join(postsDirectory, `${slug}.mdx`)
+  const fileContents = fs.readFileSync(fullPath, 'utf-8')
+  const { metadata, content } = parseFrontmatter(fileContents)
+  return { metadata, content, slug }
 }
 
-function getMDXData(dir) {
-  let mdxFiles = getMDXFiles(dir)
-  return mdxFiles.map((file) => {
-    let { metadata, content } = readMDXFile(path.join(dir, file))
-    let slug = path.basename(file, path.extname(file))
-
-    return {
-      metadata,
-      slug,
-      content,
-    }
-  })
-}
-
+/**
+ * Return all journal posts by mapping slugs to their content
+ */
 export function getJournalPosts() {
-  return getMDXData(path.join(process.cwd(), 'app', 'journal', 'posts'))
+  return getJournalSlugs().map(getJournalPost)
 }
 
-export { getMDXData, formatDate }
+// (no re-exports)
