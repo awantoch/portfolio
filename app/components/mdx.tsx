@@ -4,6 +4,7 @@ import { MDXRemote } from 'next-mdx-remote/rsc'
 import { highlight } from 'sugar-high'
 import React from 'react'
 import { CopyButton } from './copy-button'
+import { YouTube } from './youtube'
 
 function Table({ data }) {
   let headers = data.headers.map((header, index) => (
@@ -346,6 +347,22 @@ const emailComponents = {
   strong: ({ children }) => (
     <strong style={{ fontWeight: 600 }}>{children}</strong>
   ),
+  YouTube: ({ id, title = 'YouTube video player' }) => (
+    <div style={{ margin: '32px 0' }}>
+      <a
+        href={`https://www.youtube.com/watch?v=${id}`}
+        style={{
+          color: '#fff',
+          textDecoration: 'underline',
+          textDecorationColor: '#fff',
+          textUnderlineOffset: '2px',
+          textDecorationThickness: '1px',
+        }}
+      >
+        Watch: {title}
+      </a>
+    </div>
+  ),
 }
 
 // Rename original override map to webComponents
@@ -361,6 +378,7 @@ const webComponents = {
   a: CustomLink,
   code: InlineCode,
   Table,
+  YouTube,
 }
 
 // Enforce that every web component has a matching email variant
@@ -384,6 +402,7 @@ const componentVariants: ComponentVariants = {
   code: { web: webComponents.code, email: emailComponents.code },
   Table: { web: webComponents.Table, email: emailComponents.Table },
   Image: { web: webComponents.Image, email: emailComponents.Image },
+  YouTube: { web: webComponents.YouTube, email: emailComponents.YouTube },
 }
 
 // Derive final sets for MDXRemote
