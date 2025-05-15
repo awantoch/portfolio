@@ -65,7 +65,7 @@ function Pre({ children, ...props }) {
   return (
     <div className="relative group">
       <CopyButton content={codeString} />
-      <pre className={className} {...props}>
+      <pre className={`${className} whitespace-pre-wrap break-words`} {...props}>
         {isMarkdown ? (
           // Markdown fences: render as plain text
           <code className={className}>{codeString}</code>
