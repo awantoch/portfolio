@@ -31,10 +31,17 @@ export function FlowerOfLife() {
     const FREQ1_INV_DURATION = FREQ1 / duration;
     const FREQ2_INV_DURATION = FREQ2 / duration;
     let circles: Array<{ x: number; y: number; freq1Offset: number; freq2Offset: number; hueOffset: number }> = [];
+    // canvas dimensions and precomputed count
+    let width = 0, height = 0, halfW = 0, halfH = 0, circleCount = 0;
 
     function init() {
       const W = (canvas.width = window.innerWidth);
       const H = (canvas.height = window.innerHeight);
+      // update cached dimensions
+      width = W;
+      height = H;
+      halfW = W * 0.5;
+      halfH = H * 0.5;
       circles = [];
       const dx = RADIUS;
       const dy = (RADIUS * Math.sqrt(3)) / 2;
@@ -59,14 +66,14 @@ export function FlowerOfLife() {
           circles.push({ x, y, freq1Offset, freq2Offset, hueOffset });
         }
       }
+      // cache circle count
+      circleCount = circles.length;
     }
 
     let rafId: number;
     function draw(time: number) {
       // Simplified fractal breathing with fancy math for performance
-      const W = canvas.width;
-      const H = canvas.height;
-      ctx.clearRect(0, 0, W, H);
+      ctx.clearRect(0, 0, width, height);
       // compute time-based frequency and hue factors
       const tFreq1 = time * FREQ1_INV_DURATION;
       const tFreq2 = time * FREQ2_INV_DURATION;
@@ -76,12 +83,11 @@ export function FlowerOfLife() {
       ctx.save();
       ctx.globalCompositeOperation = 'lighter';
       const swirl = sin(time * SWIRL_FREQ_INV) * SWIRL_AMP;
-      ctx.translate(W / 2, H / 2);
+      ctx.translate(halfW, halfH);
       ctx.rotate(swirl);
-      ctx.translate(-W / 2, -H / 2);
+      ctx.translate(-halfW, -halfH);
 
-      const len = circles.length;
-      for (let idx = 0; idx < len; idx++) {
+      for (let idx = 0; idx < circleCount; idx++) {
         const { x, y, freq1Offset, freq2Offset, hueOffset } = circles[idx];
         // Fractal-like wave combination with precomputed offsets
         const w1 = sin(tFreq1 + freq1Offset);
