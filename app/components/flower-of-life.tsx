@@ -20,7 +20,6 @@ export function FlowerOfLife() {
     // core constants
     const RADIUS = 50;
     const duration = 33000;
-    const INV_DURATION = 1 / duration;
     const INV50 = 1 / 50;
     const SWIRL_FREQ_INV = 1 / 5000;
     const SWIRL_AMP = 0.0005;
@@ -28,7 +27,10 @@ export function FlowerOfLife() {
     const TWO_PI = Math.PI * 2;
     const FREQ1 = TWO_PI * 3;
     const FREQ2 = TWO_PI * 5;
-    let circles: Array<{ x: number; y: number; offset: number; phase360: number }> = [];
+    // inverse-duration multipliers for per-frame frequency
+    const FREQ1_INV_DURATION = FREQ1 / duration;
+    const FREQ2_INV_DURATION = FREQ2 / duration;
+    let circles: Array<{ x: number; y: number; freq1Offset: number; freq2Offset: number; hueOffset: number }> = [];
 
     function init() {
       const W = (canvas.width = window.innerWidth);
@@ -50,8 +52,11 @@ export function FlowerOfLife() {
           // random offset within [0, 0.5)
           const rand = Math.random();
           const offset = phase + rand * 0.5;
-          const phase360 = phase * 360;
-          circles.push({ x, y, offset, phase360 });
+          // precompute per-circle frequency and hue offsets
+          const freq1Offset = offset * FREQ1;
+          const freq2Offset = offset * FREQ2;
+          const hueOffset = phase * 360;
+          circles.push({ x, y, freq1Offset, freq2Offset, hueOffset });
         }
       }
     }
@@ -62,7 +67,10 @@ export function FlowerOfLife() {
       const W = canvas.width;
       const H = canvas.height;
       ctx.clearRect(0, 0, W, H);
-      const tNorm = time * INV_DURATION;
+      // compute time-based frequency and hue factors
+      const tFreq1 = time * FREQ1_INV_DURATION;
+      const tFreq2 = time * FREQ2_INV_DURATION;
+      const tHue = time * INV50;
 
       // Swirl effect
       ctx.save();
@@ -74,16 +82,14 @@ export function FlowerOfLife() {
 
       const len = circles.length;
       for (let idx = 0; idx < len; idx++) {
-        const { x, y, offset, phase360 } = circles[idx];
-        // phase progression
-        const p = tNorm + offset;
-        // Fractal-like wave combination
-        const w1 = sin(FREQ1 * p);
-        const w2 = cos(FREQ2 * p + w1);
+        const { x, y, freq1Offset, freq2Offset, hueOffset } = circles[idx];
+        // Fractal-like wave combination with precomputed offsets
+        const w1 = sin(tFreq1 + freq1Offset);
+        const w2 = cos(tFreq2 + freq2Offset + w1);
         // normalize to [0,1]
         const norm = (w1 + w2 + 2) * 0.25;
         // compute hue and alpha
-        const hue = time * INV50 + phase360;
+        const hue = tHue + hueOffset;
         const alpha = norm * 0.4 + 0.6;
         ctx.globalAlpha = alpha;
         ctx.strokeStyle = `hsl(${hue},70%,50%)`;
