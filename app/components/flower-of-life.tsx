@@ -17,7 +17,7 @@ export function FlowerOfLife() {
     setMounted(true);
     const canvas = ref.current!;
     const ctx = canvas.getContext('2d')!;
-    let circles: Array<{ x: number; y: number; r: number; len: number; phase: number; breathCycles: number; fadeTime: number }> = [];
+    let circles: Array<{ x: number; y: number; r: number; phase: number; jitter: number }> = [];
     const duration = 33000;
 
     function init() {
@@ -38,23 +38,20 @@ export function FlowerOfLife() {
           const normalizedX = (x - cx) / (W / 2);
           const normalizedY = (y - cy) / (H / 2);
           const phase = (normalizedX + normalizedY) * 0.2;
-          const len = 2 * Math.PI * r;
           const randomBreathCycles = 2 + Math.random() * 2;
-          const randomFadeTime = 0.03 + Math.random() * 0.04;
-          circles.push({ 
-            x, 
-            y, 
-            r, 
-            len, 
-            phase,
-            breathCycles: randomBreathCycles,
-            fadeTime: randomFadeTime
-          });
+          const jitter = (randomBreathCycles - 2) / 2;
+          circles.push({ x, y, r, phase, jitter });
         }
       }
     }
 
     let rafId: number;
+    // bind math functions and constants once
+    const sin = Math.sin;
+    const cos = Math.cos;
+    const TWO_PI = Math.PI * 2;
+    const FREQ1 = TWO_PI * 3;
+    const FREQ2 = TWO_PI * 5;
     function draw(time: number) {
       // Simplified fractal breathing with fancy math for performance
       const W = canvas.width;
@@ -65,31 +62,30 @@ export function FlowerOfLife() {
       // Swirl effect (lightweight)
       ctx.save();
       ctx.globalCompositeOperation = 'lighter';
-      const swirl = Math.sin(time / 5000) * 0.0005;
+      const swirl = sin(time / 5000) * 0.0005;
       ctx.translate(W / 2, H / 2);
       ctx.rotate(swirl);
       ctx.translate(-W / 2, -H / 2);
 
-      circles.forEach(({ x, y, r, phase, breathCycles }) => {
-        // Randomly jitter the wave using breathCycles (range 2–4)
-        const jitter = (breathCycles - 2) / 2; // normalize to 0–1
+      const len = circles.length;
+      for (let idx = 0; idx < len; idx++) {
+        const { x, y, r, phase, jitter } = circles[idx];
         const pBase = (tNorm + phase) % 1;
-        const p = (pBase + jitter * 0.5) % 1; // add up to 0.5 phase jitter
+        const p = (pBase + jitter * 0.5) % 1;
         // Fractal-like wave combination
-        const w1 = Math.sin(2 * Math.PI * 3 * p);
-        const w2 = Math.cos(2 * Math.PI * 5 * p + w1);
+        const w1 = sin(FREQ1 * p);
+        const w2 = cos(FREQ2 * p + w1);
         const fract = w1 * 0.5 + w2 * 0.5;
         const norm = (fract + 1) / 2;
         // Dynamic radius and color
-        const dr = r;
         const hue = (time / 50 + phase * 360) % 360;
         ctx.globalAlpha = norm * 0.4 + 0.6;
         ctx.strokeStyle = `hsl(${hue},70%,50%)`;
         ctx.lineWidth = 1 + norm;
         ctx.beginPath();
-        ctx.arc(x, y, dr, 0, Math.PI * 2);
+        ctx.arc(x, y, r, 0, TWO_PI);
         ctx.stroke();
-      });
+      }
 
       ctx.restore();
       rafId = requestAnimationFrame(draw);
