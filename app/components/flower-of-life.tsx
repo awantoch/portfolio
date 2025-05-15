@@ -20,6 +20,8 @@ export function FlowerOfLife() {
     // Get our canvas element and its 2D drawing context
     const canvas = ref.current!;
     const ctx = canvas.getContext('2d')!;
+    // Set persistent composite operation to lighten overlaps
+    ctx.globalCompositeOperation = 'lighter';
     // ---- Core Constants ----
     // RADIUS: size of each circle in pixels
     const RADIUS = 50;
@@ -90,15 +92,14 @@ export function FlowerOfLife() {
 
     let rafId: number;
     function draw(time: number) {
-      // Clear previous frame
+      // Reset transform and clear previous frame
+      ctx.setTransform(1, 0, 0, 1, 0, 0);
       ctx.clearRect(0, 0, width, height);
       // Compute frame-specific multipliers for waves & hue
       const tFreq1 = time * FREQ1_INV_DURATION;
       const tFreq2 = time * FREQ2_INV_DURATION;
       const tHue = time * INV50;
-      // Apply swirling rotation effect
-      ctx.save();
-      ctx.globalCompositeOperation = 'lighter';
+      // Apply swirling rotation effect without save/restore
       const swirl = sin(time * SWIRL_FREQ_INV) * SWIRL_AMP;
       ctx.translate(halfW, halfH);
       ctx.rotate(swirl);
@@ -122,8 +123,6 @@ export function FlowerOfLife() {
         ctx.arc(x, y, RADIUS, 0, TWO_PI);
         ctx.stroke();
       }
-      // Restore state and schedule next draw
-      ctx.restore();
       rafId = requestAnimationFrame(draw);
     }
 
