@@ -1,9 +1,7 @@
 import { ImageResponse } from 'next/og'
 import { OG_CONFIG, METADATA_CONFIG, SITE_CONFIG, CARD_BG_COLOR, CARD_BG_COLOR_DARK } from '../constants'
 
-// Using Node.js because dynamically loading WebAssembly is not supported in edge runtime yet
-// All good tho since we cache and it's still basically the same generation time
-// export const runtime = 'edge'
+export const runtime = 'edge'
 
 export async function GET(request: Request) {
   try {

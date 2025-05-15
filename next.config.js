@@ -12,9 +12,6 @@ const nextConfig = {
       },
     ],
   },
-  turbopack: {
-    resolveExtensions: ['.mdx', '.tsx', '.ts', '.jsx', '.js', '.json', '.css'],
-  },
 }
 
 module.exports = nextConfig 
