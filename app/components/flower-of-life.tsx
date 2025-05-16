@@ -138,6 +138,8 @@ export function FlowerOfLife() {
   return (
     <canvas
       ref={ref}
+      aria-hidden="true"
+      tabIndex={-1}
       style={{
         position: 'fixed',
         inset: 0,
