@@ -218,10 +218,10 @@ table {
     @apply transition-all duration-800 ease-out transform;
   }
   .interactive:hover {
-    @apply scale-[1.02] shadow-lg shadow-purple-700/30 duration-100;
+    @apply scale-[1.02] shadow-md shadow-purple-700/20 duration-100;
   }
   .interactive:active {
-    @apply scale-[0.98] shadow-md shadow-purple-700/20;
+    @apply scale-[0.98] shadow-sm shadow-purple-700/20;
   }
   /* Softer glow for inline links without visible edges */
   .interactive-soft {
