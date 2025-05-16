@@ -12,11 +12,12 @@ const nextConfig = {
       },
     ],
   },
-  async rewrites() {
+  async redirects() {
     return [
       {
-        source: '/cal',
-        destination: 'https://cal.com/alecw',
+        source: '/cal/:path*',
+        destination: 'https://cal.com/alecw/:path*',
+        permanent: true,
       },
     ];
   },
