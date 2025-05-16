@@ -5,6 +5,7 @@ import { highlight } from 'sugar-high'
 import React from 'react'
 import { CopyButton } from './copy-button'
 import { YouTube } from './youtube'
+import { FlowerOfLife } from './flower-of-life'
 
 function Table({ data }) {
   let headers = data.headers.map((header, index) => (
@@ -363,6 +364,7 @@ const emailComponents = {
       </a>
     </div>
   ),
+  FlowerOfLife: () => null,
 }
 
 // Rename original override map to webComponents
@@ -379,6 +381,7 @@ const webComponents = {
   code: InlineCode,
   Table,
   YouTube,
+  FlowerOfLife,
 }
 
 // Enforce that every web component has a matching email variant
@@ -403,6 +406,7 @@ const componentVariants: ComponentVariants = {
   Table: { web: webComponents.Table, email: emailComponents.Table },
   Image: { web: webComponents.Image, email: emailComponents.Image },
   YouTube: { web: webComponents.YouTube, email: emailComponents.YouTube },
+  FlowerOfLife: { web: webComponents.FlowerOfLife, email: emailComponents.FlowerOfLife },
 }
 
 // Derive final sets for MDXRemote

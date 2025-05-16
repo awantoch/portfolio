@@ -89,7 +89,7 @@ export default function RootLayout({
       )}
     >
       <body className="antialiased text-white overflow-hidden">
-        <FlowerOfLife />
+        <FlowerOfLife mode="fullscreen" />
         <div className="fixed inset-0 overflow-y-auto" style={{ zIndex: 0, WebkitOverflowScrolling: 'touch' }}>
           <main className="min-h-screen w-full flex flex-col items-center mt-4">
             <div className="w-full max-w-xl px-4">
