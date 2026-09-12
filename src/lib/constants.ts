@@ -24,6 +24,7 @@ export const METADATA_CONFIG = {
     'web3 gaming expert',
     'full-stack developer',
     'security engineer',
+    'BeemFlow',
     'Valist',
     'HyperPlay',
     'EVM developer',

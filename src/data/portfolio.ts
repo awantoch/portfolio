@@ -17,6 +17,19 @@ export type PortfolioEntry = {
 
 export const portfolioEntries: PortfolioEntry[] = [
   {
+    company: 'BeemFlow',
+    roles: [
+      {
+        title: 'CEO & Founder',
+        dateRange: 'Present',
+        description: 'Building AI-powered process automation to map, automate, and monitor business operations.',
+      },
+    ],
+    links: [
+      { label: 'Website', url: 'https://beemflow.com' },
+    ],
+  },
+  {
     company: 'HyperPlay Labs Inc.',
     roles: [
       {

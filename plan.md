@@ -106,3 +106,12 @@ long central bar, and slanted lower footrest.
   dependency audit reports no known vulnerabilities. The final commit is checked
   against the production deployment and the same 15 route checks.
 - No real subscriptions, broadcasts, or authorized cron syncs were performed.
+
+### BeemFlow status follow-up
+
+- Add the current role "CEO & Founder of BeemFlow" below the homepage name,
+  with a link to https://beemflow.com and matching homepage social metadata.
+- Put BeemFlow first in the portfolio, dated "Present" because no start date was
+  supplied. The short description reflects the process automation services on
+  BeemFlow's current website.
+- Build, push to `main`, then verify both pages and the link on production.
