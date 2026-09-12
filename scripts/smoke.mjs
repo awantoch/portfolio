@@ -72,6 +72,8 @@ await check('sitemap', async () => {
   const xml = await response.text();
   assert.ok(xml.includes('https://alec.wantoch.com/journal/diligencebot'));
   assert.ok(!xml.includes('pendulum'));
+  assert.ok(!xml.includes('<loc>https://alec.wantoch.com/rss</loc>'));
+  assert.ok(!xml.includes('/email</loc>'));
 });
 await check('robots', async () => {
   const response = await request('/robots.txt');

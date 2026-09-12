@@ -115,3 +115,18 @@ long central bar, and slanted lower footrest.
   supplied. The short description reflects the process automation services on
   BeemFlow's current website.
 - Build, push to `main`, then verify both pages and the link on production.
+
+### Identity and SEO alignment follow-up
+
+- Change the visible bio to begin with "Orthodox Christian" and use the same
+  bio as the source for homepage description and social metadata.
+- Give the homepage a descriptive title and add ProfilePage/Person structured
+  data for Alec, the BeemFlow role, headshot, and verified social profiles.
+- Connect Article author markup to the homepage Person entity and include the
+  canonical article page in its structured data.
+- Add complete Open Graph and Twitter image metadata, an absolute RSS discovery
+  URL, descriptive image alt text, and a consistent theme color.
+- Keep only canonical HTML pages in the sitemap and use stable, meaningful
+  modification dates instead of changing them on every build.
+- Run a reusable SEO audit against local and production pages in addition to the
+  existing type, unit, build, and route checks.

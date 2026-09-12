@@ -185,13 +185,15 @@ test('RSS escapes content and URLs, keeps dates, and sorts newest first', () => 
   assert.match(feed, /<guid isPermaLink="true">https:\/\/example.com\/journal\/diligencebot<\/guid>/);
 });
 
-test('sitemap contains canonical page and published journal routes', () => {
-  const sitemap = createSitemap([post], 'https://example.com');
-  for (const path of ['', '/journal', '/portfolio', '/rss', '/journal/diligencebot']) {
+test('sitemap contains canonical HTML pages with stable modification dates', () => {
+  const sitemap = createSitemap([post], 'https://example.com', '2026-09-11');
+  for (const path of ['/', '/journal', '/portfolio', '/journal/diligencebot']) {
     assert.ok(sitemap.includes(`<loc>https://example.com${path}</loc>`));
   }
   assert.ok(!sitemap.includes('/email'));
+  assert.ok(!sitemap.includes('<loc>https://example.com/rss</loc>'));
   assert.ok(!sitemap.includes('/rss/feed.xml'));
+  assert.match(sitemap, /<lastmod>2026-09-11<\/lastmod>/);
   assert.match(sitemap, /<lastmod>2025-05-12<\/lastmod>/);
 });
 

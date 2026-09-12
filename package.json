@@ -11,7 +11,8 @@
     "build": "astro build",
     "start": "astro dev",
     "check": "astro check",
-    "test": "tsx --test tests/*.test.ts"
+    "test": "tsx --test tests/*.test.ts",
+    "seo:audit": "node scripts/seo-audit.mjs"
   },
   "dependencies": {
     "astro": "^7.3.2",

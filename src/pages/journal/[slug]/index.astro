@@ -2,7 +2,7 @@
 import { render } from 'astro:content';
 import { getJournalPosts } from '../../../lib/journal';
 import { formatDate } from '../../../lib/utils';
-import { SITE_CONFIG } from '../../../lib/constants';
+import { PROFILE_CONFIG, SITE_CONFIG } from '../../../lib/constants';
 import { webComponents } from '../../../components/mdx/web';
 import SiteLayout from '../../../layouts/SiteLayout.astro';
 import ShareSection from '../../../components/ShareSection.astro';
@@ -27,7 +27,15 @@ const structuredData = {
   description,
   image: new URL(socialImage, SITE_CONFIG.baseUrl).href,
   url,
-  author: { '@type': 'Person', name: SITE_CONFIG.title },
+  mainEntityOfPage: { '@type': 'WebPage', '@id': url },
+  isPartOf: { '@id': `${SITE_CONFIG.baseUrl}/#website` },
+  author: {
+    '@type': 'Person',
+    '@id': `${SITE_CONFIG.baseUrl}/#person`,
+    name: PROFILE_CONFIG.name,
+    url: `${SITE_CONFIG.baseUrl}/`,
+    sameAs: PROFILE_CONFIG.sameAs,
+  },
 };
 ---
 <SiteLayout title={title} description={description} image={socialImage} type="article" publishedAt={publishedAt}>

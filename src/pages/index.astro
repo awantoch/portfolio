@@ -4,19 +4,48 @@ import JournalEntries from '../components/JournalEntries.astro';
 import Portfolio from '../components/Portfolio.astro';
 import Links from '../components/Links.astro';
 import SubscribeForm from '../components/SubscribeForm.astro';
-import { METADATA_CONFIG } from '../lib/constants';
+import { METADATA_CONFIG, PROFILE_CONFIG, SITE_CONFIG } from '../lib/constants';
 export const prerender = true;
+const profileUrl = `${SITE_CONFIG.baseUrl}/`;
+const structuredData = {
+  '@context': 'https://schema.org',
+  '@type': 'ProfilePage',
+  '@id': `${profileUrl}#profile`,
+  url: profileUrl,
+  name: PROFILE_CONFIG.homeTitle,
+  description: PROFILE_CONFIG.homeDescription,
+  inLanguage: SITE_CONFIG.language,
+  dateModified: '2026-09-11',
+  isPartOf: { '@id': `${SITE_CONFIG.baseUrl}/#website` },
+  mainEntity: {
+    '@type': 'Person',
+    '@id': `${profileUrl}#person`,
+    name: PROFILE_CONFIG.name,
+    alternateName: PROFILE_CONFIG.alternateName,
+    url: profileUrl,
+    image: new URL(PROFILE_CONFIG.image, SITE_CONFIG.baseUrl).href,
+    description: PROFILE_CONFIG.homeDescription,
+    jobTitle: 'CEO & Founder',
+    worksFor: {
+      '@type': 'Organization',
+      name: PROFILE_CONFIG.company.name,
+      url: PROFILE_CONFIG.company.url,
+    },
+    sameAs: PROFILE_CONFIG.sameAs,
+  },
+};
 ---
-<SiteLayout description={`CEO & Founder of BeemFlow. ${METADATA_CONFIG.descriptions.home}`}>
+<SiteLayout pageTitle={PROFILE_CONFIG.homeTitle} description={PROFILE_CONFIG.homeDescription} type="profile">
+  <script slot="head" is:inline type="application/ld+json" set:html={JSON.stringify(structuredData).replace(/</g, '\\u003c')} />
   <section aria-labelledby="home-heading">
     <div class="flex justify-center mb-6 mt-2">
       <div class="w-32 h-32 rounded-xl overflow-hidden shadow-lg border-2 border-neutral-800 bg-neutral-900 flex items-center justify-center">
-        <img src="/headshot.png" alt="Headshot" class="object-cover" width="128" height="128" fetchpriority="high" />
+        <img src={PROFILE_CONFIG.image} alt={`${PROFILE_CONFIG.name}, ${PROFILE_CONFIG.role}`} class="object-cover" width="128" height="128" fetchpriority="high" />
       </div>
     </div>
     <h1 id="home-heading" class="mb-4 text-2xl font-semibold tracking-tighter text-center text-neutral-100">Alec M. Wantoch</h1>
     <p class="mb-3 text-center text-neutral-200">
-      CEO &amp; Founder of <a href="https://beemflow.com" class="underline underline-offset-2 hover:opacity-80 interactive-soft" target="_blank" rel="noopener noreferrer">BeemFlow</a>
+      CEO &amp; Founder of <a href={PROFILE_CONFIG.company.url} class="underline underline-offset-2 hover:opacity-80 interactive-soft" target="_blank" rel="noopener noreferrer">{PROFILE_CONFIG.company.name}</a>
     </p>
     <p class="mb-4 text-center text-neutral-300">{METADATA_CONFIG.descriptions.home}</p>
     <div class="mt-8 mb-8"><Links /></div>

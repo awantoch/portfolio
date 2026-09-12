@@ -1,4 +1,4 @@
-import { SITE_CONFIG } from './constants';
+import { METADATA_CONFIG, SITE_CONFIG } from './constants';
 import type { JournalMetadata } from './journal';
 
 type FeedPost = { slug: string; metadata: JournalMetadata };
@@ -28,25 +28,27 @@ export function createRssFeed(posts: FeedPost[], baseUrl = SITE_CONFIG.baseUrl):
     })
     .join('\n');
   return `<?xml version="1.0" encoding="UTF-8"?>
-<rss version="2.0">
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
-    <title>${escapeXml(SITE_CONFIG.title)}</title>
+    <title>${escapeXml(`${SITE_CONFIG.title} — Journal`)}</title>
     <link>${escapeXml(baseUrl)}</link>
-    <description>This is my journal RSS feed</description>
+    <atom:link href="${escapeXml(`${baseUrl}/rss`)}" rel="self" type="application/rss+xml" />
+    <description>${escapeXml(METADATA_CONFIG.descriptions.journal)}</description>
+    <language>en-us</language>
 ${items}
   </channel>
 </rss>`;
 }
 
-export function createSitemap(posts: FeedPost[], baseUrl = SITE_CONFIG.baseUrl): string {
-  const today = new Date().toISOString().split('T')[0];
+export function createSitemap(posts: FeedPost[], baseUrl = SITE_CONFIG.baseUrl, siteLastModified = '2026-09-11'): string {
+  const origin = baseUrl.replace(/\/$/, '');
   const entries = [
-    ...['', '/journal', '/portfolio', '/rss'].map((route) => ({
-      url: `${baseUrl}${route}`,
-      lastModified: today,
+    ...['/', '/journal', '/portfolio'].map((route) => ({
+      url: `${origin}${route}`,
+      lastModified: siteLastModified,
     })),
     ...posts.map((post) => ({
-      url: `${baseUrl}/journal/${post.slug}`,
+      url: `${origin}/journal/${post.slug}`,
       lastModified: post.metadata.publishedAt,
     })),
   ];

@@ -1,6 +1,27 @@
+export const PROFILE_CONFIG = {
+  name: 'Alec M. Wantoch',
+  alternateName: 'Alec Wantoch',
+  role: 'CEO & Founder of BeemFlow',
+  bio: 'Orthodox Christian, entrepreneur, product leader, and computer scientist building to create real-world impact.',
+  homeTitle: 'Alec M. Wantoch | CEO & Founder of BeemFlow',
+  homeDescription: 'CEO & Founder of BeemFlow. Orthodox Christian, entrepreneur, product leader, and computer scientist building to create real-world impact.',
+  image: '/headshot.png',
+  company: {
+    name: 'BeemFlow',
+    url: 'https://beemflow.com',
+  },
+  sameAs: [
+    'https://instagram.com/awantoch',
+    'https://x.com/alecw',
+    'https://youtube.com/@AlecWantoch',
+    'https://github.com/awantoch',
+    'https://linkedin.com/in/awantoch',
+  ],
+} as const
+
 export const SITE_CONFIG = {
-  title: 'Alec M. Wantoch',
-  description: 'A continuous work in progress.',
+  title: PROFILE_CONFIG.name,
+  description: PROFILE_CONFIG.homeDescription,
   locale: 'en_US',
   language: 'en',
   baseUrl: import.meta.env?.PUBLIC_BASE_URL || import.meta.env?.NEXT_PUBLIC_BASE_URL || 'https://alec.wantoch.com',
@@ -11,37 +32,10 @@ export const SITE_CONFIG = {
 export const KIT_FORM_ID = 8050362;
 
 export const METADATA_CONFIG = {
-  keywords: [
-    'Alec Wantoch',
-    'Alec M. Wantoch',
-    'Alec Michael Wantoch Davis',
-    'product leader',
-    'startup founder',
-    'strategic advisor',
-    'entrepreneur',
-    'head of product',
-    'blockchain engineer',
-    'web3 gaming expert',
-    'full-stack developer',
-    'security engineer',
-    'BeemFlow',
-    'Valist',
-    'HyperPlay',
-    'EVM developer',
-    'Solidity engineer',
-    'TypeScript engineer',
-    'Golang engineer',
-    'DevSecOps',
-    'HSM architecture',
-    'Eternal Events',
-    'festival event producer',
-    'conference speaker',
-  ],
   author: 'Alec M. Wantoch',
   twitterHandle: '@alecw',
   descriptions: {
-    home:
-      'Entrepreneur, product leader, and computer scientist building to create real-world impact.',
+    home: PROFILE_CONFIG.bio,
     portfolio:
       'Explore my track record founding startups, scaling product, architecting infrastructure, and delivering results.',
     journal:
