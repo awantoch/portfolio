@@ -2,6 +2,7 @@ import assert from 'node:assert/strict';
 
 const base = (process.argv[2] || 'http://localhost:4321').replace(/\/$/, '');
 let checks = 0;
+const failures = [];
 async function request(path, options = {}) {
   const response = await fetch(`${base}${path}`, {
     ...options,
@@ -10,9 +11,14 @@ async function request(path, options = {}) {
   return response;
 }
 async function check(name, run) {
-  await run();
-  checks += 1;
-  console.log(`PASS ${name}`);
+  try {
+    await run();
+    checks += 1;
+    console.log(`PASS ${name}`);
+  } catch (error) {
+    failures.push(name);
+    console.error(`FAIL ${name}: ${error.message}`);
+  }
 }
 
 for (const [path, heading] of [
@@ -106,4 +112,10 @@ await check('cron rejects unauthorized requests without syncing', async () => {
   const response = await request('/api/kit/sync');
   assert.equal(response.status, 401);
 });
-console.log(`\n${checks} smoke checks passed against ${base}`);
+await check('legacy RSS alias', async () => {
+  const response = await request('/rss/feed.xml', { redirect: 'manual' });
+  assert.equal(response.status, 301);
+  assert.equal(response.headers.get('location'), '/rss');
+});
+console.log(`\n${checks} smoke checks passed, ${failures.length} failed against ${base}`);
+if (failures.length) process.exitCode = 1;

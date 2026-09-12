@@ -15,7 +15,8 @@ pnpm install
 pnpm dev
 ```
 
-The dev server runs at http://localhost:4321.
+The dev server runs at http://localhost:4321. `pnpm start` is an alias for
+`pnpm dev`; use a Vercel deployment to preview the built server functions.
 
 ```sh
 pnpm check

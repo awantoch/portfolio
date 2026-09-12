@@ -56,7 +56,7 @@ long central bar, and slanted lower footrest.
 - [x] Complete Astro migration with subagents.
 - [x] Complete Orthodox cross animation.
 - [x] Pass local validation.
-- [ ] Push `main` and deploy.
+- [x] Push `main` and deploy.
 - [ ] Pass production validation.
 
 ### Local results
@@ -76,3 +76,17 @@ long central bar, and slanted lower footrest.
   set `PUBLIC_BASE_URL=https://alec.wantoch.com` without changing that file.
 - Next.js/React packages and tracked `app` source have been removed. The existing
   untracked journal draft remains at its original path.
+
+### First production pass
+
+- Migration commit `bf92973` deployed successfully on Vercel as
+  `dpl_Hdp9d8PhteRt8LLspdVZrTJXWKMo`.
+- GitHub default branch and Vercel production branch are both `main`; Vercel now
+  uses the Astro framework preset.
+- Production smoke testing passed 14 of 15 checks. It caught the extensionless
+  `/rss` being served as `application/octet-stream`; an explicit Vercel RSS
+  content-type header is included in the follow-up fix.
+- Production desktop browser confirms Astro metadata, distinct animated Orthodox
+  crosses, and no console errors.
+- The follow-up build and all 15 local smoke checks pass. `pnpm start` now aliases
+  `astro dev`, since the Vercel adapter does not support `astro preview`.
