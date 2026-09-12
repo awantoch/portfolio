@@ -1,0 +1,17 @@
+---
+import SiteLayout from '../layouts/SiteLayout.astro';
+import Portfolio from '../components/Portfolio.astro';
+import Education from '../components/Education.astro';
+import { METADATA_CONFIG } from '../lib/constants';
+export const prerender = true;
+---
+<SiteLayout title="Portfolio" description={METADATA_CONFIG.descriptions.portfolio}>
+  <section role="region" aria-labelledby="portfolio-heading">
+    <h1 id="portfolio-heading" class="font-semibold text-2xl mb-8 tracking-tighter">Portfolio</h1>
+    <Portfolio />
+  </section>
+  <section role="region" aria-labelledby="education-heading">
+    <h2 id="education-heading" class="font-semibold text-2xl mb-8 tracking-tighter mt-16">Education</h2>
+    <Education />
+  </section>
+</SiteLayout>

@@ -1,0 +1,62 @@
+---
+import LinkedInIcon from './icons/LinkedInIcon.astro';
+import XIcon from './icons/XIcon.astro';
+import EmailIcon from './icons/EmailIcon.astro';
+import LinkIcon from './icons/LinkIcon.astro';
+import NativeShareIcon from './icons/NativeShareIcon.astro';
+import ClipboardCheckIcon from './icons/ClipboardCheckIcon.astro';
+interface Props { url: string; title: string; slug: string }
+const { url, title, slug } = Astro.props;
+const encodedTitle = encodeURIComponent(title);
+const shareUrl = (source: string, medium: string) => `${url}?${new URLSearchParams({ utm_source: source, utm_medium: medium, utm_campaign: slug })}`;
+const xHref = `https://x.com/intent/tweet?url=${encodeURIComponent(shareUrl('x', 'social'))}&text=${encodedTitle}`;
+const linkedinHref = `https://www.linkedin.com/sharing/share-offsite/?url=${encodeURIComponent(shareUrl('linkedin', 'social'))}`;
+const emailHref = `mailto:?subject=${encodedTitle}&body=${encodeURIComponent(shareUrl('email', 'email'))}`;
+const buttonClass = 'flex items-center justify-center card-base interactive-soft p-2 hover:shadow-lg hover:shadow-purple-700/30 focus-visible:ring-2 focus-visible:ring-purple-500 hover:scale-[1.04]';
+---
+<div data-share class="flex items-center justify-center space-x-4 my-8">
+  <span class="text-sm font-semibold text-neutral-200">Share:</span>
+  <a href={xHref} target="_blank" rel="noopener noreferrer" aria-label="Share on X" class={buttonClass}><XIcon class="w-5 h-5 text-neutral-100" /></a>
+  <a href={linkedinHref} target="_blank" rel="noopener noreferrer" aria-label="Share on LinkedIn" class={buttonClass}><LinkedInIcon class="w-5 h-5 text-neutral-100" /></a>
+  <a href={emailHref} aria-label="Share via Email" class={buttonClass}><EmailIcon class="w-5 h-5 text-neutral-100" /></a>
+  <button data-copy-url={shareUrl('clipboard', 'share')} aria-label="Copy share link" class={`${buttonClass} relative cursor-pointer`}>
+    <span data-copy-icon><LinkIcon class="w-5 h-5 text-neutral-100" /></span>
+    <span data-copied-icon hidden><ClipboardCheckIcon class="w-5 h-5 text-neutral-100" /></span>
+  </button>
+  <button data-native-url={shareUrl('native', 'share')} data-title={title} hidden aria-label="Native share" class={`${buttonClass} cursor-pointer`}><NativeShareIcon class="w-5 h-5 text-neutral-100" /></button>
+  <span data-share-status class="sr-only" role="status" aria-live="polite"></span>
+</div>
+<script>
+  for (const section of document.querySelectorAll<HTMLElement>('[data-share]')) {
+    const copy = section.querySelector<HTMLButtonElement>('[data-copy-url]')!;
+    const native = section.querySelector<HTMLButtonElement>('[data-native-url]')!;
+    const status = section.querySelector<HTMLElement>('[data-share-status]')!;
+    let timer: ReturnType<typeof setTimeout>;
+    copy.addEventListener('click', async () => {
+      try {
+        await navigator.clipboard.writeText(copy.dataset.copyUrl!);
+        copy.querySelector<HTMLElement>('[data-copy-icon]')!.hidden = true;
+        copy.querySelector<HTMLElement>('[data-copied-icon]')!.hidden = false;
+        copy.setAttribute('aria-label', 'Share link copied');
+        status.textContent = 'Share link copied';
+        clearTimeout(timer);
+        timer = setTimeout(() => {
+          copy.querySelector<HTMLElement>('[data-copy-icon]')!.hidden = false;
+          copy.querySelector<HTMLElement>('[data-copied-icon]')!.hidden = true;
+          copy.setAttribute('aria-label', 'Copy share link');
+          status.textContent = '';
+        }, 2000);
+      } catch {
+        status.textContent = 'Unable to copy the link. Copy the page address from your browser.';
+      }
+    });
+    native.hidden = typeof navigator.share !== 'function';
+    native.addEventListener('click', async () => {
+      try {
+        await navigator.share({ title: native.dataset.title, url: native.dataset.nativeUrl });
+      } catch (error) {
+        if (!(error instanceof DOMException && error.name === 'AbortError')) status.textContent = 'Unable to share. Please use one of the other sharing options.';
+      }
+    });
+  }
+</script>

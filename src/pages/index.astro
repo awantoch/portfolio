@@ -1,0 +1,30 @@
+---
+import SiteLayout from '../layouts/SiteLayout.astro';
+import JournalEntries from '../components/JournalEntries.astro';
+import Portfolio from '../components/Portfolio.astro';
+import Links from '../components/Links.astro';
+import SubscribeForm from '../components/SubscribeForm.astro';
+import { METADATA_CONFIG } from '../lib/constants';
+export const prerender = true;
+---
+<SiteLayout description={METADATA_CONFIG.descriptions.home}>
+  <section aria-labelledby="home-heading">
+    <div class="flex justify-center mb-6 mt-2">
+      <div class="w-32 h-32 rounded-xl overflow-hidden shadow-lg border-2 border-neutral-800 bg-neutral-900 flex items-center justify-center">
+        <img src="/headshot.png" alt="Headshot" class="object-cover" width="128" height="128" fetchpriority="high" />
+      </div>
+    </div>
+    <h1 id="home-heading" class="mb-4 text-2xl font-semibold tracking-tighter text-center text-neutral-100">Alec M. Wantoch</h1>
+    <p class="mb-4 text-center text-neutral-300">{METADATA_CONFIG.descriptions.home}</p>
+    <div class="mt-8 mb-8"><Links /></div>
+    <section role="region" aria-labelledby="journal-heading" class="my-8">
+      <h2 id="journal-heading" class="text-xl font-semibold mb-4">Journal</h2>
+      <JournalEntries limit={5} showMore />
+    </section>
+    <div class="my-10"><SubscribeForm title="Stay in the loop" subtitle="Get notified from my personal email when I publish new content" compact /></div>
+    <section role="region" aria-labelledby="portfolio-heading" class="my-8">
+      <h2 id="portfolio-heading" class="text-xl font-semibold mb-4">Portfolio</h2>
+      <Portfolio limit={3} showMore />
+    </section>
+  </section>
+</SiteLayout>

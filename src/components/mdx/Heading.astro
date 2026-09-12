@@ -1,0 +1,12 @@
+---
+import { decodeHtml } from './html';
+interface Props { level: 1 | 2 | 3 | 4 | 5 | 6; id?: string }
+const { level, id } = Astro.props;
+const content = await Astro.slots.render('default');
+const slug = decodeHtml(content.replace(/<[^>]*>/g, '')).toLowerCase().trim().replace(/\s+/g, '-').replace(/&/g, '-and-').replace(/[^\w-]+/g, '').replace(/--+/g, '-') || id;
+const Tag = `h${level}` as 'h1';
+---
+<Tag id={slug}>
+  <a href={`#${slug}`} class="anchor" aria-label="Link to this section"></a>
+  <Fragment set:html={content} />
+</Tag>

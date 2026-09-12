@@ -1,0 +1,78 @@
+# Astro migration and Orthodox cross animation
+
+## Goal
+
+Rebuild alec.wantoch.com with Astro while retaining the current design, content,
+URLs, metadata, integrations, and background animation colors and timing. Replace
+the repeating circles with Orthodox crosses: a vertical stem, short upper bar,
+long central bar, and slanted lower footrest.
+
+## Baseline and constraints
+
+- Current stack: Next.js 15, React 19, Tailwind CSS 4, MDX, Vercel.
+- GitHub currently uses `master`; create `main` from its current commit and make
+  sure the production deployment follows `main`.
+- Preserve the existing untracked `app/journal/posts/pendulum.mdx` draft locally;
+  it is outside the migration and must not be included in a deployment.
+- Keep `/`, `/portfolio`, `/journal`, journal articles and email renderings,
+  `/rss`, `/sitemap.xml`, `/robots.txt`, `/og`, `/cal/*`, and Kit API routes.
+- Do not trigger newsletter broadcasts or create real subscriptions during tests.
+
+## Implementation with subagents
+
+1. **Baseline and deployment (primary agent)**
+   - Inspect the existing production site and Vercel/GitHub configuration.
+   - Record desktop/mobile appearance and route behavior.
+   - Establish Astro, MDX, Tailwind, and the Vercel adapter.
+2. **Pages and components (subagent)**
+   - Port layout, navigation, homepage, portfolio, journal, MDX rendering,
+     subscription form, sharing, metadata, and analytics to native Astro.
+   - Keep the published content and design intact, with small browser scripts
+     for interactions instead of a React application runtime.
+3. **Orthodox cross animation (subagent)**
+   - Port the canvas to Astro and replace circle geometry with repeated Orthodox
+     crosses while preserving the hue, breathing, swirl, opacity, and backdrop.
+   - Handle resizing, high density displays, reduced motion, and cleanup.
+4. **Endpoints and content (subagent)**
+   - Migrate published MDX content, content helpers, Kit endpoints, RSS, sitemap,
+     robots, and social preview generation to Astro-compatible modules.
+   - Preserve API contracts and the cron schedule.
+5. **Integration and local verification (primary agent)**
+   - Remove obsolete Next.js code/dependencies after parity is established.
+   - Run type checking, production build, targeted API tests, and browser checks.
+   - Verify navigation, article rendering, subscription validation, sharing,
+     cross visibility/motion, responsive layouts, redirects, and metadata.
+6. **Release and production verification (primary agent)**
+   - Commit reviewable changes and push `main` after local checks pass.
+   - Monitor the Vercel deployment and verify the deployed commit.
+   - Repeat production route and browser smoke checks, fixing and redeploying
+     any regressions discovered.
+   - Record actual test results and release details below.
+
+## Progress and verification
+
+- [x] Inspect repository, current stack, branch state, and local changes.
+- [x] Capture production baseline and inspect deployment settings.
+- [x] Complete Astro migration with subagents.
+- [x] Complete Orthodox cross animation.
+- [x] Pass local validation.
+- [ ] Push `main` and deploy.
+- [ ] Pass production validation.
+
+### Local results
+
+- Astro 7.3.2 production build succeeds with the Vercel adapter.
+- Astro check: 82 files, zero errors, warnings, or hints.
+- 16 automated tests pass for animation geometry/lifecycle, Kit subscription and
+  sync contracts, feed escaping, and dates across time zones. Kit is mocked.
+- 14 HTTP smoke checks pass against the local Astro server, including 1200×630
+  social previews, calendar redirects, unauthorized cron and invalid input.
+- Browser checks cover desktop and 390px mobile layouts, journal navigation,
+  intact 6,934-character prompt copying, and share-link copying. No horizontal
+  overflow at the mobile viewport.
+- Cross glyphs were reduced to 65% of their initial geometry so neighboring
+  crosses remain distinct while keeping the original 50px hex spacing.
+- The local `.env` contains an old localhost URL; validation builds explicitly
+  set `PUBLIC_BASE_URL=https://alec.wantoch.com` without changing that file.
+- Next.js/React packages and tracked `app` source have been removed. The existing
+  untracked journal draft remains at its original path.

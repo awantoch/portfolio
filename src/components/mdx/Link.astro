@@ -1,0 +1,7 @@
+---
+import type { HTMLAttributes } from 'astro/types';
+type Props = HTMLAttributes<'a'>;
+const { href = '', class: className, ...props } = Astro.props;
+const external = !(String(href).startsWith('/') || String(href).startsWith('#'));
+---
+<a href={href} target={external ? '_blank' : undefined} rel={external ? 'noopener noreferrer' : undefined} {...props} class:list={['interactive-soft', className]}><slot /></a>

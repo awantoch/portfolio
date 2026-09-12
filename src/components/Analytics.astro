@@ -1,0 +1,17 @@
+---
+import Analytics from '@vercel/analytics/astro';
+import SpeedInsights from '@vercel/speed-insights/astro';
+import { SITE_CONFIG } from '../lib/constants';
+const analyticsId = SITE_CONFIG.googleAnalyticsId;
+---
+<Analytics />
+<SpeedInsights />
+{analyticsId && <>
+  <script is:inline async src={`https://www.googletagmanager.com/gtag/js?id=${encodeURIComponent(analyticsId)}`}></script>
+  <script is:inline define:vars={{ analyticsId }}>
+    window.dataLayer = window.dataLayer || [];
+    function gtag() { window.dataLayer.push(arguments); }
+    gtag('js', new Date());
+    gtag('config', analyticsId);
+  </script>
+</>}

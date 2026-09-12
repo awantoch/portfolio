@@ -1,0 +1,52 @@
+---
+import { render } from 'astro:content';
+import { getJournalPosts } from '../../../lib/journal';
+import { formatDate } from '../../../lib/utils';
+import { SITE_CONFIG } from '../../../lib/constants';
+import { webComponents } from '../../../components/mdx/web';
+import SiteLayout from '../../../layouts/SiteLayout.astro';
+import ShareSection from '../../../components/ShareSection.astro';
+import SubscribeForm from '../../../components/SubscribeForm.astro';
+export const prerender = true;
+export async function getStaticPaths() {
+  return (await getJournalPosts()).map((post) => ({ params: { slug: post.slug }, props: { post } }));
+}
+const { post } = Astro.props;
+const { Content } = await render(post.entry);
+const { title, publishedAt, summary: description, image } = post.metadata;
+const path = `/journal/${post.slug}`;
+const url = new URL(path, SITE_CONFIG.baseUrl).href;
+const socialImage = image || `/og?${new URLSearchParams({ title, description, path })}`;
+const heroImage = image || `${socialImage}&bg=dark`;
+const structuredData = {
+  '@context': 'https://schema.org',
+  '@type': 'Article',
+  headline: title,
+  datePublished: publishedAt,
+  dateModified: publishedAt,
+  description,
+  image: new URL(socialImage, SITE_CONFIG.baseUrl).href,
+  url,
+  author: { '@type': 'Person', name: SITE_CONFIG.title },
+};
+---
+<SiteLayout title={title} description={description} image={socialImage} type="article" publishedAt={publishedAt}>
+  <article itemscope itemtype="https://schema.org/Article" aria-labelledby="entry-title">
+    <script is:inline type="application/ld+json" set:html={JSON.stringify(structuredData).replace(/</g, '\\u003c')} />
+    <h1 id="entry-title" itemprop="headline" class="title font-semibold text-2xl tracking-tighter">{title}</h1>
+    <div class="flex justify-between items-center mt-2 mb-8 text-sm">
+      <time datetime={publishedAt} itemprop="datePublished" class="text-sm text-neutral-400">{formatDate(publishedAt)}</time>
+    </div>
+    <div class="mb-8 flex justify-center">
+      <div class="card-base card-base--dark p-2 max-w-3xl w-full">
+        <img src={heroImage} alt={title} width="1200" height="630" class="rounded-lg w-full h-auto" fetchpriority="high" />
+      </div>
+    </div>
+    <ShareSection url={url} title={title} slug={post.slug} />
+    <section class="prose" aria-label="Journal entry content" itemprop="articleBody">
+      <Content components={webComponents} />
+    </section>
+    <ShareSection url={url} title={title} slug={post.slug} />
+    <div class="mt-12"><SubscribeForm title="Well since you read the whole thing..." subtitle="'preciate it yo! Might as well subscribe 😉" /></div>
+  </article>
+</SiteLayout>

@@ -1,0 +1,14 @@
+---
+import { NAV_ITEMS } from '../lib/constants';
+---
+<aside class="mb-4 tracking-tight flex justify-center">
+  <div class="lg:sticky lg:top-20">
+    <nav aria-label="Main navigation" class="flex flex-row items-start justify-center md:overflow-auto md:relative" id="nav">
+      <div class="flex flex-row justify-center">
+        {Object.entries(NAV_ITEMS).map(([path, { name }]) => (
+          <a href={path} aria-current={Astro.url.pathname === path ? 'page' : undefined} class="hover:opacity-80 flex align-middle py-1 px-2 m-1 interactive-soft">{name}</a>
+        ))}
+      </div>
+    </nav>
+  </div>
+</aside>

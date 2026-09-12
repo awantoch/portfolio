@@ -1,0 +1,6 @@
+---
+import type { HTMLAttributes } from 'astro/types';
+type Props = HTMLAttributes<'img'> & { priority?: boolean; quality?: number; placeholder?: string; blurDataURL?: string };
+const { class: className, alt = '', priority, quality: _quality, placeholder: _placeholder, blurDataURL: _blur, ...props } = Astro.props;
+---
+<img {...props} alt={alt} class:list={['rounded-lg', className]} loading={priority ? 'eager' : 'lazy'} decoding="async" />

@@ -1,0 +1,83 @@
+---
+import ArrowIcon from './icons/ArrowIcon.astro';
+interface Props { title?: string; subtitle?: string; compact?: boolean }
+const { title = 'Subscribe to my newsletter', subtitle = 'Get notified when I publish new articles', compact = false } = Astro.props;
+const id = `subscribe-${crypto.randomUUID()}`;
+---
+<div data-subscribe class:list={['subscribe-card card-base w-full px-6', compact ? 'py-6' : 'py-8']}>
+  <div class:list={['max-w-md mx-auto', compact ? 'space-y-3' : 'space-y-4']}>
+    <div class="text-center">
+      <h2 id={`${id}-title`} class:list={['font-semibold text-white', compact ? 'text-lg' : 'text-xl']}>{title}</h2>
+      <p class="text-neutral-300 text-sm mt-1">{subtitle}</p>
+    </div>
+    <div data-success hidden role="status" aria-live="polite" class="bg-purple-900/30 border border-purple-700/50 rounded-md p-3 text-center animate-fade-in">
+      <p class="text-purple-200"></p>
+    </div>
+    <form class="space-y-3" aria-busy="false" aria-labelledby={`${id}-title`}>
+      <div class="relative group">
+        <label for={`${id}-email`} class="sr-only">Email address</label>
+        <input id={`${id}-email`} name="email" type="email" autocomplete="email" placeholder="your.email@example.com" required class="w-full px-3 py-2 bg-neutral-900 border border-neutral-700 rounded-md text-white placeholder:text-neutral-500 focus:outline-none focus:ring-2 focus:ring-purple-500/70 focus:border-transparent transition-all duration-300 peer cursor-text hover:cursor-text" />
+        <div class="absolute inset-0 bg-gradient-to-r from-purple-700/20 to-indigo-700/20 opacity-0 group-hover:opacity-100 rounded-md -z-10 transition-opacity duration-300"></div>
+      </div>
+      <div data-error hidden role="alert" aria-live="assertive" class="text-red-500 text-sm animate-fade-in"></div>
+      <button type="submit" class="w-full flex items-center justify-center px-4 py-2 bg-gradient-to-r from-purple-800 via-[#20132b] to-indigo-900 hover:bg-gradient-to-r hover:from-purple-700 hover:via-[#2d1d3e] hover:to-indigo-800 focus:outline-none focus:ring-2 focus:ring-purple-500 focus:ring-offset-2 focus:ring-offset-neutral-900 disabled:opacity-50 rounded-md shadow-md border border-purple-700/50 interactive cursor-pointer disabled:cursor-not-allowed">
+        <span data-idle class="flex items-center gap-2 group">Subscribe <ArrowIcon /></span>
+        <span data-loading hidden class="flex items-center gap-2">
+          <svg class="animate-spin h-4 w-4 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" aria-hidden="true">
+            <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+            <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+          </svg>
+          <span>Subscribing...</span>
+        </span>
+      </button>
+      <p class="text-xs text-center text-neutral-400">No spam. Unsubscribe at any time.</p>
+    </form>
+  </div>
+</div>
+<script>
+  for (const card of document.querySelectorAll<HTMLElement>('[data-subscribe]')) {
+    const form = card.querySelector('form')!;
+    const input = form.querySelector('input')!;
+    const button = form.querySelector('button')!;
+    const error = form.querySelector<HTMLElement>('[data-error]')!;
+    const success = card.querySelector<HTMLElement>('[data-success]')!;
+    const idle = button.querySelector<HTMLElement>('[data-idle]')!;
+    const loading = button.querySelector<HTMLElement>('[data-loading]')!;
+    form.addEventListener('submit', async (event) => {
+      event.preventDefault();
+      if (button.disabled || !form.reportValidity()) return;
+      error.hidden = true;
+      button.disabled = true;
+      input.disabled = true;
+      form.setAttribute('aria-busy', 'true');
+      idle.hidden = true;
+      loading.hidden = false;
+      try {
+        const response = await fetch('/api/kit/subscribe', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ email_address: input.value.trim() }),
+        });
+        const data = await response.json();
+        if (response.ok && data.success) {
+          success.querySelector('p')!.textContent = data.message || 'Thanks for subscribing!';
+          success.hidden = false;
+          form.hidden = true;
+          input.value = '';
+        } else {
+          error.textContent = 'Failed to subscribe. Please try again.';
+          error.hidden = false;
+        }
+      } catch {
+        error.textContent = 'An error occurred. Please try again.';
+        error.hidden = false;
+      } finally {
+        button.disabled = false;
+        input.disabled = false;
+        form.setAttribute('aria-busy', 'false');
+        idle.hidden = false;
+        loading.hidden = true;
+      }
+    });
+  }
+</script>

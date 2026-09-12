@@ -1,0 +1,9 @@
+---
+interface Props { class?: string }
+const { class: className = "" } = Astro.props;
+---
+<svg class={className} width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+      <rect x="4" y="4" width="16" height="16" rx="4" />
+      <circle cx="12" cy="12" r="3" />
+      <circle cx="16.5" cy="7.5" r="0.5" />
+    </svg>

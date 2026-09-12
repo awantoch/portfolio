@@ -1,0 +1,21 @@
+---
+import { render } from 'astro:content';
+import { getJournalPosts } from '../../../lib/journal';
+import { formatDate } from '../../../lib/utils';
+import { emailComponents } from '../../../components/mdx/email';
+import SiteLayout from '../../../layouts/SiteLayout.astro';
+export const prerender = true;
+export async function getStaticPaths() {
+  return (await getJournalPosts()).map((post) => ({ params: { slug: post.slug }, props: { post } }));
+}
+const { post } = Astro.props;
+const { Content } = await render(post.entry);
+const { title, publishedAt, summary } = post.metadata;
+---
+<SiteLayout title={title} description={summary} noindex>
+  <article style="font-family:Arial,sans-serif;color:#ffffff">
+    <h1 style="font-size:24px;font-weight:bold;margin:0 0 16px">{title}</h1>
+    <time datetime={publishedAt} style="font-size:14px;color:#999999;display:block;margin-bottom:24px">{formatDate(publishedAt)}</time>
+    <Content components={emailComponents} />
+  </article>
+</SiteLayout>

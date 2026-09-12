@@ -1,0 +1,14 @@
+---
+import SiteLayout from '../../layouts/SiteLayout.astro';
+import JournalEntries from '../../components/JournalEntries.astro';
+import SubscribeForm from '../../components/SubscribeForm.astro';
+import { METADATA_CONFIG } from '../../lib/constants';
+export const prerender = true;
+---
+<SiteLayout title="Journal" description={METADATA_CONFIG.descriptions.journal}>
+  <section role="region" aria-labelledby="journal-heading">
+    <h1 id="journal-heading" class="font-semibold text-2xl mb-8 tracking-tighter">Journal</h1>
+    <JournalEntries />
+    <div class="mt-12"><SubscribeForm title="Join the adventure" subtitle="Follow along the journey with new entries & other goodies!" /></div>
+  </section>
+</SiteLayout>

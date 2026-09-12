@@ -1,0 +1,26 @@
+---
+import GitHubIcon from './icons/GitHubIcon.astro';
+import LinkedInIcon from './icons/LinkedInIcon.astro';
+import InstagramIcon from './icons/InstagramIcon.astro';
+import XIcon from './icons/XIcon.astro';
+import YouTubeIcon from './icons/YouTubeIcon.astro';
+import EmailIcon from './icons/EmailIcon.astro';
+const links = [
+  { href: 'https://instagram.com/awantoch', label: 'Instagram', Icon: InstagramIcon },
+  { href: 'https://x.com/alecw', label: 'X/Twitter', Icon: XIcon },
+  { href: 'https://youtube.com/@AlecWantoch', label: 'YouTube', Icon: YouTubeIcon },
+  { href: 'https://github.com/awantoch', label: 'GitHub', Icon: GitHubIcon },
+  { href: 'https://linkedin.com/in/awantoch', label: 'LinkedIn', Icon: LinkedInIcon },
+  { href: 'mailto:alec@wantoch.com', label: 'Email', Icon: EmailIcon },
+];
+---
+<ul class="grid grid-cols-3 gap-4 w-full max-w-2xl mx-auto">
+  {links.map(({ href, label, Icon }) => (
+    <li class="text-center">
+      <a class="flex flex-col items-center justify-center gap-1 md:gap-2 card-base interactive py-2 md:py-4 focus-visible:ring-2 focus-visible:ring-purple-500" rel="noopener noreferrer" target="_blank" href={href} aria-label={label}>
+        <Icon class="w-6 h-6 mb-0.5 md:mb-1 md:w-7 md:h-7 text-neutral-100" />
+        <span class="text-xs md:text-sm font-medium text-neutral-200 tracking-tight capitalize">{label}</span>
+      </a>
+    </li>
+  ))}
+</ul>

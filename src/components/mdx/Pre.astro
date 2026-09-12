@@ -1,0 +1,29 @@
+---
+import { highlight } from 'sugar-high';
+import { decodeHtml } from './html';
+const content = await Astro.slots.render('default');
+const code = content.match(/<code\b([^>]*)>([\s\S]*?)<\/code>/);
+const className = code?.[1].match(/class="([^"]*)"/)?.[1] || '';
+const codeText = decodeHtml(code ? code[2] : content.replace(/<[^>]*>/g, ''));
+const isMarkdown = /language-(markdown|md)(\s|$)/.test(className);
+---
+<div data-code-block class="relative group">
+  <button data-copy-code aria-live="polite" aria-atomic="true" class="absolute z-10 right-2 top-2 px-2 py-1 text-xs rounded bg-neutral-800 hover:bg-neutral-700 transition-colors cursor-pointer">Copy</button>
+  <pre class={`${className} whitespace-pre-wrap break-words`} {...Astro.props}>{isMarkdown ? <code class={className}>{codeText}</code> : <code class={className} set:html={highlight(codeText)} />}</pre>
+</div>
+<script>
+  for (const block of document.querySelectorAll<HTMLElement>('[data-code-block]')) {
+    const button = block.querySelector<HTMLButtonElement>('[data-copy-code]')!;
+    let timer: ReturnType<typeof setTimeout>;
+    button.addEventListener('click', async () => {
+      try {
+        await navigator.clipboard.writeText(block.querySelector('code')?.textContent || '');
+        button.textContent = 'Copied!';
+      } catch {
+        button.textContent = 'Copy failed';
+      }
+      clearTimeout(timer);
+      timer = setTimeout(() => { button.textContent = 'Copy'; }, 2000);
+    });
+  }
+</script>

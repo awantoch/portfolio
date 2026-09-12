@@ -1,0 +1,271 @@
+---
+interface Props {
+  radius?: number;
+  duration?: number;
+  hueSpeed?: number;
+  swirlSpeed?: number;
+  swirlAmplitude?: number;
+  freq1Multiplier?: number;
+  freq2Multiplier?: number;
+  rings?: number;
+  mode?: 'fullscreen' | 'fixed';
+}
+
+const {
+  radius = 50,
+  duration = 33000,
+  hueSpeed = 50,
+  swirlSpeed = 5000,
+  swirlAmplitude = 0.0005,
+  freq1Multiplier = 3,
+  freq2Multiplier = 5,
+  rings,
+  mode = 'fullscreen',
+} = Astro.props;
+---
+
+<orthodox-crosses
+  data-radius={radius}
+  data-duration={duration}
+  data-hue-speed={hueSpeed}
+  data-swirl-speed={swirlSpeed}
+  data-swirl-amplitude={swirlAmplitude}
+  data-freq1-multiplier={freq1Multiplier}
+  data-freq2-multiplier={freq2Multiplier}
+  data-rings={rings}
+  data-mode={mode}
+>
+  <canvas aria-hidden="true" tabindex="-1"></canvas>
+</orthodox-crosses>
+
+<style>
+  orthodox-crosses {
+    display: contents;
+  }
+
+  canvas {
+    display: block;
+    width: 100%;
+    height: 100%;
+    pointer-events: none;
+    will-change: filter, opacity;
+    filter: hue-rotate(0deg);
+    animation: cross-hue 5s linear infinite;
+    opacity: 0;
+    transition: opacity 1.333s ease-in-out;
+  }
+
+  orthodox-crosses[data-mode='fullscreen'] canvas {
+    position: fixed;
+    inset: 0;
+    z-index: -1;
+  }
+
+  orthodox-crosses[data-ready] canvas {
+    opacity: 0.08;
+  }
+
+  orthodox-crosses[data-paused] canvas {
+    animation-play-state: paused;
+  }
+
+  @keyframes cross-hue {
+    to {
+      filter: hue-rotate(360deg);
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    canvas {
+      animation: none;
+      transition: none;
+      will-change: auto;
+    }
+  }
+</style>
+
+<script>
+  interface Cross {
+    x: number;
+    y: number;
+    freq1Offset: number;
+    freq2Offset: number;
+    hueOffset: number;
+  }
+
+  class OrthodoxCrosses extends HTMLElement {
+    private canvas: HTMLCanvasElement | null = null;
+    private context: CanvasRenderingContext2D | null = null;
+    private motion: MediaQueryList | null = null;
+    private resizeObserver: ResizeObserver | null = null;
+    private frame = 0;
+    private resizeFrame = 0;
+    private width = 0;
+    private height = 0;
+    private pixelRatio = 1;
+    private crosses: Cross[] = [];
+    private radius = 50;
+    private duration = 33000;
+    private hueSpeed = 50;
+    private swirlSpeed = 5000;
+    private swirlAmplitude = 0.0005;
+    private freq1 = Math.PI * 2 * 3;
+    private freq2 = Math.PI * 2 * 5;
+
+    connectedCallback() {
+      this.canvas = this.querySelector('canvas');
+      this.context = this.canvas?.getContext('2d') ?? null;
+      if (!this.canvas || !this.context) return;
+
+      this.radius = Math.max(1, Number(this.dataset.radius));
+      this.duration = Math.max(1, Number(this.dataset.duration));
+      this.hueSpeed = Math.max(1, Number(this.dataset.hueSpeed));
+      this.swirlSpeed = Math.max(1, Number(this.dataset.swirlSpeed));
+      this.swirlAmplitude = Number(this.dataset.swirlAmplitude);
+      this.freq1 = Math.PI * 2 * Number(this.dataset.freq1Multiplier);
+      this.freq2 = Math.PI * 2 * Number(this.dataset.freq2Multiplier);
+      this.motion = window.matchMedia('(prefers-reduced-motion: reduce)');
+
+      this.motion.addEventListener('change', this.updatePlayback);
+      document.addEventListener('visibilitychange', this.updatePlayback);
+      window.addEventListener('resize', this.scheduleResize);
+      this.resizeObserver = new ResizeObserver(this.scheduleResize);
+      this.resizeObserver.observe(this.canvas);
+      this.resize();
+      this.updatePlayback();
+    }
+
+    disconnectedCallback() {
+      cancelAnimationFrame(this.frame);
+      cancelAnimationFrame(this.resizeFrame);
+      this.motion?.removeEventListener('change', this.updatePlayback);
+      document.removeEventListener('visibilitychange', this.updatePlayback);
+      window.removeEventListener('resize', this.scheduleResize);
+      this.resizeObserver?.disconnect();
+      this.resizeObserver = null;
+      this.removeAttribute('data-ready');
+      this.frame = 0;
+      this.resizeFrame = 0;
+    }
+
+    private scheduleResize = () => {
+      cancelAnimationFrame(this.resizeFrame);
+      this.resizeFrame = requestAnimationFrame(() => {
+        this.resizeFrame = 0;
+        this.resize();
+      });
+    };
+
+    private resize() {
+      const canvas = this.canvas;
+      if (!canvas) return;
+
+      const fullscreen = this.dataset.mode === 'fullscreen';
+      const width = fullscreen ? window.innerWidth : canvas.clientWidth;
+      const height = fullscreen ? window.innerHeight : canvas.clientHeight;
+      // A 2x backing store keeps strokes sharp without oversized mobile buffers.
+      const pixelRatio = Math.min(window.devicePixelRatio || 1, 2);
+      if (width === this.width && height === this.height && pixelRatio === this.pixelRatio) return;
+
+      this.width = width;
+      this.height = height;
+      this.pixelRatio = pixelRatio;
+      canvas.width = Math.round(width * pixelRatio);
+      canvas.height = Math.round(height * pixelRatio);
+      this.crosses = [];
+      if (!width || !height) return;
+
+      const dx = this.radius;
+      const dy = (this.radius * Math.sqrt(3)) / 2;
+      const cx = width / 2;
+      const cy = height / 2;
+      const rings = this.dataset.rings === undefined
+        ? undefined
+        : Math.max(0, Math.floor(Number(this.dataset.rings)));
+      const yExtent = rings ?? Math.ceil((cy + this.radius) / dy);
+      const xExtent = rings ?? Math.ceil((cx + this.radius) / dx + yExtent / 2);
+
+      for (let j = -yExtent; j <= yExtent; j++) {
+        for (let i = -xExtent; i <= xExtent; i++) {
+          if (rings !== undefined && Math.abs(i + j) > rings) continue;
+          const x = cx + dx * (i + j / 2);
+          const y = cy + dy * j;
+          if (x < -this.radius || x > width + this.radius) continue;
+          const phase = ((x - cx) / cx + (y - cy) / cy) * 0.2;
+          const offset = phase + Math.random() * 0.5;
+          this.crosses.push({
+            x,
+            y,
+            freq1Offset: offset * this.freq1,
+            freq2Offset: offset * this.freq2,
+            hueOffset: phase * 360,
+          });
+        }
+      }
+
+      this.draw(this.motion?.matches ? 0 : performance.now());
+    }
+
+    private updatePlayback = () => {
+      cancelAnimationFrame(this.frame);
+      this.frame = 0;
+      this.toggleAttribute('data-paused', document.hidden || !!this.motion?.matches);
+      if (document.hidden) return;
+      if (this.motion?.matches) {
+        this.draw(0);
+        this.setAttribute('data-ready', '');
+      } else {
+        this.frame = requestAnimationFrame(this.renderFrame);
+      }
+    };
+
+    private renderFrame = (time: number) => {
+      this.draw(time);
+      this.setAttribute('data-ready', '');
+      this.frame = requestAnimationFrame(this.renderFrame);
+    };
+
+    private draw(time: number) {
+      const ctx = this.context;
+      if (!ctx || !this.width || !this.height) return;
+
+      ctx.setTransform(this.pixelRatio, 0, 0, this.pixelRatio, 0, 0);
+      ctx.clearRect(0, 0, this.width, this.height);
+      // Resizing resets the context, so restore the original overlap blending.
+      ctx.globalCompositeOperation = 'lighter';
+      const tFreq1 = (time * this.freq1) / this.duration;
+      const tFreq2 = (time * this.freq2) / this.duration;
+      const tHue = time / this.hueSpeed;
+      const swirl = Math.sin(time / this.swirlSpeed) * this.swirlAmplitude;
+      ctx.translate(this.width / 2, this.height / 2);
+      ctx.rotate(swirl);
+      ctx.translate(-this.width / 2, -this.height / 2);
+
+      // Leave space between staggered rows so each three-bar cross reads clearly.
+      const r = this.radius * 0.65;
+      for (const { x, y, freq1Offset, freq2Offset, hueOffset } of this.crosses) {
+        const w1 = Math.sin(tFreq1 + freq1Offset);
+        const w2 = Math.cos(tFreq2 + freq2Offset + w1);
+        const norm = (w1 + w2 + 2) * 0.25;
+        ctx.globalAlpha = norm * 0.4 + 0.6;
+        ctx.strokeStyle = `hsl(${tHue + hueOffset},70%,50%)`;
+        ctx.lineWidth = 1 + norm;
+        ctx.beginPath();
+        // Orthodox cross: stem, title bar, main bar, and slanted footrest.
+        ctx.moveTo(x, y - r * 0.68);
+        ctx.lineTo(x, y + r * 0.68);
+        ctx.moveTo(x - r * 0.24, y - r * 0.43);
+        ctx.lineTo(x + r * 0.24, y - r * 0.43);
+        ctx.moveTo(x - r * 0.46, y - r * 0.18);
+        ctx.lineTo(x + r * 0.46, y - r * 0.18);
+        ctx.moveTo(x - r * 0.28, y + r * 0.22);
+        ctx.lineTo(x + r * 0.28, y + r * 0.42);
+        ctx.stroke();
+      }
+    }
+  }
+
+  if (!customElements.get('orthodox-crosses')) {
+    customElements.define('orthodox-crosses', OrthodoxCrosses);
+  }
+</script>

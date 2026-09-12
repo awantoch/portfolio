@@ -1,0 +1,9 @@
+---
+import Element from './Element.astro';
+interface Props { data: { headers: string[]; rows: (string | number)[][] } }
+const { data } = Astro.props;
+---
+<Element as="table">
+  <thead><tr>{data.headers.map((header) => <Element as="th">{header}</Element>)}</tr></thead>
+  <tbody>{data.rows.map((row) => <tr>{row.map((cell) => <Element as="td">{cell}</Element>)}</tr>)}</tbody>
+</Element>
