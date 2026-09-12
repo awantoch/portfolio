@@ -57,7 +57,7 @@ long central bar, and slanted lower footrest.
 - [x] Complete Orthodox cross animation.
 - [x] Pass local validation.
 - [x] Push `main` and deploy.
-- [ ] Pass production validation.
+- [x] Pass production validation.
 
 ### Local results
 
@@ -90,3 +90,19 @@ long central bar, and slanted lower footrest.
   crosses, and no console errors.
 - The follow-up build and all 15 local smoke checks pass. `pnpm start` now aliases
   `astro dev`, since the Vercel adapter does not support `astro preview`.
+
+### Production validation and final dependency patch
+
+- Follow-up commit `ad65663` automatically deployed from `main` as
+  `dpl_A7eXDrdpD6Nb3YKx6LASdHae3HMo`; all 15 production smoke checks pass.
+- Live 390px mobile layout has no horizontal overflow. Browser checks confirm
+  native invalid-email feedback, journal navigation, complete prompt copying
+  (6,934 characters), and working share-link copying. No console errors.
+- A final GitHub dependency alert identified Vercel's transitive
+  `path-to-regexp@6.1.0`. A scoped override upgrades it to patched `6.3.0`.
+  Subagent comparison found identical route matching for 11 relevant patterns,
+  three option sets, and 15 paths. The final production build passes, and the generated Vercel routing
+  configuration is byte-for-byte identical after the override. The production
+  dependency audit reports no known vulnerabilities. The final commit is checked
+  against the production deployment and the same 15 route checks.
+- No real subscriptions, broadcasts, or authorized cron syncs were performed.
