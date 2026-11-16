@@ -1,0 +1,66 @@
+---
+import SiteLayout from '../layouts/SiteLayout.astro';
+
+export const prerender = true;
+---
+<SiteLayout title="Terms of Service" description="Simple terms for using Alec Wantoch's website and Google OAuth client for Omamail, including account access and third-party services." noindex>
+  <article aria-labelledby="terms-heading" class="mb-12">
+    <h1 id="terms-heading" class="font-semibold text-2xl mb-2 tracking-tighter">Terms of Service</h1>
+    <p class="text-sm text-neutral-400">Effective <time datetime="2026-11-16">November 16, 2026</time></p>
+    <div class="prose leading-relaxed">
+      <p>
+        These terms apply to this website and the Google OAuth client I, Alec M.
+        Wantoch, provide for use with Omamail. By using them, you agree to these terms.
+      </p>
+
+      <h2>What I provide</h2>
+      <p>
+        This website shares my work and writing. The OAuth client lets you
+        authorize Omamail to connect to your Google account. Omamail is an
+        independent open-source project; its software is covered by its own
+        <a href="https://github.com/huacnlee/omamail">license and documentation</a>.
+        Providing this client does not imply endorsement by Google or the Omamail developers.
+      </p>
+
+      <h2>Your account and choices</h2>
+      <p>
+        Only connect accounts you own or have permission to use. You are
+        responsible for keeping your device secure and for the messages,
+        calendar changes, and other actions you authorize. Do not use the
+        client for spam, abuse, unlawful activity, or attempts to bypass
+        Google's access restrictions.
+      </p>
+      <p>
+        You can stop using the client at any time and revoke its access in
+        your <a href="https://myaccount.google.com/permissions">Google Account permissions</a>.
+        The <a href="/privacy">Privacy Policy</a> explains data handling and deletion.
+      </p>
+
+      <h2>Other services</h2>
+      <p>
+        Google, Omamail, and any optional AI provider you choose have their own
+        terms and policies. You are responsible for following the terms that
+        apply to those services. Their availability and behavior are outside my control.
+      </p>
+
+      <h2>Availability and responsibility</h2>
+      <p>
+        The website and OAuth client are provided as available, without
+        guarantees that they will always work, stay available, or be free of
+        errors. I may change or discontinue them, including access to the OAuth
+        client. Keep backups of anything important to you.
+      </p>
+      <p>
+        To the extent the law allows, I am not responsible for losses caused by
+        using or being unable to use the website or client. These terms do not
+        limit any rights or protections that the law does not allow you to waive.
+      </p>
+
+      <h2>Changes and questions</h2>
+      <p>
+        If these terms change, I will update this page and its effective date.
+        For questions, contact <a href="mailto:alec@wantoch.com">alec@wantoch.com</a>.
+      </p>
+    </div>
+  </article>
+</SiteLayout>

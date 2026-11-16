@@ -1,0 +1,127 @@
+---
+import SiteLayout from '../layouts/SiteLayout.astro';
+
+export const prerender = true;
+---
+<SiteLayout title="Privacy Policy" description="How this website and Alec Wantoch's Google OAuth client for Omamail handle your information, account access, and privacy choices." noindex>
+  <article aria-labelledby="privacy-heading" class="mb-12">
+    <h1 id="privacy-heading" class="font-semibold text-2xl mb-2 tracking-tighter">Privacy Policy</h1>
+    <p class="text-sm text-neutral-400">Effective <time datetime="2026-11-16">November 16, 2026</time></p>
+    <div class="prose leading-relaxed">
+      <p>
+        I'm Alec M. Wantoch. This policy covers this website and the Google OAuth
+        client I provide for use with <a href="https://github.com/huacnlee/omamail">Omamail</a>,
+        an independently developed, open-source desktop email and calendar app.
+        Questions or privacy requests can be sent to <a href="mailto:alec@wantoch.com">alec@wantoch.com</a>.
+      </p>
+
+      <h2>Google account access</h2>
+      <p>
+        Omamail connects your computer directly to Google. Signing in authorizes
+        the app to access your account; it does not send your mailbox, calendar,
+        or sign-in tokens to me or to this website. Google handles sign-in, and
+        Omamail does not receive your Google password.
+      </p>
+      <p>The Google permissions Omamail requests are:</p>
+      <dl class="space-y-4">
+        <div>
+          <dt class="font-mono text-sm break-all">https://www.googleapis.com/auth/gmail.modify</dt>
+          <dd class="mt-1 text-neutral-200">Read messages, threads, attachments, and labels; search and organize mail; save drafts; and apply changes such as archiving, marking read, or moving messages to trash.</dd>
+        </div>
+        <div>
+          <dt class="font-mono text-sm break-all">https://www.googleapis.com/auth/gmail.send</dt>
+          <dd class="mt-1 text-neutral-200">Send the emails and replies you choose to send.</dd>
+        </div>
+        <div>
+          <dt class="font-mono text-sm break-all">https://www.googleapis.com/auth/calendar.events</dt>
+          <dd class="mt-1 text-neutral-200">Read calendar events and invitations, respond to invitations, and create, update, or delete events when you use those features.</dd>
+        </div>
+        <div>
+          <dt class="font-mono text-sm break-all">https://www.googleapis.com/auth/calendar.calendarlist.readonly</dt>
+          <dd class="mt-1 text-neutral-200">List your calendars so you can choose which calendar to use.</dd>
+        </div>
+      </dl>
+      <p>
+        The app also reads your account's email address to identify your mailbox.
+        Google data is used to provide the email and calendar features you request.
+      </p>
+
+      <h2>Storage and security</h2>
+      <p>
+        Omamail keeps its data on your device. Refresh tokens are stored in your
+        operating system's credential store, such as the Linux keyring. Mail,
+        attachments, calendar data, drafts, and settings may be stored locally
+        so the app can load quickly and work offline. Google API requests use
+        encrypted HTTPS connections. I do not operate a server that stores this data.
+      </p>
+
+      <h2>Sharing and optional AI features</h2>
+      <p>
+        Using email and calendar features sends the necessary data directly to
+        Google, including messages you send and event changes you make. If you
+        choose to use Omamail's AI assistance, the message or conversation you
+        select and your request are passed to the assistant you configured.
+        That provider processes them under its own terms, privacy policy, and
+        your account settings. I do not receive that content.
+      </p>
+      <p>
+        Loading remote images in a message or following a link contacts the
+        sender's or destination's servers, which may receive your IP address
+        and other request information.
+      </p>
+
+      <h2>Google API Limited Use</h2>
+      <p>
+        The use and transfer of information received from Google APIs through
+        this OAuth client will adhere to the
+        <a href="https://developers.google.com/terms/api-services-user-data-policy">Google API Services User Data Policy</a>,
+        including its Limited Use requirements, and the
+        <a href="https://developers.google.com/workspace/workspace-api-user-data-developer-policy">Google Workspace API User Data and Developer Policy</a>.
+        Google user data is not sold, used for advertising, or used to develop
+        or train generalized AI or machine learning models. Access and transfers
+        are limited to providing the features you request and the exceptions
+        those policies allow. I do not access or read your Google data through
+        this client.
+      </p>
+
+      <h2>Disconnecting and deleting data</h2>
+      <p>
+        Signing out of an account in Omamail removes its stored refresh token.
+        You can also revoke access from your
+        <a href="https://myaccount.google.com/permissions">Google Account permissions</a>.
+        Local caches and settings may remain after signing out or uninstalling;
+        remove Omamail's local application data to delete them. On Linux, cached
+        data is normally in <code>~/.cache/omamail</code>. Removing local data
+        does not delete messages or events stored by Google. I have no server
+        copy of your Google data to delete.
+      </p>
+
+      <h2>This website</h2>
+      <p>
+        If you subscribe to my journal, your email address is stored with Kit
+        to send the updates you requested. You can unsubscribe using the link
+        in an email or contact me to request deletion. If you email me, I keep
+        your message as needed to respond and handle your request.
+      </p>
+      <p>
+        This site is hosted on Vercel and uses Vercel Analytics, Vercel Speed
+        Insights, and Google Analytics to understand visits and performance.
+        These services may process request and usage information such as your
+        IP address, browser, device, pages visited, and timing data. Google
+        Analytics may use cookies. Website analytics do not receive your
+        Omamail messages, calendar data, or OAuth tokens.
+      </p>
+
+      <h2>Children</h2>
+      <p>This website and OAuth client are not directed to children under 13. I do not knowingly collect personal information from children under 13.</p>
+
+      <h2>Changes and contact</h2>
+      <p>
+        Updates will be posted here with a new effective date. If the way this
+        OAuth client uses Google data changes, I will obtain any consent Google
+        requires before using it for a new purpose. For questions or requests,
+        email <a href="mailto:alec@wantoch.com">alec@wantoch.com</a>.
+      </p>
+    </div>
+  </article>
+</SiteLayout>
